@@ -23,7 +23,6 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("style.css", views.style, name="style"),
-    path("polls/",  include('polls.urls')),
     path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
 ]
@@ -33,7 +32,7 @@ for d in os.listdir(sectionsdir):
     for f in os.listdir(sectionsdir + d):
         name = f[0:f.rfind(".")]
         urlpatterns.append(
-            path(d.lower() + '/' +name, views.testt, name=name)
+            path(d.lower() + '/' +name, views.index, name=name)
         )
 
 handler404 = 'burnsomninet.views.handle404'
