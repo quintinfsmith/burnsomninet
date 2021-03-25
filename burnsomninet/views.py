@@ -19,9 +19,9 @@ def handle404(request, exception):
 
     return HttpResponse(top.__repr__(), status=404)
 
-def testt(request):
-    return HttpResponse(str(dir(request)) + "\n" + request.get_full_path())
-
+#def testt(request):
+#    return HttpResponse(str(dir(request)) + "\n" + request.get_full_path())
+#
 
 def style(request):
     content = ""
