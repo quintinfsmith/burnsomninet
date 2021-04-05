@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '4_m6_(zq#$!u#i=b0o=911e3)_xfq!_3mh9%)nhxqw5r@24fv&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "burnsomni.net",
@@ -125,4 +125,6 @@ STATICFILES_DIRS = [
     str(BASE_DIR.joinpath('static')),
     str(BASE_DIR.joinpath('ntest/www'))
 ]
+SITE_PATH = str(BASE_DIR.joinpath('burnsomninet'))
+
 

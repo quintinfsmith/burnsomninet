@@ -23,16 +23,20 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("style.css", views.style, name="style"),
-    path("ntest/",  include('ntest.urls')),
+    #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
 ]
 
 sectionsdir = "/srv/http/burnsomninet/burnsomninet/sections/"
 for d in os.listdir(sectionsdir):
     for f in os.listdir(sectionsdir + d):
-        name = f[0:f.rfind(".")]
+        name = f
         urlpatterns.append(
-            path(d.lower() + '/' +name, views.index, name=name)
+            path(d.lower() + '/' + name, views.section_controller, name=name)
+        )
+        urlpatterns.append(
+            path(d.lower() + '/' + name + ".json", views.section_json, name=name + ".json")
         )
 
 handler404 = 'burnsomninet.views.handle404'
+#handler500 = 'burnsomninet.views.handle500'
