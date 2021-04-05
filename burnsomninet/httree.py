@@ -1,9 +1,10 @@
-TABWIDTH = 4
-RETURN = "\n"
+import html
+TABWIDTH = 0
+RETURN = ""
 
 class Node:
-    def __init__(self, name, **attributes):
-        self.name = name.lower().strip()
+    def __init__(self, tname, **attributes):
+        self.name = tname.lower().strip()
         self.attributes = attributes
 
     def to_markup(self, depth=0):
@@ -19,7 +20,7 @@ class Tag(Node):
                 attributes = child
             elif isinstance(child, str):
                 self.children.append(Text(child))
-            else:
+            elif child:
                 self.children.append(child)
 
         super().__init__(tagname, **attributes)
@@ -44,7 +45,7 @@ class Tag(Node):
                     tojoin.append("%s: %s" % (k, v))
                 output += " %s=\"%s\"" % (key, "; ".join(tojoin))
             else:
-                output += " %s=\"%s\"" % (key, value)
+                output += " %s=\"%s\"" % (key, html.escape(str(value)))
 
         if not self.name in self.self_closing:
             output += ">"
@@ -58,10 +59,19 @@ class Tag(Node):
 
         return output
 
-class Text(Node):
+class RawHTML(Node):
     def __init__(self, text):
+        super().__init__("_html")
         self.text = text
 
     def to_markup(self, depth=0):
         return self.text
+
+class Text(Node):
+    def __init__(self, text):
+        super().__init__("_text")
+        self.text = text
+
+    def to_markup(self, depth=0):
+        return html.escape(self.text)
 

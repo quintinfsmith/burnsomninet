@@ -1,38 +1,152 @@
 import json, os
-from httree import Tag, Text
+from httree import Tag, Text, RawHTML
+from django.conf import settings
+SITE_PATH = settings.SITE_PATH
 
-VHACK = Tag('div', { "class": "vhack" })
 
-def build_sitemap():
-    sitemap = Tag("div", { "class": "sitemap" })
-    sectionsdir = "/srv/http/burnsomninet/burnsomninet/sections/"
+VH_TOP = Tag('div', { "class": "vh_top" })
+VH_BOT = Tag('div', { "class": "vh_bot" })
+VH_MID = Tag('div', { "class": "vh_mid" })
+
+def build_head():
+    return Tag("head",
+        Tag("link", {
+            "rel": "stylesheet",
+            "type": "text/css",
+            "href": "/style.css"
+        }),
+        Tag("link", {
+            "rel": "stylesheet",
+            "type": "text/css",
+            "href": "/content/style/prism.css"
+        }),
+        Tag("script", {
+            "src": "/content/javascript/crel.js",
+            "type": "text/javascript"
+        }),
+        Tag("script", {
+            "src": "/content/javascript/inheritance.js",
+            "type": "text/javascript"
+        }),
+        Tag("script", {
+            "src": "/content/javascript/main.js",
+            "type": "text/javascript"
+        }),
+        Tag("meta", {
+            "name": "viewport",
+            "content": "initial-scale=1.0"
+        }),
+        Tag("script", {
+            "src": "/content/javascript/prism.js",
+            "type": "text/javascript"
+        })
+    )
+
+def build_sitemap(*active_path):
+    classname = "sitemap"
+    if active_path:
+        classname += " " + active_path[0]
+
+    sitemap = Tag("div", { "class": classname })
+    svg_content = ""
+    with open("%s/content/logo.svg" % SITE_PATH, "r") as fp:
+        svg_content = fp.read()
+    sitemap.append(
+        Tag("div",
+            { "class": "logo" },
+            Tag("div"),
+            Tag("a",
+                { "href": "/" },
+                RawHTML(svg_content)
+            ),
+            Tag("div")
+        )
+    )
+    sectionsdir = "%s/sections/" % SITE_PATH
 
     headings = os.listdir(sectionsdir)
     headings.sort()
+    subsitemap = Tag("div")
     for heading in headings:
         entry = Tag("div", { "class": "entry" })
-        entry.append(
-            Tag('div',
-                { 'class': 'header' },
-                VHACK,
-                Tag('div', heading.title())
-            )
-        )
         files = os.listdir(sectionsdir + heading)
         files.sort()
         for f in files:
-            title = f[0:f.rfind(".")]
+            if not os.path.isdir(sectionsdir + heading + '/' + f):
+                continue
+
+            title = f
+            classname = "item"
+            if (heading, title) == active_path:
+                classname += " active"
+
             entry.append(
                 Tag('a',
                     {
-                        'class': 'item',
-                        'href': "/%s/%s"  % (heading.lower(), title)
+                        'class': classname,
+                        'href': "/%s/%s"  % (heading, title)
                     },
-                    VHACK,
+                    VH_MID,
                     Tag('div', title.title())
                 )
             )
-        sitemap.append(entry)
+
+        subsitemap.append(
+            Tag("div",
+                Tag('div',
+                    { 'class': 'header' },
+                    VH_MID,
+                    Tag('div', heading.title())
+                ),
+                entry
+            )
+        )
+    sitemap.append(subsitemap)
 
     return sitemap
+
+def media_content(mediamap):
+    output = Tag("div",
+        { "class": "media" }
+    )
+    for media in mediamap:
+        # Create screenshots
+        for src in media['srcs']:
+            abs_src = SITE_PATH + "/" + src
+            if not os.path.isfile(abs_src + ".jpg"):
+                os.system("ffmpeg -i \"%s\" -ss 00:00:00 -vframes 1 \"%s.jpg\"" % (abs_src, abs_src))
+
+        output.append(
+            Tag("div",
+                {},
+                VH_MID,
+                Tag("div",
+                    {
+                        "class": "polaroid",
+                        "data-srcs": json.dumps(media["srcs"])
+                    },
+                    Tag("div",
+                        Tag("img", {
+                            "src": media["srcs"][0] + ".jpg",
+                        })
+                    ),
+                    Tag("div",
+                        { 'class': 'label-wrapper' },
+                        Tag("div",
+                            { 'class': 'label' },
+                            VH_MID,
+                            Tag("div", media["title"])
+                        )
+                    )
+                )
+            )
+        )
+    output.append(
+        Tag("script", {
+            "src": "/content/javascript/media.js",
+            "type": "text/javascript"
+        })
+    )
+
+    return output
 
