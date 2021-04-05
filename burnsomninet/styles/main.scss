@@ -410,17 +410,11 @@ body {
         }
 
         > h1 + p + p {
-            display: flex;
             text-align: center;
             > * {
-                margin: 0;
-                flex: 1 1 auto;
                 color: var(--col_dark);
                 background-color: var(--col_light);
                 padding: .5em 1em;
-            }
-            > *:not(:first-child) {
-                margin-left: 1em;
             }
         }
 
