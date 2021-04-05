@@ -76,7 +76,7 @@ VIEWMAP = {
 }
 
 def style(request):
-    midsize = 1000
+    midsize = 800
     content = ""
     with open("%s/styles/main.scss" % SITE_PATH, "r") as fp:
         content = fp.read()

@@ -2,6 +2,7 @@
 An in-console byte editor.
 
 [GitHub](https://github.com/quintinfsmith/sbyte)
+[Crates.io](https://crates.io/crates/sbyte)
 
 ## Table of Contents
 - [About](#abt)
