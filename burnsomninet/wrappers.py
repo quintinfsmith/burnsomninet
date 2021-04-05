@@ -10,6 +10,7 @@ VH_MID = Tag('div', { "class": "vh_mid" })
 
 def build_head():
     return Tag("head",
+        Tag("title", "Home page of Quintin Smith (quintinfsmith)"),
         Tag("link", {
             "rel": "stylesheet",
             "type": "text/css",

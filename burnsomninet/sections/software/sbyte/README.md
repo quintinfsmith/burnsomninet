@@ -84,8 +84,23 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 
 <a name="shell"></a>
 ## Shell Commands
-- `find <pattern>` search for, and jump to, a pattern
+- `find <pattern>` Search for, and jump to, a pattern
+- `fr <pattern> <replacewith>` Search for all instances of pattern and replace them
 - `lw <int>` Set the number of bytes-per-line
+- `insert <pattern>` Insert pattern
+- `overwrite <pattern>` Overwrite with pattern
+- `q` Quit
+- `w` Save
+- `wq` Save & Quit
+
+#### Bitwise Masks
+- `and <pattern>`
+- `nand <pattern>`
+- `or <pattern>`
+- `nor <pattern>`
+- `xor <pattern>`
+- `not`
+
 
 <a name="rgx"></a>
 ## Regex modifications
