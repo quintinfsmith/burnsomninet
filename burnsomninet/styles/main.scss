@@ -1,0 +1,454 @@
+:root {
+    --krisholmblue: rgb(6,56,126);
+    --col_light: #afafaf;
+    --col_dark: #2d2d2d;
+    --col_highlight: rgb(126, 6, 56);
+    --col_highlight: #961553;
+}
+
+@font-face {
+    font-family: primary;
+    font-weight: 800;
+    src: url(content/fonts/FiraSans/Heavy.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 700;
+    src: url(content/fonts/FiraSans/ExtraBold.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 600;
+    src: url(content/fonts/FiraSans/Bold.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 500;
+    src: url(content/fonts/FiraSans/SemiBold.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 400;
+    src: url(content/fonts/FiraSans/Regular.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 300;
+    src: url(content/fonts/FiraSans/Light.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 200;
+    src: url(content/fonts/FiraSans/ExtraLight.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 100;
+    src: url(content/fonts/FiraSans/Thin.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 800;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/HeavyItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 700;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/ExtraBoldItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 600;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/BoldItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 500;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/SemiBoldItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 400;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/Italic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 300;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/LightItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 200;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/ExtraLightItalic.otf);
+}
+@font-face {
+    font-family: primary;
+    font-weight: 100;
+    font-style: italic;
+    src: url(content/fonts/FiraSans/ThinItalic.otf);
+}
+
+@font-face {
+    font-family: monospace;
+    src: url(content/fonts/FiraMono/Regular.woff2);
+}
+@font-face {
+    font-family: monospace;
+    font-weight: bold;
+    src: url(content/fonts/FiraMono/Bold.woff2);
+}
+
+
+a {
+    text-decoration: none !important;
+    color: inherit;
+}
+
+body {
+    height: 100vh;
+    background-color: var(--col_dark);
+    margin: 0;
+    font-family: primary;
+}
+
+
+.vh_top,
+.vh_mid,
+.vh_bot {
+    display: inline-block;
+    height: 100%;
+    width: 0;
+    ~ * {
+        display: inline-block;
+    }
+}
+
+
+.vh_top ~ *,
+.vh_top {
+    vertical-align: top;
+}
+.vh_mid,
+.vh_mid ~ * {
+    vertical-align: middle;
+}
+.vh_bot,
+.vh_bot ~ * {
+    vertical-align: bottom;
+}
+
+
+.sitemap {
+    color: var(--col_dark);
+    background-color: var(--col_light);
+    > .logo {
+        > a {
+            height: calc(100% - 2em);
+            text-align: center;
+            svg {
+                display: block;
+                width: 100%;
+                height: 100%;
+                path {
+                    stroke: none;
+                    fill: var(--col_dark);
+                    opacity: .3;
+                }
+
+            }
+        }
+    }
+
+    .header {
+        font-weight: bold;
+    }
+
+    .item.active {
+        background-color: var(--col_highlight);
+        color: var(--col_light);
+        font-weight: bold;
+    }
+    .item:hover {
+        > div {
+            text-decoration: underline;
+        }
+    }
+}
+
+.software.sitemap > .logo {
+    svg {
+        path.frame,
+        path.tire {
+            opacity: 1;
+            fill: var(--col_highlight);
+        }
+    }
+}
+
+.unicycling.sitemap > .logo > a {
+    svg {
+        path.saddle,
+        path.tire,
+        path.frame {
+            opacity: 1;
+            fill: var(--col_highlight);
+        }
+    }
+}
+
+
+.content {
+    > div { }
+}
+
+.index.content {
+    color: var(--col_light);
+    text-align: center;
+    padding: 2em;
+    .img_wrapper {
+        padding: 0 10vw;
+        img {
+            display: inline-block;
+            width: 24em;
+            max-width: 100%;
+            border-radius: 50%;
+        }
+    }
+    .details {
+        > div {
+            padding: 1em 0 0 0;
+        }
+        .nametag {
+            font-weight: bold;
+            font-size: 2em;
+        }
+        .nametag + div {
+            font-size: 1.2em;
+            font-style: italic;
+            font-weight: 200;
+        }
+    }
+}
+
+
+.media {
+    display: flex;
+    flex-wrap: wrap;
+    width: calc(100% - 1em);
+    padding-left: 1em;
+    padding-bottom: 1em;
+    overflow: hidden;
+    > div {
+        flex: 1 1 auto;
+        vertical-align: bottom;
+        text-align: center;
+        width: 20%;
+        min-width: 16em;
+        padding: 1em 1em 0 0;
+    }
+}
+
+.polaroid {
+    cursor: pointer;
+    width: calc(100% - 2em - 2px);
+    padding: 1em;
+    color: var(--col_light);
+    border: 1px solid var(--col_light);
+    > div {
+        > img {
+            max-height: 16em;
+            max-width: 16em;
+            display: inline-block;
+            text-align: center;
+            border: 1px solid var(--col_light);
+        }
+    }
+    > div.label-wrapper {
+        padding-top: 1em;
+        height: 2em;
+        > .label {
+            background-color: var(--col_light);
+            color: var(--col_dark);
+        }
+    }
+}
+
+
+
+.mp_overlay {
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, .7);
+    text-align:center;
+}
+
+.media_player {
+    text-align: center;
+    padding: .5em;
+
+    > div:first-child {
+        height: 2em;
+        text-align: right;
+        > div {
+            height: calc(100% - 2px);
+            display: inline-block;
+        }
+
+        .close_button {
+            color: var(--col_dark);
+            background-color: var(--col_light);
+            cursor: pointer;
+            padding: 0 1.5em;
+        }
+    }
+
+    > div:nth-child(2) {
+        height: calc(80% - 2em);
+        display: block;
+
+        > div:first-child:last-child {
+            height: 100%;
+        }
+        > div:first-child:not(:last-child) {
+            height: calc(100% - 4em);
+        }
+        > div:last-child:not(:first-child) {
+            height: 4em;
+        }
+
+        .mp_title {
+            color: var(--col_light);
+        }
+
+        .mp_video_wrapper {
+            > * {
+                height: 100%;
+            }
+            video {
+                max-height: calc(100% - 1em);
+                max-width: 100%;
+            }
+        }
+    }
+
+    > div:last-child {
+        height: 20%;
+        display: block;
+    }
+
+
+    > .mp_selector {
+        .thumb:first-child:last-child {
+            display: none;
+        }
+        .thumb {
+            cursor: pointer;
+            height: 100%;
+            display: inline-block;
+            > div {
+                display: inline-block;
+                height: calc(100% - 1em);
+                padding: .5em;
+                img {
+                    display: block;
+                    height: 100%;
+                }
+            }
+        }
+        .thumb:not(.selected) {
+            padding: 1px;
+        }
+        .thumb.selected {
+            border: 1px solid var(--col_light);
+        }
+    }
+}
+
+.markdown-wrapper {
+    > .markdown {
+        padding: 1em;
+        color: var(--col_light);
+        > * {
+            max-width: 100%;
+        }
+        > *:first-child {
+            margin: 0;
+        }
+        > :not(:first-child) {
+            margin: 1em 0 0 0;
+        }
+
+        > h1:not(:first-child),
+        > h2:not(:first-child),
+        > h3:not(:first-child),
+        > h4:not(:first-child),
+        > h5:not(:first-child) {
+            margin: 1.4rem 0 0 0;
+        }
+
+        > p {
+            + p {
+                margin: 1rem 0 0 0;
+            }
+            > img {
+                display: inline-block;
+                max-width: 100%;
+            }
+        }
+
+        > h1,
+        > h1 + p {
+            text-align: center;
+        }
+
+        > h1 + p + p {
+            display: flex;
+            text-align: center;
+            > * {
+                margin: 0;
+                flex: 1 1 auto;
+                color: var(--col_dark);
+                background-color: var(--col_light);
+                padding: .5em 1em;
+            }
+            > *:not(:first-child) {
+                margin-left: 1em;
+            }
+        }
+
+        > h2 {
+            border-bottom: 1px solid var(--col_light);
+        }
+        > :not(h2) + ul,
+        > :not(h1) + p {
+            font-weight: 200;
+        }
+
+        > ol,
+        > ul {
+            margin: 1em 0 0 0;
+            padding-left: 0em;
+            ol, ul {
+                padding-left: 1em;
+            }
+        }
+
+        li {
+            list-style: none;
+            line-height: 1.7em;
+            > p {
+                margin: 0;
+            }
+        }
+
+    }
+}
+
