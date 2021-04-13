@@ -1,9 +1,9 @@
 :root {
     --krisholmblue: rgb(6,56,126);
+    --krisholmyellow: #ffe100;
     --col_light: #afafaf;
     --col_dark: #2d2d2d;
     --col_highlight: rgb(126, 6, 56);
-    --col_highlight: #961553;
 }
 
 @font-face {
@@ -171,8 +171,6 @@ body {
     }
 
     .item.active {
-        background-color: var(--col_highlight);
-        color: var(--col_light);
         font-weight: bold;
     }
     .item:hover {
@@ -206,6 +204,35 @@ body {
 
 .content {
     > div { }
+}
+.content.daisy {
+    color: var(--col_light);
+    text-align: center;
+    padding: 1em;
+    max-height: calc(100vh - 2em);
+    .img_wrapper {
+        padding: 0 10vw;
+        svg {
+            max-height: 50vh;
+            display: inline-block;
+            max-width: 100%;
+            border-radius: 50%;
+            .petals {
+                fill: #FFF;
+            }
+            .stamen {
+                fill: #c16500;
+            }
+            .stem {
+                fill: #4a772f;
+            }
+        }
+    }
+    .details {
+        padding: 1em;
+        font-weight: bold;
+        font-size: 1.4em;
+    }
 }
 
 .index.content {
@@ -376,6 +403,7 @@ body {
     > .markdown {
         padding: 1em;
         color: var(--col_light);
+
         > * {
             max-width: 100%;
         }
@@ -416,6 +444,12 @@ body {
                 background-color: var(--col_light);
                 padding: .5em 1em;
             }
+
+        }
+        > h1 + p + p ~ p {
+            a {
+                font-weight: 500;
+            }
         }
 
         > h2 {
@@ -424,6 +458,7 @@ body {
         > :not(h2) + ul,
         > :not(h1) + p {
             font-weight: 200;
+
         }
 
         > ol,

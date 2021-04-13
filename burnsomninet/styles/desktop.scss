@@ -9,6 +9,9 @@ body {
     flex-direction: column;
     width: 12em;
     height: 100vh;
+    .logo {
+        height: 8em;
+    }
 
     > div:first-child {
         flex: 0 1 auto;
@@ -37,15 +40,21 @@ body {
                     padding-left: 2em;
                     height: 2em;
                     display: block;
-                    > div {
-                        display: inline-block;
-                        vertical-align: middle;
-                    }
+                }
+
+                .item.active {
+                    background-color: var(--col_highlight);
+                    color: var(--col_light);
+                    font-weight: bold;
                 }
 
             }
 
         }
+    }
+
+    hr {
+        display: none;
     }
 }
 
@@ -56,6 +65,10 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     > div { }
+}
+
+.content.index {
+    height: calc(100% - 4em - 1px);
 }
 
 
