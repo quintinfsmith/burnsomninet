@@ -8,9 +8,13 @@ VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
 
-def build_head():
+def build_head(**kwargs):
+    title = ""
+    if "title" in kwargs:
+        title = kwargs["title"]
+
     return Tag("head",
-        Tag("title", "Home page of Quintin Smith (quintinfsmith)"),
+        Tag("title", title),
         Tag("link", {
             "rel": "stylesheet",
             "type": "text/css",
@@ -68,7 +72,8 @@ def build_sitemap(*active_path):
     headings = os.listdir(sectionsdir)
     headings.sort()
     subsitemap = Tag("div")
-    for heading in headings:
+    
+    for i, heading in enumerate(headings):
         entry = Tag("div", { "class": "entry" })
         files = os.listdir(sectionsdir + heading)
         files.sort()
@@ -102,6 +107,10 @@ def build_sitemap(*active_path):
                 entry
             )
         )
+        if i != len(headings) - 1:
+            subsitemap.append(
+                Tag("hr")
+            )
     sitemap.append(subsitemap)
 
     return sitemap

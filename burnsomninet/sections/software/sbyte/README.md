@@ -63,6 +63,8 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `J` Increase length of selection by a line
 - `K` Decrease length of selection by a line
 - `L` Increase length of selection
+- `R` Jump to index denoted by selection (Big Endian)
+- `T` Jump to index denoted by selection (Little Endian)
 - `p` paste
 - `x` cut selection
 - `u` undo action
@@ -79,6 +81,8 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `0-9 a-f` overwrite digit
 - `p` paste
 - `x` cut selection
+- `h` Move sub-cursor to next digit
+- `l` Move sub-cursor to previous digit
 - `esc` return to default mode
 
 
@@ -94,11 +98,11 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `wq` Save & Quit
 
 #### Bitwise Masks
-- `and <pattern>`
-- `nand <pattern>`
-- `or <pattern>`
-- `nor <pattern>`
-- `xor <pattern>`
+- `and <mask>`
+- `nand <mask>`
+- `or <mask>`
+- `nor <mask>`
+- `xor <mask>`
 - `not`
 
 

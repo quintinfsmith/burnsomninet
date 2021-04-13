@@ -10,7 +10,7 @@ A library for terminal-based interfaces.
 Wrecked is an environment that uses nested rectangles to aid in construction of in-terminal interfaces. Designed to be simple and intuitive.
 
 ## Projects
-Both [Rory](/projects/rory) and [Sbyte](/projects/sbyte) use the Wrecked environment.
+Both [Rory](/software/rory) and [Sbyte](/software/sbyte) use the Wrecked environment.
 
 ## Usage
 For Rust, see [Documentation](https://docs.rs/wrecked/).

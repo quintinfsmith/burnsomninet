@@ -10,17 +10,30 @@ from django.conf import settings
 SITE_PATH = settings.SITE_PATH
 
 def handle404(request, exception):
+    daisy = ""
+    with open(SITE_PATH + "/oopsie daisy.svg", "r") as fp:
+        daisy = fp.read()
     top = Tag("html",
-        Tag("head",
-            Tag("style", { }),
-        ),
+        wrappers.build_head(title="404"),
         Tag("body",
+            wrappers.build_sitemap(),
             Tag("div",
-                "Looks like you've gone and picked yourself an oopsie daisy there, friend.")
+                { "class": "content daisy" },
+                Tag("div",
+                    { "class": "img_wrapper" },
+                    RawHTML(daisy)
+                ),
+                Tag("div",
+                    { "class": "details"},
+                    Tag("div",
+                        "Looks like you've gone and picked yourself an oopsie daisy there, friend."
+                    )
+                )
+            )
         )
     )
 
-    return HttpResponse(top.__repr__(), status=404)
+    return HttpResponse(top.__repr__())
 
 #def handle500(request):
 #    top = Tag("html",
@@ -154,7 +167,7 @@ def index(request):
         active_path.remove("")
 
     top = Tag("html",
-        wrappers.build_head(),
+        wrappers.build_head(title="Yeah, I got this domain. I thought it'd be funny. I stand by it."),
         Tag("body",
             wrappers.build_sitemap(*active_path),
             Tag("div",
