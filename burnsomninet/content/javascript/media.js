@@ -1,6 +1,7 @@
-define_class("MediaPlayer", {
-    init: function(options) {
-        this.super('init', crel('div'), options);
+class MediaPlayer {
+    constructor(options) {
+        this.element = crel('div');
+        this.options = options;
         this.active_index = 0;
         this.title = options.title;
 
@@ -10,59 +11,46 @@ define_class("MediaPlayer", {
                 media_player: this
             }
         });
+
         this.element_video = crel('video', {
             controls: true,
             loop: true
         });
-        this.element_selector = crel('div',
-            { class: 'mp_selector' }
-        );
 
-        for (var vid in this.options.srcs) {
-            var vidobj = crel('img', {
-                src: this.options.srcs[vid] + '.jpg',
-            });
-
-            var div = crel('div',
-                {
-                    class: "thumb",
-                    data: {
-                        media_player: this,
-                        index: vid
-                    }
-                },
-                crel('div',
-                    vidobj
-                )
+        this.element_selector = null;
+        if (this.options.srcs.length > 1) {
+            this.element_selector = crel('div',
+                { class: 'mp_selector' }
             );
 
-            event_listen.call(vidobj, 'error', function(event) {
-                this.parentNode.removeChild(this);
-            });
+            for (var vid in this.options.srcs) {
+                var vidobj = crel('img', {
+                    src: this.options.srcs[vid] + '.jpg',
+                });
 
-            event_listen.call(div, 'click', function(event) {
-                var data = this.data;
-                data.media_player.set_video(data.index);
-            });
-            this.element_selector.appendChild(div);
-        }
+                var div = crel('div',
+                    {
+                        class: "thumb",
+                        data: {
+                            media_player: this,
+                            index: vid
+                        }
+                    },
+                    crel('div', {
+                        'style': 'background-image: url("' + this.options.srcs[vid] + '.jpg");'
+                    })
+                );
 
-        var video_wrapper = crel('div');
-        video_wrapper.appendChild(
-            crel('div',
-                { class: "mp_video_wrapper" },
-                crel('div', { class: "vh_mid" }),
-                this.element_video
-            )
-        );
-        if (this.title) {
-            video_wrapper.appendChild(
-                crel('div',
-                    { class: "mp_title" },
-                    crel('div', { class: "vh_mid" }),
-                    crel('div', this.title)
-                )
-            );
+                event_listen(vidobj, 'error', function(event) {
+                    this.parentNode.removeChild(this);
+                });
+
+                event_listen(div, 'click', function(event) {
+                    var data = this.data;
+                    data.media_player.set_video(data.index);
+                });
+                this.element_selector.appendChild(div);
+            }
         }
 
         var xbutton = crel('div',
@@ -76,14 +64,37 @@ define_class("MediaPlayer", {
             crel('div', "X")
         );
 
-        event_listen.call(xbutton, 'click', function(event) {
+        event_listen(xbutton, 'click', function(event) {
             var media_player = this.data.media_player;
             media_player.kill();
         });
 
-        this.element.appendChild(crel('div', xbutton));
-        this.element.appendChild(video_wrapper);
-        this.element.appendChild(this.element_selector);
+        var title_element = null;
+        if (this.title) {
+            title_element = crel('div',
+                { class: "mp_title" },
+                crel('div',
+                    crel('div', { class: "vh_mid" }),
+                    crel('div', this.title)
+                )
+            );
+        }
+
+        this.element.appendChild(
+            crel('div',
+                crel('div', xbutton),
+                crel('div',
+                    crel('div',
+                        { class: "mp_video_wrapper" },
+                        crel('div', { class: "vh_mid" }),
+                        this.element_video
+                    ),
+                    title_element
+                ),
+                this.element_selector
+            )
+        );
+
 
         document.body.appendChild(this.element_overlay);
         this.element_overlay.appendChild(
@@ -96,11 +107,11 @@ define_class("MediaPlayer", {
 
         this.set_video(0);
 
-        event_listen.call(this.element, 'click', function(event) {
+        event_listen(this.element, 'click', function(event) {
             event.stopPropagation();
         });
 
-        event_listen.call(this.element_overlay, 'click', function(event) {
+        event_listen(this.element_overlay, 'click', function(event) {
             this.data.media_player.kill();
         });
 
@@ -113,44 +124,53 @@ define_class("MediaPlayer", {
             data: { MP: this }
         });
 
-        event_listen.call(window, "mediacenter.resize",  function(event) {
+        event_listen(window, "mediacenter.resize",  function(event) {
             var media_player = document.body.data.MP;
             media_player.reposition();
         });
+
+        event_listen(window, "mediacenter.keydown", function(event) {
+            if (event.keyCode == 27) {
+                var media_player = document.body.data.MP;
+                media_player.kill();
+            }
+        });
         this.reposition();
-    },
+    }
 
-    reposition: function() {
+    reposition() {
         this.element_overlay.style.setProperty("top", window.scrollY + "px");
-    },
+    }
 
-    set_video: function(index) {
+    set_video(index) {
         var src = this.options.srcs[index % this.options.srcs.length];
-
         this.element_video.setAttribute('src', src);
 
-        var prev_thumb = this.element_selector.childNodes[this.active_index];
-        var current_thumb = this.element_selector.childNodes[index];
-        removeClass.call(prev_thumb, 'selected');
-        addClass.call(current_thumb, 'selected');
+        if (this.element_selector) {
+            var prev_thumb = this.element_selector.childNodes[this.active_index];
+            var current_thumb = this.element_selector.childNodes[index];
+            removeClass(prev_thumb, 'selected');
+            addClass(current_thumb, 'selected');
+        }
 
         this.active_index = index;
-    },
+    }
 
-    kill: function() {
+    kill() {
         this.element_overlay.parentNode.removeChild(this.element_overlay);
         document.body.style.setProperty("overflow", this.overflow_backup);
         delete document.body.data.MP;
-        event_ignore.call(document.body, "mediacenter.resize");
+
+        event_ignore(window, "mediacenter.resize");
+        event_ignore(window, "mediacenter.keydown");
     }
+}
 
-}, "Compound");
-
-function polaroid_open_mediaplayer() {
-    var srcs = JSON.parse(this.dataset['srcs']);
+function polaroid_open_mediaplayer(elm) {
+    var srcs = JSON.parse(elm.dataset['srcs']);
     new MediaPlayer({
         srcs: srcs,
-        title: this.textContent.trim()
+        title: elm.textContent.trim()
     });
 }
 
@@ -158,8 +178,18 @@ function polaroid_open_mediaplayer() {
     var media = document.body.getElementsByClassName("polaroid");
     for (var i = 0; i < media.length; i++) {
         var elm = media[i];
-        event_listen.call(elm, "click", function(event) {
-            polaroid_open_mediaplayer.call(this)
+        event_listen(elm, "click", function(event) {
+            polaroid_open_mediaplayer(this)
         });
     }
+
+    var pieces = window.location.hash.split("?");
+    while (pieces.length > 1) {
+        pieces.pop();
+    }
+    //if (pieces.length > 0) {
+    //    var hashid = pieces[0].substring(1);
+    //    event_trigger(document.getElementById(hashid), 'click');
+    //}
+
 })()

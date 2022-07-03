@@ -29,10 +29,10 @@ def build_head(**kwargs):
             "src": "/content/javascript/crel.js",
             "type": "text/javascript"
         }),
-        Tag("script", {
-            "src": "/content/javascript/inheritance.js",
-            "type": "text/javascript"
-        }),
+        #Tag("script", {
+        #    "src": "/content/javascript/inheritance.js",
+        #    "type": "text/javascript"
+        #}),
         Tag("script", {
             "src": "/content/javascript/main.js",
             "type": "text/javascript"
@@ -53,10 +53,12 @@ def build_sitemap(*active_path):
         classname += " " + active_path[0]
 
     sitemap = Tag("div", { "class": classname })
+    sitemap_sub = Tag("div")
+    sitemap.append(sitemap_sub)
     svg_content = ""
     with open("%s/content/logo.svg" % SITE_PATH, "r") as fp:
         svg_content = fp.read()
-    sitemap.append(
+    sitemap_sub.append(
         Tag("div",
             { "class": "logo" },
             Tag("div"),
@@ -67,12 +69,31 @@ def build_sitemap(*active_path):
             Tag("div")
         )
     )
+    sitemap_sub.append(
+        Tag("div",
+            { "class": "hamburger-wrapper" },
+            Tag("div",
+                { "class": "hamburger" },
+                Tag("div",
+                    Tag("div"),
+                    Tag("div"),
+                    Tag("div"),
+                    Tag("div"),
+                    Tag("div")
+                )
+            ),
+            Tag("script", {
+                "src": "/content/javascript/hamburger.js",
+                "type": "text/javascript"
+            })
+        )
+    )
     sectionsdir = "%s/sections/" % SITE_PATH
 
     headings = os.listdir(sectionsdir)
     headings.sort()
-    subsitemap = Tag("div")
-    
+    subsitemap = Tag("div", { "class": "treemap" })
+
     for i, heading in enumerate(headings):
         entry = Tag("div", { "class": "entry" })
         files = os.listdir(sectionsdir + heading)
@@ -107,12 +128,7 @@ def build_sitemap(*active_path):
                 entry
             )
         )
-        if i != len(headings) - 1:
-            subsitemap.append(
-                Tag("hr")
-            )
-    sitemap.append(subsitemap)
-
+    sitemap_sub.append(subsitemap)
     return sitemap
 
 def media_content(mediamap):
@@ -132,6 +148,7 @@ def media_content(mediamap):
                 VH_MID,
                 Tag("div",
                     {
+                        "id": media["title"].replace(" ", "_").lower(),
                         "class": "polaroid",
                         "data-srcs": json.dumps(media["srcs"])
                     },

@@ -23,6 +23,8 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("style.css", views.style, name="style"),
+    path("keybase.txt", views.keybase, name="keybase"),
+    path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
 ]

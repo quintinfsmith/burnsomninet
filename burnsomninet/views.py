@@ -72,8 +72,17 @@ def projects_hook(request, **kwargs):
         )
     )
 
+def keybase(request):
+    content = ''
+    with open("%s/keybasejson" % SITE_PATH, "r") as fp:
+        content = fp.read()
+    return HttpResponse(content)
 
-
+def favicon(request):
+    content = b''
+    with open('%s/content/favicon-32.ico' % SITE_PATH, 'rb') as fp:
+        content = fp.read()
+    return HttpResponse(content)
 
 VIEWMAP = {
     "unicycling": {
@@ -132,6 +141,9 @@ def section_controller(request):
     directory_path = "%s/%s/%s" % (sectionsdir, *active_path)
     files = os.listdir(directory_path)
     for f in files:
+        if f == 'head.json':
+            continue
+
         ext = f[f.rfind(".") + 1:].lower()
         file_path = "%s/%s" % (directory_path, f)
         content = None
@@ -147,13 +159,19 @@ def section_controller(request):
         if content != None:
             kwargs[ext] = content
 
+    head_kwargs = {}
+    if os.path.isfile(f"{directory_path}/head.json"):
+        with open(f"{directory_path}/head.json", 'r') as fp:
+            head_kwargs = json.loads(fp.read())
+
+    body_content = VIEWMAP[active_path[0]][active_path[1]](request, **kwargs)
     top = Tag("html",
-        wrappers.build_head(),
+        wrappers.build_head(**head_kwargs),
         Tag("body",
             wrappers.build_sitemap(*active_path),
             Tag("div",
                 { "class": "content" },
-                VIEWMAP[active_path[0]][active_path[1]](request, **kwargs)
+                body_content
             )
         )
     )
@@ -167,7 +185,7 @@ def index(request):
         active_path.remove("")
 
     top = Tag("html",
-        wrappers.build_head(title="Yeah, I got this domain. I thought it'd be funny. I stand by it."),
+        wrappers.build_head(title="Quintin Smith - Developer, Unicyclist"),
         Tag("body",
             wrappers.build_sitemap(*active_path),
             Tag("div",
@@ -177,7 +195,7 @@ def index(request):
                     Tag("div",
                         { "class": "img_wrapper" },
                         Tag("img", {
-                            "src": "https://secure.gravatar.com/avatar/a5c06e62c415e83649434e3e668b1ff6?size=400"
+                            "src": "https://avatars.githubusercontent.com/u/72575658?v=4"
                         })
                     ),
                     Tag("div",
@@ -205,4 +223,5 @@ def index(request):
     )
 
     return HttpResponse(top.__repr__())
+
 

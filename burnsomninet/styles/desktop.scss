@@ -3,58 +3,64 @@ body {
     overflow: hidden;
 }
 
+.hamburger-wrapper {
+    display: none;
+}
+
 .sitemap {
-    flex: 0 0 auto;
-    display: flex;
-    flex-direction: column;
     width: 12em;
     height: 100vh;
-    .logo {
-        height: 8em;
-    }
-
-    > div:first-child {
-        flex: 0 1 auto;
-        > div {
-            display: none;
-        }
-        a {
-            display: block;
-            padding: 1em 30%;
+    flex: 0 0 auto;
+    > div {
+        display: flex;
+        flex-direction: column;
+        .logo {
+            height: 8em;
         }
 
-    }
-
-    > div:last-child {
-        flex: 1 1 auto;
-        > div {
+        > div:first-child {
+            flex: 0 1 auto;
             > div {
+                display: none;
+            }
+            a {
                 display: block;
+                padding: 1em 30%;
             }
-            > .header {
-                padding-left: 1em;
-                height: 2em;
-            }
-            > .entry {
-                > .item {
-                    padding-left: 2em;
-                    height: 2em;
+
+        }
+
+        > div:last-child {
+            flex: 1 1 auto;
+            > div {
+                > div {
                     display: block;
                 }
+                > .header {
+                    padding-left: 1em;
+                    height: 2em;
+                }
+                > .entry {
+                    > .item {
+                        padding-left: 2em;
+                        height: 2em;
+                        display: block;
+                    }
 
-                .item.active {
-                    background-color: var(--col_highlight);
-                    color: var(--col_light);
-                    font-weight: bold;
+                    .item.active {
+                        background-color: var(--col_highlight);
+                        color: var(--col_light);
+                        font-weight: normal;
+                    }
+
                 }
 
             }
-
         }
-    }
 
-    hr {
-        display: none;
+        hr {
+            display: none;
+        }
     }
 }
 
@@ -70,6 +76,11 @@ body {
 .content.index {
     height: calc(100% - 4em - 1px);
 }
+
+.content.daisy {
+    height: calc(100vh - 2em);
+}
+
 
 
 .media_player {

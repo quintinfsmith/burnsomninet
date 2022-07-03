@@ -11,10 +11,12 @@ Learn Piano using MIDI files and a MIDI Keyboard
     - [Running](#inst_b)
 - [The Interface](#intrf)
 - [Features](#funcs)
+    - [The Help Window](#funcs_help)
     - [The Register](#funcs_a)
     - [Position Control](#funcs_b)
     - [Loop Control](#funcs_c)
-    - [Quitting](#funcs_d)
+    - [Ignoring Channels](#funcs_d)
+    - [Quitting](#funcs_e)
 
 <a name="abt"></a>
 ## About
@@ -56,6 +58,10 @@ rory /path/to/file.mid
 
 <a name="funcs"></a>
 ## Features
+<a name="funcs_help"></a>
+### The Help Window
+`h` will bring up the help window, showing all possible controls
+
 <a name="funcs_a"></a>
 ### The Register
 There is a number register that gets passed to user functions.<br/>
@@ -76,11 +82,16 @@ Boundaries can be set to practice a single section of a piece.  As the player po
 - `\` to reset the boundaries
 
 <a name="funcs_d"></a>
+### Ignoring channels
+You can ignore a channel in order to focus on one hand<br/>
+`i` will set ignore the channel set in the register<br/>
+`u` will stop ignoring all ignored channels
+
+<a name="funcs_e"></a>
 ### Quitting
 - `q` to quit
 
 ### Planned Features
-- Hiding or ignoring tracks
 - cropping out the unused sections of the keyboard
 
 ### Possible Features

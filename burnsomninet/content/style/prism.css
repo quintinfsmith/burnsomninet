@@ -37,7 +37,8 @@ pre {
 
 pre,
 :not(pre) > code {
-    background-color: #0f1419;
+    background-color: var(--code);
+    border: 1px solid var(--col_light);
 }
 
 :not(pre) > code {
