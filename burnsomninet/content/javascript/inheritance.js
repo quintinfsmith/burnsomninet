@@ -269,7 +269,32 @@ define_class('Compound', {
     }
 });
 
-var EVENTMAP = {}
+var EVENTMAP = {};
+
+function touch_to_click_cancel(e) {
+    this.__click_cancelled = true;
+}
+function touch_to_click_end(e) {
+    if (! this.__click_cancelled) {
+        event_trigger.call(this, "click");
+    }
+    this.__click_cancelled = false;
+}
+
+function event_trigger(eventname) {
+    var event; // The custom event that will be created
+    if (document.createEvent){
+        event = document.createEvent("HTMLEvents");
+        event.initEvent(eventname, true, true);
+        event.eventName = eventname;
+        this.dispatchEvent(event);
+    } else {
+        event = document.createEventObject();
+        event.eventName = eventname;
+        event.eventType = eventname;
+        this.fireEvent("on" + event.eventType, event);
+    }
+}
 
 function event_listen(eventname, function_hook) {
     var eventpath = eventname.split(".");
@@ -286,6 +311,11 @@ function event_listen(eventname, function_hook) {
 
     var eventtype = eventpath[eventpath.length - 1];
     current_branch[eventtype] = function_hook;
+
+    if (eventtype == "click") {
+        event_listen.call(this, "__.touchmove", touch_to_click_cancel);
+        event_listen.call(this, "__.touchend", touch_to_click_end);
+    }
 
     this.addEventListener(eventtype, function_hook);
 }

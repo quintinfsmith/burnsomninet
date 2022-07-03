@@ -5,5 +5,11 @@
             "/content/univids/ShaleNose2.webm",
             "/content/univids/ShaleDrop.webm"
         ]
+    },
+    {
+        "title": "Smith Creek",
+        "srcs": [
+            "/content/univids/FTLDeck.webm"
+        ]
     }
 ]

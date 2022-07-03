@@ -90,7 +90,6 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 ## Shell Commands
 - `find <pattern>` Search for, and jump to, a pattern
 - `fr <pattern> <replacewith>` Search for all instances of pattern and replace them
-- `lw <int>` Set the number of bytes-per-line
 - `insert <pattern>` Insert pattern
 - `overwrite <pattern>` Overwrite with pattern
 - `q` Quit
