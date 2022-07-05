@@ -14,6 +14,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+SITECODE = f"{BASE_DIR}/sitecode"
+JS_PATH = f"{SITECODE}/javascript"
+SCSS_PATH = f"{SITECODE}/scss"
+STATIC_PATH = f"{Path(__file__).resolve().parent.parent.parent}/content"
 
 
 # Quick-start development settings - unsuitable for production
@@ -23,9 +27,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = '4_m6_(zq#$!u#i=b0o=911e3)_xfq!_3mh9%)nhxqw5r@24fv&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
+    "localhost",
     "burnsomni.net",
     "www.burnsomni.net"
 ]
@@ -107,13 +112,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 
@@ -122,9 +123,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    str(BASE_DIR.joinpath('static')),
-    str(BASE_DIR.joinpath('ntest/www'))
+#    str(BASE_DIR.joinpath('static')),
+#    str(BASE_DIR.joinpath('ntest/www'))
 ]
 SITE_PATH = str(BASE_DIR.joinpath('burnsomninet'))
 
 
+COMMIT_ID = None
+with open(f"{BASE_DIR}/.git/ORIG_HEAD", "r") as fp:
+    COMMIT_ID = fp.read().strip()

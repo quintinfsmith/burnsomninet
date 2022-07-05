@@ -1,18 +1,40 @@
-from django.http import HttpResponse, Http404
-from django.shortcuts import render
-import os, json
-from httree import Tag, Text, RawHTML
-import wrappers
-import sass
+import os
+import json
+import time
 import marko
-
+from django.http import HttpResponse, Http404
 from django.conf import settings
-SITE_PATH = settings.SITE_PATH
+from sitecode.py.httree import Tag, Text, RawHTML
+from burnsomninet import wrappers
 
-def handle404(request, exception):
+SITECODE = settings.SITECODE
+STATIC_PATH = settings.STATIC_PATH
+COMMIT_ID = settings.COMMIT_ID
+JS_PATH = settings.JS_PATH
+SCSS_PATH = settings.SCSS_PATH
+
+def sass_compile(input_scss):
+    timestamp = time.time()
+    scss_path = f"/tmp/.tmp_scss{timestamp}"
+    css_path = f"/tmp/.tmp_css{timestamp}"
+    with open(scss_path, "w") as file_pipe:
+        file_pipe.write(input_scss)
+    os.system(f"pysassc {scss_path} {css_path}")
+    output = ""
+    with open(css_path, "r") as file_pipe:
+        output = file_pipe.read()
+    if os.path.isfile(css_path):
+        os.system(f"rm {css_path}")
+    if os.path.isfile(scss_path):
+        os.system(f"rm {scss_path}")
+    return output
+
+#NOTE: Do not change the argument names. that fucks django
+def handler404(request, exception):
     daisy = ""
-    with open(SITE_PATH + "/oopsie daisy.svg", "r") as fp:
-        daisy = fp.read()
+    with open(f"{STATIC_PATH}/oopsie daisy.svg", "r") as file_pipe:
+        daisy = file_pipe.read()
+
     top = Tag("html",
         wrappers.build_head(title="404"),
         Tag("body",
@@ -33,24 +55,21 @@ def handle404(request, exception):
         )
     )
 
-    return HttpResponse(top.__repr__())
+    return HttpResponse(repr(top), status=404)
 
-#def handle500(request):
-#    top = Tag("html",
-#        Tag("head",
-#            Tag("style", { }),
-#        ),
-#        Tag("body",
-#            Tag("div",
-#                "Looks like I've gone and picked myself an oopsie daisy.")
-#        )
-#    )
-#
-#    return HttpResponse(top.__repr__(), status=500)
+#NOTE: Do not change the argument names. that fucks django
+def handler500(request):
+    top = Tag("html",
+        Tag("head",
+            Tag("style", { }),
+        ),
+        Tag("body",
+            Tag("div",
+                "Looks like I've gone and picked myself an oopsie daisy.")
+        )
+    )
 
-
-#def testt(request):
-#    return HttpResponse(str(dir(request)) + "\n" + request.get_full_path())
+    return HttpResponse(repr(top), status=500)
 
 def unicycling_street(request, **kwargs):
     content = wrappers.media_content(kwargs["json"])
@@ -74,59 +93,60 @@ def projects_hook(request, **kwargs):
 
 def keybase(request):
     content = ''
-    with open("%s/keybasejson" % SITE_PATH, "r") as fp:
-        content = fp.read()
+    with open(f"{SITECODE}/keybasejson", "r") as file_pipe:
+        content = file_pipe.read()
     return HttpResponse(content)
 
 def favicon(request):
     content = b''
-    with open('%s/content/favicon-32.ico' % SITE_PATH, 'rb') as fp:
-        content = fp.read()
+    with open(f"{STATIC_PATH}/favicon-32.ico", 'rb') as file_pipe:
+        content = file_pipe.read()
     return HttpResponse(content)
-
-VIEWMAP = {
-    "unicycling": {
-        "street": unicycling_street,
-        "mountain": unicycling_mountain
-    },
-    "software": {
-        "sbyte": projects_hook,
-        "apres": projects_hook,
-        "rory": projects_hook,
-        "wrecked": projects_hook
-    }
-}
 
 def style(request):
     midsize = 800
     content = ""
-    with open("%s/styles/main.scss" % SITE_PATH, "r") as fp:
-        content = fp.read()
+    with open(f"{SCSS_PATH}/main.scss", "r") as file_pipe:
+        content = file_pipe.read()
 
-    with open("%s/styles/mobile.scss" % SITE_PATH, "r") as fp:
-        content += "\n@media only screen and (max-width: %dpx) {\n" % midsize
-        content += fp.read()
+    with open(f"{SCSS_PATH}/mobile.scss", "r") as file_pipe:
+        content += f"\n@media only screen and (max-width: {midsize}px) {{\n"
+        content += file_pipe.read()
         content += "\n}\n"
 
-    with open("%s/styles/desktop.scss" % SITE_PATH, "r") as fp:
-        content += "\n@media only screen and (min-width: %spx) {\n" % midsize
-        content += fp.read()
+    with open(f"{SCSS_PATH}/desktop.scss", "r") as file_pipe:
+        content += f"\n@media only screen and (min-width: {midsize}px) {{\n"
+        content += file_pipe.read()
         content += "\n}\n"
 
-    content = sass.compile(string=content)
+    content = sass_compile(content)
 
     return HttpResponse(content, content_type="text/css")
+
+def javascript_controller(request, file_path):
+    active_path = file_path.split("/")
+    while "" in active_path:
+        active_path.remove("")
+
+    js_path = f"{JS_PATH}/" + "/".join(active_path)
+    content = ""
+    if os.path.isfile(js_path):
+        with open(js_path, 'r') as file_pipe:
+            content = file_pipe.read()
+        return HttpResponse(content, content_type="text/javascript")
+    else:
+        return handler404(request, None)
 
 def section_json(request):
     active_path = request.get_full_path().split("/")
     while "" in active_path:
         active_path.remove("")
 
-    sectionsdir = "%s/sections/" % SITE_PATH
+    sectionsdir = f"{SITECODE}/sections/"
     json_path = sectionsdir + "/".join(active_path)
     content = "{}"
-    with open(json_path, "r") as fp:
-        content = fp.read()
+    with open(json_path, "r") as file_pipe:
+        content = file_pipe.read()
 
     return HttpResponse(content, content_type="application/json")
 
@@ -136,33 +156,33 @@ def section_controller(request):
     while "" in active_path:
         active_path.remove("")
 
-    sectionsdir = "%s/sections/" % SITE_PATH
+    sectionsdir = f"{SITECODE}/sections/"
     kwargs = {}
-    directory_path = "%s/%s/%s" % (sectionsdir, *active_path)
+    directory_path = f"{sectionsdir}/{active_path[0]}/{active_path[1]}"
     files = os.listdir(directory_path)
-    for f in files:
-        if f == 'head.json':
+    for file_name in files:
+        if file_name == 'head.json':
             continue
 
-        ext = f[f.rfind(".") + 1:].lower()
-        file_path = "%s/%s" % (directory_path, f)
+        ext = file_name[file_name.rfind(".") + 1:].lower()
+        file_path = f"{directory_path}/{file_name}"
         content = None
         if ext == "json":
             content = {}
-            with open(file_path, "r") as fp:
-                content = json.loads(fp.read())
+            with open(file_path, "r") as file_pipe:
+                content = json.loads(file_pipe.read())
         elif ext == "md":
             content = ""
-            with open(file_path, "r") as fp:
-                content = marko.convert(fp.read())
+            with open(file_path, "r") as file_pipe:
+                content = marko.convert(file_pipe.read())
 
-        if content != None:
+        if content is not None:
             kwargs[ext] = content
 
     head_kwargs = {}
     if os.path.isfile(f"{directory_path}/head.json"):
-        with open(f"{directory_path}/head.json", 'r') as fp:
-            head_kwargs = json.loads(fp.read())
+        with open(f"{directory_path}/head.json", 'r') as file_pipe:
+            head_kwargs = json.loads(file_pipe.read())
 
     body_content = VIEWMAP[active_path[0]][active_path[1]](request, **kwargs)
     top = Tag("html",
@@ -176,7 +196,7 @@ def section_controller(request):
         )
     )
 
-    return HttpResponse(top.__repr__())
+    return HttpResponse(repr(top))
 
 def index(request):
     active_path = request.get_full_path().split("/")
@@ -222,6 +242,18 @@ def index(request):
         )
     )
 
-    return HttpResponse(top.__repr__())
+    return HttpResponse(repr(top))
 
+VIEWMAP = {
+    "unicycling": {
+        "street": unicycling_street,
+        "mountain": unicycling_mountain
+    },
+    "software": {
+        "sbyte": projects_hook,
+        "apres": projects_hook,
+        "rory": projects_hook,
+        "wrecked": projects_hook
+    }
+}
 

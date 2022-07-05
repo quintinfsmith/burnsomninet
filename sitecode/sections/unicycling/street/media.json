@@ -1,0 +1,55 @@
+[
+    {
+        "title": "Crank Flip",
+        "srcs": [
+            "/content/univids/Crankflip0.webm",
+            "/content/univids/Crankflip1.webm",
+            "/content/univids/Crankflip2.webm"
+        ]
+    },
+    {
+        "title": "Back Flip",
+        "srcs": [
+            "/content/univids/Backflip0.webm",
+            "/content/univids/Backflip1.webm"
+        ]
+    },
+    {
+        "title": "BaeFlip",
+        "srcs": [
+            "/content/univids/Baeflip1.webm",
+            "/content/univids/Baeflip2.webm"
+        ]
+    },
+    {
+        "title": "Body Wrap",
+        "srcs": [
+            "/content/univids/BodyWrap0.webm",
+            "/content/univids/bodywrap1.webm"
+        ]
+    },
+    {
+        "title": "Pedal Slide",
+        "srcs": [
+            "/content/univids/PedalSlide0.webm"
+        ]
+    },
+    {
+        "title": "Rolling Wrap",
+        "srcs": [
+            "/content/univids/RollingWrap0.webm"
+        ]
+    },
+    {
+        "title": "UniSpin",
+        "srcs": [
+            "/content/univids/UniSpin0.webm"
+        ]
+    },
+    {
+        "title": "Zero Plant",
+        "srcs": [
+            "/content/univids/ZeroPlant0.webm"
+        ]
+    }
+]

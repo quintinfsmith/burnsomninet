@@ -1,8 +1,10 @@
 import json, os
-from httree import Tag, Text, RawHTML
+from sitecode.py.httree import Tag, Text, RawHTML
 from django.conf import settings
-SITE_PATH = settings.SITE_PATH
-
+SITECODE = settings.SITECODE
+STATIC_PATH = settings.STATIC_PATH
+BASE_DIR = settings.BASE_DIR
+COMMIT_ID = settings.COMMIT_ID
 
 VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
@@ -18,7 +20,7 @@ def build_head(**kwargs):
         Tag("link", {
             "rel": "stylesheet",
             "type": "text/css",
-            "href": "/style.css"
+            "href": f"/style.css?commit={COMMIT_ID}"
         }),
         Tag("link", {
             "rel": "stylesheet",
@@ -34,7 +36,7 @@ def build_head(**kwargs):
         #    "type": "text/javascript"
         #}),
         Tag("script", {
-            "src": "/content/javascript/main.js",
+            "src": f"/javascript/main.js?commit={COMMIT_ID}",
             "type": "text/javascript"
         }),
         Tag("meta", {
@@ -56,7 +58,7 @@ def build_sitemap(*active_path):
     sitemap_sub = Tag("div")
     sitemap.append(sitemap_sub)
     svg_content = ""
-    with open("%s/content/logo.svg" % SITE_PATH, "r") as fp:
+    with open(f"{STATIC_PATH}/logo.svg", "r") as fp:
         svg_content = fp.read()
     sitemap_sub.append(
         Tag("div",
@@ -83,12 +85,12 @@ def build_sitemap(*active_path):
                 )
             ),
             Tag("script", {
-                "src": "/content/javascript/hamburger.js",
+                "src": f"/javascript/hamburger.js?commit={COMMIT_ID}",
                 "type": "text/javascript"
             })
         )
     )
-    sectionsdir = "%s/sections/" % SITE_PATH
+    sectionsdir = f"{SITECODE}/sections/"
 
     headings = os.listdir(sectionsdir)
     headings.sort()
@@ -138,7 +140,7 @@ def media_content(mediamap):
     for media in mediamap:
         # Create screenshots
         for src in media['srcs']:
-            abs_src = SITE_PATH + "/" + src
+            abs_src = f"{BASE_DIR}/{src}"
             if not os.path.isfile(abs_src + ".jpg"):
                 os.system("ffmpeg -i \"%s\" -ss 00:00:00 -vframes 1 \"%s.jpg\"" % (abs_src, abs_src))
 
@@ -168,9 +170,10 @@ def media_content(mediamap):
                 )
             )
         )
+
     output.append(
         Tag("script", {
-            "src": "/content/javascript/media.js",
+            "src": "/javascript/media.js",
             "type": "text/javascript"
         })
     )
