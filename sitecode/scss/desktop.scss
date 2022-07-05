@@ -1,0 +1,129 @@
+body {
+    display: flex;
+    overflow: hidden;
+}
+
+.hamburger-wrapper {
+    display: none;
+}
+
+.sitemap {
+    width: 12em;
+    height: 100vh;
+    flex: 0 0 auto;
+    > div {
+        display: flex;
+        flex-direction: column;
+        .logo {
+            height: 8em;
+        }
+
+        > div:first-child {
+            flex: 0 1 auto;
+            > div {
+                display: none;
+            }
+            a {
+                display: block;
+                padding: 1em 30%;
+            }
+
+        }
+
+        > div:last-child {
+            flex: 1 1 auto;
+            > div {
+                > div {
+                    display: block;
+                }
+                > .header {
+                    padding-left: 1em;
+                    height: 2em;
+                }
+                > .entry {
+                    > .item {
+                        padding-left: 2em;
+                        height: 2em;
+                        display: block;
+                    }
+
+                    .item.active {
+                        background-color: var(--col_highlight);
+                        color: var(--col_light);
+                        font-weight: normal;
+                    }
+
+                }
+
+            }
+        }
+
+        hr {
+            display: none;
+        }
+    }
+}
+
+.content {
+    flex: 1 1 auto;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    > div { }
+}
+
+.content.index {
+    height: calc(100% - 4em - 1px);
+}
+
+.content.daisy {
+    height: calc(100vh - 2em);
+}
+
+
+
+.media_player {
+    background-color: #2d2d2d;
+    border: 1px solid #afafaf;
+    height: calc(95vh - 1em - 2px);
+    width: calc(90vw - 1em);
+
+    > div:first-child {
+        > div:first-child:last-child { }
+        > div:first-child:not(:last-child) { }
+        > div:last-child:not(:first-child) { }
+
+        .mp_title {
+            > div { }
+        }
+
+        .mp_video_wrapper {
+            > * { }
+            video {
+            }
+        }
+    }
+
+    > div:last-child { }
+
+
+    > .mp_selector {
+        .thumb { }
+        .thumb.selected { }
+        .thumb video { }
+    }
+}
+
+.markdown {
+    > h1 + p + p {
+        display: flex;
+        > * {
+            flex: 1 1 auto;
+            margin: 0;
+        }
+        > :not(:first-child) {
+            margin-left: 1em;
+        }
+    }
+}

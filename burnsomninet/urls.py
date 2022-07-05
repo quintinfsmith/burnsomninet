@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import handler404
+from django.conf.urls import handler404, handler500
+from django.conf import settings
 import os
 
-from . import views
+from burnsomninet import views
+
+SITECODE = settings.SITECODE
 
 urlpatterns = [
     path("", views.index, name="index"),
+    path("javascript/<path:file_path>", views.javascript_controller),
     path("style.css", views.style, name="style"),
     path("keybase.txt", views.keybase, name="keybase"),
     path("favicon.ico", views.favicon, name="favicon"),
@@ -29,7 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
-sectionsdir = "/srv/http/burnsomninet/burnsomninet/sections/"
+sectionsdir = f"{SITECODE}/sections/"
 for d in os.listdir(sectionsdir):
     for f in os.listdir(sectionsdir + d):
         name = f
@@ -40,5 +44,6 @@ for d in os.listdir(sectionsdir):
             path(d.lower() + '/' + name + ".json", views.section_json, name=name + ".json")
         )
 
-handler404 = 'burnsomninet.views.handle404'
-#handler500 = 'burnsomninet.views.handle500'
+handler404 = views.handler404
+#handler404 = 'views.handle404'
+handler500 = views.handler500
