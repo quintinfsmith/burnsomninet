@@ -130,5 +130,8 @@ SITE_PATH = str(BASE_DIR.joinpath('burnsomninet'))
 
 
 COMMIT_ID = None
-with open(f"{BASE_DIR}/.git/ORIG_HEAD", "r") as fp:
-    COMMIT_ID = fp.read().strip()
+with open(f"{BASE_DIR}/.git/HEAD", "r") as fp:
+    branch_path = fp.read()
+    branch_path = branch_path[5:].strip()
+    with open(f"{BASE_DIR}/.git/{branch_path}", "r") as fp:
+        COMMIT_ID = fp.read().strip()
