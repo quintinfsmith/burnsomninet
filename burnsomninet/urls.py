@@ -31,18 +31,9 @@ urlpatterns = [
     path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
+    path("<str:section>/<str:subsection>", views.section_controller),
+    path("<str:section>/<str:subsection>.json", views.section_json),
 ]
-
-sectionsdir = f"{SITECODE}/sections/"
-for d in os.listdir(sectionsdir):
-    for f in os.listdir(sectionsdir + d):
-        name = f
-        urlpatterns.append(
-            path(d.lower() + '/' + name, views.section_controller, name=name)
-        )
-        urlpatterns.append(
-            path(d.lower() + '/' + name + ".json", views.section_json, name=name + ".json")
-        )
 
 handler404 = views.handler404
 #handler404 = 'views.handle404'
