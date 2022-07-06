@@ -151,14 +151,10 @@ def section_json(request):
     return HttpResponse(content, content_type="application/json")
 
 
-def section_controller(request):
-    active_path = request.get_full_path().split("/")
-    while "" in active_path:
-        active_path.remove("")
-
+def section_controller(request, section, subsection):
     sectionsdir = f"{SITECODE}/sections/"
     kwargs = {}
-    directory_path = f"{sectionsdir}/{active_path[0]}/{active_path[1]}"
+    directory_path = f"{sectionsdir}/{section}/{subsection}"
     files = os.listdir(directory_path)
     for file_name in files:
         if file_name == 'head.json':
@@ -184,11 +180,11 @@ def section_controller(request):
         with open(f"{directory_path}/head.json", 'r') as file_pipe:
             head_kwargs = json.loads(file_pipe.read())
 
-    body_content = VIEWMAP[active_path[0]][active_path[1]](request, **kwargs)
+    body_content = VIEWMAP[section][subsection](request, **kwargs)
     top = Tag("html",
         wrappers.build_head(**head_kwargs),
         Tag("body",
-            wrappers.build_sitemap(*active_path),
+            wrappers.build_sitemap(section, subsection),
             Tag("div",
                 { "class": "content" },
                 body_content
