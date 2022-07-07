@@ -1,10 +1,13 @@
 import json, os
 from sitecode.py.httree import Tag, Text, RawHTML
 from django.conf import settings
+from sitecode.py.gitmanip import Project as GitProject
+
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
 BASE_DIR = settings.BASE_DIR
 COMMIT_ID = settings.COMMIT_ID
+GIT_PATH = "/srv/git"
 
 VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
@@ -180,3 +183,57 @@ def media_content(mediamap):
 
     return output
 
+def build_git_overview(project, branch, path=""):
+    git_project = GitProject(f"{GIT_PATH}/{project}")
+    branch = git_project.get_branch()
+
+    body_content = Tag("table")
+
+    filelist = branch.get_filelist(path)
+
+    sorter_list = []
+    max_commit_ids = {}
+
+    offset = len(path)
+
+    for file_path, commit_id in filelist:
+        file_path = file_path[offset:]
+        parts = file_path.split("/")
+        commit = branch.get_commit(commit_id)
+        endpoint = parts[0].strip()
+        if endpoint not in max_commit_ids or commit.date > max_commit_ids[endpoint][1]:
+            max_commit_ids[endpoint] = (commit_id, commit.date, len(parts) == 1)
+
+    for endpoint, (commit_id, _, is_file) in max_commit_ids.items():
+        commit = branch.get_commit(commit_id)
+        sorter_list.append((is_file, endpoint, commit_id, commit.get_description()))
+
+    sorter_list.sort()
+    for is_file, pathname, commit_id, description in sorter_list:
+
+        full_path = path + pathname
+
+        if not is_file:
+            full_path += "/"
+
+        body_content.append(
+            Tag("tr",
+                Tag("td",
+                    Tag("a",
+                        { "href": f"/git/{project}?path={full_path}" },
+                        pathname
+                    )
+                ),
+                Tag("td",
+                    { 'title': commit_id },
+                    description
+                )
+            )
+        )
+
+    return body_content
+
+
+def build_git_file_view(project, branch, path):
+
+    return Tag("div", f"File Overview for {path}")

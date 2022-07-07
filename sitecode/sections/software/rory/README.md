@@ -1,7 +1,7 @@
 # Rory
 Learn Piano using MIDI files and a MIDI Keyboard
 
-[GitHub](https://github.com/quintinfsmith/rory/)
+[Git Project](/git/rory/)
 [Pypi](https://pypi.org/project/rory/)
 
 ## Table of Contents
