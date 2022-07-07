@@ -5,10 +5,12 @@ import marko
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML
+from sitecode.py.gitmanip import Project as GitProject
 from burnsomninet import wrappers
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
+GIT_PATH = "/srv/git"
 COMMIT_ID = settings.COMMIT_ID
 JS_PATH = settings.JS_PATH
 SCSS_PATH = settings.SCSS_PATH
@@ -239,6 +241,30 @@ def index(request):
     )
 
     return HttpResponse(repr(top))
+
+def git_controller(request, project):
+    if project not in os.listdir(f"{GIT_PATH}"):
+        raise Http404()
+
+    path = request.GET.get('path', '')
+    if path == '' or path[-1] == '/':
+        body = wrappers.build_git_overview(project, 'master', path)
+    else:
+        body = wrappers.build_git_file_view(project, 'master', path)
+
+
+    top = Tag("html",
+        wrappers.build_head(title=f"{project.capitalize()} overview"),
+        Tag("body",
+            wrappers.build_sitemap('git', project),
+            Tag("div",
+                { "class": "content" },
+                body
+            )
+        )
+    )
+    return HttpResponse(repr(top))
+
 
 VIEWMAP = {
     "unicycling": {
