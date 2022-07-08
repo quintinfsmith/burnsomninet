@@ -48,6 +48,9 @@ class ProjectBranch:
                 if commit is not None:
                     self.commits[commit.id] = commit
 
+    def get_latest_commit_id(self):
+        return self.get_commits()[0].date
+
     def get_commit(self, commit_id):
         return self.commits[commit_id]
 

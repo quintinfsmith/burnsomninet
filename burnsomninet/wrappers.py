@@ -2,6 +2,8 @@ import json, os
 from sitecode.py.httree import Tag, Text, RawHTML
 from django.conf import settings
 from sitecode.py.gitmanip import Project as GitProject
+from typing import Optional, Tuple, List
+from urllib.parse import urlencode
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -116,7 +118,7 @@ def build_sitemap(*active_path):
                 Tag('a',
                     {
                         'class': classname,
-                        'href': "/%s/%s"  % (heading, title)
+                        'href': f"{heading}/{title}"
                     },
                     VH_MID,
                     Tag('div', title.title())
@@ -183,19 +185,98 @@ def media_content(mediamap):
 
     return output
 
-def build_git_overview(project, branch, path=""):
-    git_project = GitProject(f"{GIT_PATH}/{project}")
-    branch = git_project.get_branch()
+def build_git_branch_select(git_project: GitProject, active_branch_name: Optional[str]=None) -> Tag:
+    if active_branch_name is None:
+        active_branch_name = 'master'
 
-    body_content = Tag("table")
+    output: Tag = Tag("select")
+    branch_names = git_project.get_branch_names()
+    branch_names = sorted(branch_names, key=lambda x: int(x != "master"))
+    for branch_name in branch_names:
+        tag_attrs = {
+            "value": branch_name
+        }
+
+        if branch_name == active_branch_name:
+            tag_attrs["selected"] = True
+
+        output.append(
+            Tag("option",
+                tag_attrs,
+                branch_name
+            )
+        )
+    return output
+
+def build_git_commit_select(git_project: GitProject, branch_name: str, active_commit: Optional[str]=None) -> Tag:
+    branch = git_project.get_branch(branch_name)
+    output: Tag = Tag("select")
+    for i, commit in enumerate(branch.get_commits()):
+        tag_attrs = {
+            "value": commit.id
+        }
+
+        if (i == 0 and active_commit is None) or commit.id == active_commit:
+            tag_attrs['selected'] = True
+
+        output.append(
+            Tag("option",
+                tag_attrs,
+                str(commit.date)
+            )
+        )
+
+    return output
+
+def build_git_overview(project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    branch = git_project.get_branch(branch_name)
+
+    query_attrs = {
+        "branch": branch_name,
+        "path": path
+    }
+    if active_commit is not None:
+        query_attrs['commit'] = active_commit
+
+    del query_attrs['path']
+    tag_nav_path = Tag("div",
+        Tag("a",
+            { "href": "?" + urlencode(query_attrs) },
+            "root/"
+        )
+    )
+    path_chunks = path.split("/")
+    while "" in path_chunks:
+        path_chunks.remove("")
+
+    for i, chunk in enumerate(path_chunks):
+        href_path = "/".join(path_chunks[0:i + 1]) + "/"
+        query_attrs['path'] = href_path
+        tag_nav_path.append(
+            Tag("a",
+                { "href": "?" + urlencode(query_attrs) },
+                f"{chunk}/"
+            )
+        )
+
+    file_table = Tag("table",
+        Tag("tr",
+            Tag("th",
+                {"colspan": 2},
+                tag_nav_path
+            ),
+            Tag("th",
+                "Last Updated"
+            )
+        )
+    )
 
     filelist = branch.get_filelist(path)
-
     sorter_list = []
     max_commit_ids = {}
 
     offset = len(path)
-
     for file_path, commit_id in filelist:
         file_path = file_path[offset:]
         parts = file_path.split("/")
@@ -210,30 +291,59 @@ def build_git_overview(project, branch, path=""):
 
     sorter_list.sort()
     for is_file, pathname, commit_id, description in sorter_list:
-
         full_path = path + pathname
 
         if not is_file:
             full_path += "/"
-
-        body_content.append(
+        query_attrs['path'] = full_path
+        file_table.append(
             Tag("tr",
                 Tag("td",
                     Tag("a",
-                        { "href": f"/git/{project}?path={full_path}" },
+                        { "href": f"/git/{project_name}?" + urlencode(query_attrs) },
                         pathname
                     )
                 ),
                 Tag("td",
                     { 'title': commit_id },
                     description
+                ),
+                Tag("td",
+                    str(commit.date)
                 )
             )
         )
 
+
+    body_content = Tag("div",
+        {},
+        Tag("div",
+            Tag("div",
+                "Branch: ",
+                build_git_branch_select(git_project, branch_name),
+            ),
+            Tag("div",
+                "Commit: ",
+                build_git_commit_select(git_project, branch_name, active_commit)
+            )
+        ),
+        Tag("div",
+            file_table
+        )
+    )
+
+
     return body_content
 
 
-def build_git_file_view(project, branch, path):
-
+def build_git_file_view(project, branch, commit_id, path):
     return Tag("div", f"File Overview for {path}")
+
+def build_git_commit_view(project_name, branch_name, commit_id=None):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    branch = git_project.get_branch(branch_name)
+    if commit_id is None:
+        commit_id = branch.get_latest_commit_id()
+
+    branch.get_commit(commit_id)
+    return Tag("div", f"commit/diff oviewview of {commit_id}")
