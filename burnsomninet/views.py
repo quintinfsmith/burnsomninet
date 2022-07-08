@@ -246,11 +246,17 @@ def git_controller(request, project):
     if project not in os.listdir(f"{GIT_PATH}"):
         raise Http404()
 
-    path = request.GET.get('path', '')
-    if path == '' or path[-1] == '/':
-        body = wrappers.build_git_overview(project, 'master', path)
-    else:
-        body = wrappers.build_git_file_view(project, 'master', path)
+    view = request.GET.get('view', 'files')
+    branch = request.GET.get('branch', 'master')
+    commit = request.GET.get('commit', None)
+    if view == 'files':
+        path = request.GET.get('path', '')
+        if path == '' or path[-1] == '/':
+            body = wrappers.build_git_overview(project, branch, commit, path)
+        else:
+            body = wrappers.build_git_file_view(project, branch, commit, path)
+    elif view == "commit":
+        body = wrappers.build_git_commit_view(project, branch, commit)
 
 
     top = Tag("html",
