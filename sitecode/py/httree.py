@@ -25,7 +25,11 @@ class Tag(Node):
 
         super().__init__(tagname, **attributes)
 
+    def get_attribute(self, key):
+        return self.attributes[key]
 
+    def set_attribute(self, key, new_value):
+        self.attributes[key] = new_value
 
     def append(self, child):
         self.children.append(child)

@@ -2,8 +2,9 @@ import json, os
 from sitecode.py.httree import Tag, Text, RawHTML
 from django.conf import settings
 from sitecode.py.gitmanip import Project as GitProject
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Dict
 from urllib.parse import urlencode
+from datetime import datetime
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -36,10 +37,6 @@ def build_head(**kwargs):
             "src": "/content/javascript/crel.js",
             "type": "text/javascript"
         }),
-        #Tag("script", {
-        #    "src": "/content/javascript/inheritance.js",
-        #    "type": "text/javascript"
-        #}),
         Tag("script", {
             "src": f"/javascript/main.js?commit={COMMIT_ID}",
             "type": "text/javascript"
@@ -118,7 +115,7 @@ def build_sitemap(*active_path):
                 Tag('a',
                     {
                         'class': classname,
-                        'href': f"{heading}/{title}"
+                        'href': f"/{heading}/{title}"
                     },
                     VH_MID,
                     Tag('div', title.title())
@@ -189,7 +186,9 @@ def build_git_branch_select(git_project: GitProject, active_branch_name: Optiona
     if active_branch_name is None:
         active_branch_name = 'master'
 
-    output: Tag = Tag("select")
+    output: Tag = Tag("select", {
+        'class': 'branch-selector'
+    })
     branch_names = git_project.get_branch_names()
     branch_names = sorted(branch_names, key=lambda x: int(x != "master"))
     for branch_name in branch_names:
@@ -210,7 +209,7 @@ def build_git_branch_select(git_project: GitProject, active_branch_name: Optiona
 
 def build_git_commit_select(git_project: GitProject, branch_name: str, active_commit: Optional[str]=None) -> Tag:
     branch = git_project.get_branch(branch_name)
-    output: Tag = Tag("select")
+    output: Tag = Tag("select", { "class": "commit-selector" })
     for i, commit in enumerate(branch.get_commits()):
         tag_attrs = {
             "value": commit.id
@@ -228,24 +227,21 @@ def build_git_commit_select(git_project: GitProject, branch_name: str, active_co
 
     return output
 
-def build_git_overview(project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
-    git_project = GitProject(f"{GIT_PATH}/{project_name}")
-    branch = git_project.get_branch(branch_name)
-
+def build_git_path_navigator(branch_name: str, active_commit: Optional[str], path: str =""):
     query_attrs = {
-        "branch": branch_name,
-        "path": path
+        "branch": branch_name
     }
     if active_commit is not None:
         query_attrs['commit'] = active_commit
 
-    del query_attrs['path']
     tag_nav_path = Tag("div",
+        { "class": "breadcrumb-nav" },
         Tag("a",
             { "href": "?" + urlencode(query_attrs) },
-            "root/"
+            "root"
         )
     )
+
     path_chunks = path.split("/")
     while "" in path_chunks:
         path_chunks.remove("")
@@ -254,17 +250,86 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
         href_path = "/".join(path_chunks[0:i + 1]) + "/"
         query_attrs['path'] = href_path
         tag_nav_path.append(
+            Tag("span", "/")
+        )
+        tag_nav_path.append(
             Tag("a",
                 { "href": "?" + urlencode(query_attrs) },
-                f"{chunk}/"
+                f"{chunk}"
             )
         )
 
+    return tag_nav_path
+
+def is_leap_year(year):
+    try:
+        datetime(year=year, month=2, day=29)
+        return True
+    except ValueError:
+        return False
+
+def build_git_activity_chart(git_branch) -> Tag:
+    commits = git_branch.get_commits()
+    years = set()
+    commit_days: Dict[Tuple[int, int], int] = {}
+    for commit in commits:
+        years.add(commit.date.year)
+        commit_key = (commit.date.year, commit.date.timetuple().tm_yday)
+        if commit_key not in commit_days:
+            commit_days[commit_key] = 0
+        commit_days[commit_key] += 1
+
+    years = list(years)
+    years.sort()
+    #for year in years:
+    working_year = 2022 #For Dev, switch to loop when done
+    offset = datetime(year=working_year, month=1, day=1).weekday()
+    day_count = 365
+    if is_leap_year(working_year):
+        day_count += 1
+
+    year_table = Tag("table", { "class": "year-table" })
+    day_tds = []
+    rows = []
+    for i in range(7):
+        rows.append(Tag("tr"))
+        year_table.append(rows[i])
+
+    for i in range(day_count + offset):
+        if i < offset:
+            classname = "oob"
+        else:
+            classname = ""
+
+        td = Tag("td", { "class": classname })
+        rows[i % 7].append(td)
+        day_tds.append(td)
+
+    for (year, day), count in commit_days.items():
+        if year != working_year:
+            continue
+        td = day_tds[day + offset]
+        td.set_attribute('class', 'active')
+
+
+    return Tag("div", { "class": "activity-overview"}, year_table)
+
+def build_git_overview(project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    branch = git_project.get_branch(branch_name)
+
+    query_attrs = {
+        "branch": branch_name
+    }
+    if active_commit is not None:
+        query_attrs['commit'] = active_commit
+
     file_table = Tag("table",
+        { "class": "files-table" },
         Tag("tr",
             Tag("th",
                 {"colspan": 2},
-                tag_nav_path
+                build_git_path_navigator(branch_name, active_commit, path)
             ),
             Tag("th",
                 "Last Updated"
@@ -285,59 +350,132 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
         if endpoint not in max_commit_ids or commit.date > max_commit_ids[endpoint][1]:
             max_commit_ids[endpoint] = (commit_id, commit.date, len(parts) == 1)
 
-    for endpoint, (commit_id, _, is_file) in max_commit_ids.items():
+    for endpoint, (commit_id, commit_date, is_file) in max_commit_ids.items():
         commit = branch.get_commit(commit_id)
-        sorter_list.append((is_file, endpoint, commit_id, commit.get_description()))
+        sorter_list.append((is_file, endpoint, commit_id, commit.get_description(), commit_date))
 
     sorter_list.sort()
-    for is_file, pathname, commit_id, description in sorter_list:
+    for is_file, pathname, commit_id, description, commit_date in sorter_list:
         full_path = path + pathname
 
         if not is_file:
             full_path += "/"
+            icon_path = f"{STATIC_PATH}/dir-icon.svg"
+        else:
+            icon_path = f"{STATIC_PATH}/file-icon.svg"
+
+        icon = ""
+        with open(icon_path, 'r') as fp:
+            icon = RawHTML(fp.read())
+
+        commit_query_attrs = {
+            "view": "commit",
+            "commit": commit_id,
+            "branch": branch_name
+        }
+
         query_attrs['path'] = full_path
         file_table.append(
             Tag("tr",
                 Tag("td",
                     Tag("a",
                         { "href": f"/git/{project_name}?" + urlencode(query_attrs) },
-                        pathname
+                        VH_MID,
+                        Tag("span",
+                            { "class": "icon-svg" },
+                            icon
+                        ),
+                        Tag("span", pathname)
                     )
                 ),
                 Tag("td",
-                    { 'title': commit_id },
+                    { 'title': commit_id, "class": "description" },
                     description
                 ),
                 Tag("td",
-                    str(commit.date)
+                    Tag("a",
+                        { "href": f"/git/{project_name}?" + urlencode(commit_query_attrs) },
+                        str(commit_date)
+                    )
                 )
             )
         )
 
 
     body_content = Tag("div",
-        {},
+        { "class": "git-overview" },
         Tag("div",
+            { "class": "option-row" },
             Tag("div",
-                "Branch: ",
+                { "title": "Branch" },
                 build_git_branch_select(git_project, branch_name),
             ),
             Tag("div",
-                "Commit: ",
+                { "title": "Commit" },
                 build_git_commit_select(git_project, branch_name, active_commit)
             )
         ),
         Tag("div",
+            { "class": "files-wrapper" },
             file_table
         )
     )
+
+    if active_commit is None and path == "":
+        body_content.append(build_git_activity_chart(branch))
 
 
     return body_content
 
 
-def build_git_file_view(project, branch, commit_id, path):
-    return Tag("div", f"File Overview for {path}")
+def build_git_file_view(project_name, branch_name, commit_id, path):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    branch = git_project.get_branch(branch_name)
+    blame = branch.get_blame(path, commit_id)
+    body_content = ""
+    for i, (last_commit_id, content) in enumerate(blame):
+        body_content += content + "\n"
+
+    ext = path[path.rfind(".") + 1:].lower()
+    if ext == "py":
+        language = "python"
+    elif ext == "rs":
+        language = "rust"
+    elif ext == "sh":
+        language = "bash"
+    elif ext == "yml":
+        language = "yaml"
+    else:
+        language = "none"
+
+    return Tag("div",
+        { "class": "git-fileoverview" },
+        Tag("div",
+            { "class": "navigation-row" },
+            Tag("div",
+                build_git_path_navigator(branch_name, commit_id, path)
+            ),
+            Tag("div",
+                { "title": "Branch" },
+                VH_MID,
+                build_git_branch_select(git_project, branch_name)
+            ),
+            Tag("div",
+                { "title": "Commit" },
+                VH_MID,
+                build_git_commit_select(git_project, branch_name, commit_id)
+            )
+        ),
+        Tag("div",
+            Tag("pre",
+                { "class": f"language-{language} line-numbers" },
+                Tag("code",
+                    { "class": f"language-{language}" },
+                    body_content
+                )
+            )
+        )
+    )
 
 def build_git_commit_view(project_name, branch_name, commit_id=None):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")

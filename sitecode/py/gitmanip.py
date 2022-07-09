@@ -1,4 +1,5 @@
 import os, sys
+import re
 from datetime import datetime, timedelta, timezone
 
 class Author:
@@ -28,6 +29,7 @@ class ProjectBranch:
     def __init__(self, project, branch=""):
         self.project = project
         self.commits = {}
+        self.branch = branch
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
@@ -52,7 +54,15 @@ class ProjectBranch:
         return self.get_commits()[0].date
 
     def get_commit(self, commit_id):
-        return self.commits[commit_id]
+        output = None
+        if commit_id in self.commits:
+            output = self.commits[commit_id]
+        else:
+            for check_id, commit in self.commits.items():
+                if check_id[0:len(commit_id)] == commit_id:
+                    output = commit
+                    break
+        return output
 
     def get_commits(self, latest_commit=None):
         commits = list(self.commits.values())
@@ -62,11 +72,13 @@ class ProjectBranch:
 
         i = 0
         if latest_commit is not None:
-            while latest_commit != commits[i].id and i < len(commits) - 1:
+            commit_id = commits[i].id
+            while latest_commit != commit_id[0:len(latest_commit)] and i < len(commits) - 1:
+                commit_id = commits[i].id
                 i += 1
 
             # id doesn't exist, show all
-            if commits[i].id != latest_commit:
+            if latest_commit != commit_id[0:len(latest_commit)]:
                 i = 0
 
         return commits[i:]
@@ -102,6 +114,33 @@ class ProjectBranch:
         for file in files:
             adj_files.append((file, commit_map[file]))
         return adj_files
+
+    def get_blame(self, filepath, commit_id=None):
+        if not commit_id:
+            commit_chunk = ""
+        else:
+            commit_chunk = f"--ignore-revision {commit_id}"
+
+        cwd = os.getcwd()
+        os.chdir(f"{self.project.path}")
+        os.system(f"git blame {self.branch} {commit_chunk} \"{filepath}\" > /tmp/gitmanip")
+        content = ""
+        with open("/tmp/gitmanip", "r") as fp:
+            content = fp.read()
+
+        os.system("rm /tmp/gitmanip")
+        os.chdir(cwd)
+
+        lines = content.split("\n")
+        output = []
+        for i, line in enumerate(lines):
+            last_commit_id = line[0:line.find(" ")]
+            needle = f"{i+1}) "
+            code = line[line.find(needle) + len(needle):]
+            output.append((last_commit_id, code))
+
+        return output
+
 
 class Commit:
     @staticmethod
