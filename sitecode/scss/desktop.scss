@@ -127,3 +127,35 @@ body {
         }
     }
 }
+
+.git-fileoverview {
+    padding: 0 .5em;
+    .navigation-row {
+        display: flex;
+        > div:first-child {
+            flex: 1 1 auto;
+        }
+        > div:not(:first-child) {
+            flex: 0 1 auto;
+            text-align: right;
+            padding-left: 1em;
+        }
+
+        .breadcrumb-nav {
+            a, span {
+                margin-top: .25em;
+                margin-bottom: .25em;
+            }
+        }
+    }
+}
+.git-overview {
+    .option-row {
+        text-align: right;
+        display: block;
+        > div {
+            margin-left: 1em;
+            display: inline-block;
+        }
+    }
+}

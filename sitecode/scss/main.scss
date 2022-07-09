@@ -111,6 +111,9 @@ a {
     text-decoration: none !important;
     color: inherit;
 }
+pre {
+    margin: 0;
+}
 
 body {
     height: 100vh;
@@ -570,3 +573,121 @@ body {
 
     }
 }
+
+.git-overview {
+    padding: 1em 2em;
+    .files-wrapper {
+        width: 100%;
+        > .files-table {
+            color: var(--col_light);
+            width: 100%;
+            border-collapse: collapse;
+
+            > tbody {
+                > tr:hover {
+                    > td {
+                        > a {
+                            color: var(--col_hover);
+                            path, rect {
+                                stroke: var(--col_hover);
+                            }
+                        }
+                    }
+                }
+                > tr:first-child {
+                    > th {
+                        padding:0;
+                        background-color: var(--col_light);
+                        color: var(--col_dark);
+                        .breadcrumb-nav {
+                            a, span {
+                                border-bottom: none;
+                            }
+                        }
+                    }
+                    > th:first-child {
+                        text-align: left;
+                    }
+                    > th:last-child {
+                        text-align: right;
+                        padding-right: .5em;
+                    }
+                }
+                > tr:not(:first-child) {
+                    > td:first-child {
+                        padding: .5rem;
+                    }
+                    > td {
+                        border-top: solid 1px var(--col_light);
+                        padding: .5rem 0;
+                    }
+                    > td.description {
+                        max-width: 30vw;
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        padding-left: 1em;
+                        padding-right: 1em;
+                    }
+                    > td:last-child {
+                        text-align: right;
+                    }
+                }
+            }
+        }
+    }
+
+    .icon-svg {
+        width: 2em;
+        display: inline-block;
+        svg {
+            width: 1.6em;
+            height: 1.6em;
+            rect, path {
+                stroke: var(--col_light);
+            }
+        }
+    }
+    .option-row {
+    }
+}
+
+.git-overview,
+.git-fileoverview {
+    .breadcrumb-nav {
+        font-weight: bold;
+        a:hover {
+            background-color: var(--col_hover);
+            color: var(--col_highlight);
+            border-color: var(--col_highlight);
+        }
+        span, a {
+            display: inline-block;
+            padding: .2em .3em;
+        }
+        a {
+            color: var(--col_light);
+            background-color: var(--col_dark);
+            border: solid 1px var(--col_light);
+        }
+        span {
+            display: inline-block;
+        }
+
+    }
+    .activity-overview {
+        .year-table {
+            td {
+                width: 1em;
+                height: 1.6em;
+            }
+            td:not(.oob) {
+                border: 1px solid var(--col_light);
+            }
+            td.active {
+                background-color: var(--col_light);
+            }
+        }
+    }
+}
+
+
