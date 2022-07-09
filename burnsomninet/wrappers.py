@@ -401,7 +401,6 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
             )
         )
 
-
     body_content = Tag("div",
         { "class": "git-overview" },
         Tag("div",
@@ -485,3 +484,13 @@ def build_git_commit_view(project_name, branch_name, commit_id=None):
 
     branch.get_commit(commit_id)
     return Tag("div", f"commit/diff oviewview of {commit_id}")
+
+def slug_tag(remote, classname, **kwargs):
+    opts = {
+        "class": f"widget-slug slug-{classname}",
+        "data-remote": remote,
+        "data-class": classname,
+        "data-json": json.dumps(kwargs)
+    }
+
+    return Tag("div", opts)

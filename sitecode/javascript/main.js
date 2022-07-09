@@ -18,6 +18,13 @@ function toggleClass(elm, classname) {
     }
 }
 
+class SlugWidget {
+    constructor(element, options) {
+        this.element = element;
+        this.options = options;
+        this.element.innerHTML = "";
+    }
+}
 
 var EVENTMAP = {};
 function touch_to_click_cancel(elm, e) {
@@ -93,4 +100,71 @@ function event_ignore(elm, eventname) {
         event_listen(elm, "__.touchend", touch_to_click_end);
     }
 
+}
+
+function ajax_call(url, on_success, on_fail) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            if (this.status == 200) {
+                on_success.apply(this);
+            } else {
+                on_fail.apply(this);
+            }
+        }
+    }
+
+    xhr.send();
+}
+
+function load_script(url, callback) {
+    let script = document.createElement('script');
+    script.src = url;
+    script.type = 'text/javascript';
+
+    if (callback) {
+        script.onload = callback;
+    }
+
+    document.getElementsByTagName('head')[0].appendChild(script);
+}
+
+function widget_slug_callback() {
+    let slug_data = this;
+    for (let i = 0; i < slug_data.length; i++) {
+        let slug = slug_data[i];
+        // FIXME: I don't like this, i just don't have a better idea ATM.
+        let classref = eval(slug.classname);
+        let new_obj = new classref(slug.element, slug.kwargs);
+    }
+}
+
+function load_widget_slugs() {
+    let slugs = document.getElementsByClassName("widget-slug");
+
+    let payloads = {};
+    for (let i = 0; i < slugs.length; i++) {
+        let url = slugs[i].getAttribute('data-remote');
+        if (! payloads[url]) {
+            payloads[url] = [];
+        }
+        let kwargs = JSON.parse(slugs[i].getAttribute('data-json'));
+        let classname = slugs[i].getAttribute('data-class');
+
+        payloads[url].push({
+            element: slugs[i],
+            classname: classname,
+            kwargs: kwargs
+        });
+    }
+
+    for (let url in payloads) {
+        load_script(url, widget_slug_callback.bind(payloads[url]))
+    }
+}
+
+window.onload = function() {
+    load_widget_slugs();
 }
