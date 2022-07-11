@@ -23,6 +23,8 @@ class Project:
 
     def get_branch_names(self):
         return os.listdir(f"{self.path}/refs/heads/")
+    def get_path(self):
+        return self.path
 
 
 class ProjectBranch:
@@ -32,7 +34,7 @@ class ProjectBranch:
         self.branch = branch
 
         cwd = os.getcwd()
-        os.chdir(f"{self.project.path}")
+        os.chdir(f"{self.project.get_path()}")
         os.system(f"git whatchanged {branch} > /tmp/gitmanip")
         whatchanged_dump = ""
 
@@ -224,6 +226,15 @@ class Commit:
 
     def get_description(self):
         return self.description
+
+    def get_id(self):
+        return self.id
+
+    def get_timestamp(self):
+        return self.date.timestamp()
+
+    def get_author_email(self):
+        return self.author
 
 
 if __name__ == "__main__":

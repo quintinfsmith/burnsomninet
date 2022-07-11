@@ -31,6 +31,7 @@ urlpatterns = [
     path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
+    path('api/<path:section_path>', views.api_controller),
     path("git/<str:project>/", views.git_controller, name="git"),
     path("<str:section>/<str:subsection>/", views.section_controller),
     path("<str:section>/<str:subsection>.json", views.section_json),
