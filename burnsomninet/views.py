@@ -2,6 +2,7 @@ import os
 import json
 import time
 import marko
+import importlib
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML
@@ -270,6 +271,22 @@ def git_controller(request, project):
         )
     )
     return HttpResponse(repr(top))
+
+def api_controller(request, section_path):
+    section_split = section_path.split("/")
+    while "" in section_split:
+        section_split.remove("")
+    module_name = f"sitecode.py.api.{'.'.join(section_split)}"
+
+    try:
+        controller = importlib.import_module(module_name)
+    except ModuleNotFoundError:
+        raise Http404()
+
+    content = controller.process_request(request)
+    content = json.dumps(content)
+
+    return HttpResponse(content, content_type="application/json")
 
 
 VIEWMAP = {
