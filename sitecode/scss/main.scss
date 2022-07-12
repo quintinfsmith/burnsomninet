@@ -1,6 +1,7 @@
 :root {
     --krisholmblue: rgb(6,56,126);
     --krisholmyellow: #ffe100;
+    --col_lightb: #6f6f6f;
     --col_light: #afafaf;
     --col_dark: #2d2d2d;
     --col_highlight: #3c4b66;
@@ -219,6 +220,18 @@ body {
     }
 }
 
+.project.sitemap > div > .logo {
+    svg {
+        path.frame,
+        path.tire {
+            opacity: 1;
+            fill: var(--col_highlight);
+            stroke: var(--col_hover);
+            stroke-width: 20;
+        }
+    }
+
+}
 .software.sitemap > div > .logo {
     svg {
         path.frame,
@@ -674,20 +687,68 @@ body {
         }
 
     }
-    .activity-overview {
-        .year-table {
-            td {
-                width: 1em;
-                height: 1.6em;
+}
+
+.slug-GitActivityWidget {
+    > div:first-child {
+        color: var(--col_light);
+        text-align: center;
+        font-size: 1.7rem;
+        font-weight: bold;
+    }
+    > div:nth-child(2) {
+        display: flex;
+        > div {
+            flex: 1 1 auto;
+                text-align: center;
+            > * {
+                display: inline-block;
             }
-            td:not(.oob) {
+        }
+        > div:first-child:not(:last-child),
+        > div:last-child:not(:first-child){
+            flex: 0 1 auto;
+        }
+    }
+
+    .year-table {
+        td:first-child {
+            color: var(--col_light);
+            font-weight: bold;
+            font-family: monospace;
+            font-size: .9em;
+        }
+        td {
+            > div {
+                width: 1em;
+                height: 1em;
+            }
+        }
+        td:not(.oob) {
+            > div {
                 border: 1px solid var(--col_light);
             }
-            td.active {
+        }
+        td.active {
+             > div {
                 background-color: var(--col_light);
             }
         }
+        td.evenmonth {
+            > div {
+                border: 1px solid var(--col_lightb);
+            }
+        }
+        td:hover {
+            > div {
+                border-color: var(--col_hover);
+            }
+        }
+        td.active:hover {
+            > div {
+                background-color: var(--col_hover);
+            }
+        }
     }
+
 }
-
-
