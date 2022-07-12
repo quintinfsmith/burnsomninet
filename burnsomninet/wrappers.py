@@ -92,11 +92,50 @@ def build_sitemap(*active_path):
             })
         )
     )
+
+    subsitemap = Tag("div", { "class": "treemap" })
+    #------------------------------------------#
+    repositories = os.listdir(GIT_PATH)
+    repositories.sort()
+    working_repositories = []
+    for path in repositories:
+        if os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok"):
+            working_repositories.append(path)
+    repositories = working_repositories
+
+
+    entry = Tag("div", { "class": "entry" })
+    for i, repo in enumerate(repositories):
+        classname = "item"
+        if ('project', repo) == active_path:
+            classname += " active"
+
+        entry.append(
+            Tag('a',
+                {
+                    'class': classname,
+                    'href': f"/project/{repo}"
+                },
+                VH_MID,
+                Tag('div', repo)
+            )
+        )
+
+    subsitemap.append(
+        Tag("div",
+            Tag('div',
+                { 'class': 'header' },
+                VH_MID,
+                Tag('div', 'Repositories')
+            ),
+            entry
+        )
+    )
+    #------------------------------------------#
     sectionsdir = f"{SITECODE}/sections/"
 
     headings = os.listdir(sectionsdir)
     headings.sort()
-    subsitemap = Tag("div", { "class": "treemap" })
 
     for i, heading in enumerate(headings):
         entry = Tag("div", { "class": "entry" })
@@ -132,6 +171,8 @@ def build_sitemap(*active_path):
                 entry
             )
         )
+    #sitemap_sub.append(subsitemap)
+
     sitemap_sub.append(subsitemap)
     return sitemap
 
@@ -379,7 +420,7 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
             Tag("tr",
                 Tag("td",
                     Tag("a",
-                        { "href": f"/git/{project_name}?" + urlencode(query_attrs) },
+                        { "href": f"/project/{project_name}?" + urlencode(query_attrs) },
                         VH_MID,
                         Tag("span",
                             { "class": "icon-svg" },
@@ -394,7 +435,7 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
                 ),
                 Tag("td",
                     Tag("a",
-                        { "href": f"/git/{project_name}?" + urlencode(commit_query_attrs) },
+                        { "href": f"/project/{project_name}?" + urlencode(commit_query_attrs) },
                         str(commit_date)
                     )
                 )
@@ -421,7 +462,9 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
     )
 
     if active_commit is None and path == "":
-        body_content.append(build_git_activity_chart(branch))
+        body_content.append(
+            slug_tag('/javascript/git.js', 'GitActivityWidget', project = project_name)
+        )
 
 
     return body_content
@@ -446,7 +489,6 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
         language = "yaml"
     else:
         language = "none"
-
     return Tag("div",
         { "class": "git-fileoverview" },
         Tag("div",

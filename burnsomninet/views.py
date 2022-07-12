@@ -263,7 +263,7 @@ def git_controller(request, project):
     top = Tag("html",
         wrappers.build_head(title=f"{project.capitalize()} overview"),
         Tag("body",
-            wrappers.build_sitemap('git', project),
+            wrappers.build_sitemap('project', project),
             Tag("div",
                 { "class": "content" },
                 body

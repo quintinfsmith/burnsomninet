@@ -102,17 +102,30 @@ function event_ignore(elm, eventname) {
 
 }
 
+function api_call(url, on_success, on_fail) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+
+    xhr.onloadend = function () {
+        if (xhr.status == 200) {
+            on_success.apply(this, [JSON.parse(this.response)]);
+        } else {
+            on_fail.apply(this, [this.response]);
+        }
+    }
+
+    xhr.send();
+}
+
 function ajax_call(url, on_success, on_fail) {
     var xhr = new XMLHttpRequest();
     xhr.open("GET", url, true);
 
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            if (this.status == 200) {
-                on_success.apply(this);
-            } else {
-                on_fail.apply(this);
-            }
+    xhr.onloadend = function () {
+        if (xhr.status == 200) {
+            on_success.apply(this, [this.response]);
+        } else {
+            on_fail.apply(this, [this.response]);
         }
     }
 
