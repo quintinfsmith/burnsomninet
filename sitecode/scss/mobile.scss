@@ -146,10 +146,20 @@ body {
 .git-overview {
     .option-row {
         display: flex;
+        flex-wrap: wrap;
         > div {
             flex: 1 1 auto;
+            text-align: center;
+            margin: 0;
         }
         > div:first-child {
+            width: 100%;
+            padding-bottom: 1px;
+        }
+        > div:not(:first-child) {
+            height: 2em;
+        }
+        > div:nth-child(2) {
             text-align: left;
         }
         > div:last-child {

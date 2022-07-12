@@ -151,10 +151,16 @@ body {
 }
 .git-overview {
     .option-row {
-        text-align: right;
-        display: block;
-        > div {
+        padding-bottom: 1px;
+        display: flex;
+        > div:first-child {
+            flex: 1 1 auto;
+        }
+        > div:not(:first-child) {
+            flex: 0 1 auto;
             margin-left: 1em;
+        }
+        > div {
             display: inline-block;
         }
     }

@@ -253,7 +253,7 @@ def git_controller(request, project):
     if view == 'files':
         path = request.GET.get('path', '')
         if path == '' or path[-1] == '/':
-            body = wrappers.build_git_overview(project, branch, commit, path)
+            body = wrappers.build_git_overview(request, project, branch, commit, path)
         else:
             body = wrappers.build_git_file_view(project, branch, commit, path)
     elif view == "commit":
