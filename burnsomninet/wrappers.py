@@ -355,7 +355,7 @@ def build_git_activity_chart(git_branch) -> Tag:
 
     return Tag("div", { "class": "activity-overview"}, year_table)
 
-def build_git_overview(project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
+def build_git_overview(request, project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch = git_project.get_branch(branch_name)
 
@@ -442,17 +442,30 @@ def build_git_overview(project_name: str, branch_name: str, active_commit: Optio
             )
         )
 
+    host = request.get_host()
+    if ":" in host:
+        host = host[0:host.rfind(":")]
+
     body_content = Tag("div",
         { "class": "git-overview" },
         Tag("div",
             { "class": "option-row" },
             Tag("div",
+                { "class": "clone-path" },
+                Tag("div", "Clone URL:"),
+                Tag("div",
+                    f"git://{host}/{project_name}"
+                )
+            ),
+            Tag("div",
                 { "title": "Branch" },
                 build_git_branch_select(git_project, branch_name),
+                VH_MID
             ),
             Tag("div",
                 { "title": "Commit" },
-                build_git_commit_select(git_project, branch_name, active_commit)
+                build_git_commit_select(git_project, branch_name, active_commit),
+                VH_MID
             )
         ),
         Tag("div",

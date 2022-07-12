@@ -589,6 +589,24 @@ body {
 
 .git-overview {
     padding: 1em 2em;
+    color: var(--col_light);
+    .clone-path {
+        > div {
+            font-family: monospace;
+            display: inline-block;
+            padding: .5em;
+        }
+        > div:first-child {
+            user-select: none;
+            color: var(--col_dark);
+            background-color: var(--col_light);
+            border: 1px solid var(--col_light);
+        }
+        > div:last-child {
+            cursor: pointer;
+            border: 1px solid var(--col_light);
+        }
+    }
     .files-wrapper {
         width: 100%;
         > .files-table {
