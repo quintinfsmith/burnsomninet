@@ -6,7 +6,6 @@ import importlib
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML
-from sitecode.py.gitmanip import Project as GitProject
 from burnsomninet import wrappers
 
 SITECODE = settings.SITECODE
@@ -250,10 +249,15 @@ def git_controller(request, project):
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
     commit = request.GET.get('commit', None)
+
+    # TODO: Clean up this structure
     if view == 'files':
         path = request.GET.get('path', '')
         if path == '' or path[-1] == '/':
             body = wrappers.build_git_overview(request, project, branch, commit, path)
+        elif request.GET.get('raw', 0):
+            raw_content = wrappers.get_raw_file_content(project, branch, commit, path)
+            return HttpResponse(raw_content, content_type="text/plain")
         else:
             body = wrappers.build_git_file_view(project, branch, commit, path)
     elif view == "commit":

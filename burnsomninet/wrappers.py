@@ -482,6 +482,17 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
 
     return body_content
 
+def get_raw_file_content(project_name, branch_name, commit_id, path):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    branch = git_project.get_branch(branch_name)
+    blame = branch.get_blame(path, commit_id)
+    body_content = ""
+    for i, (last_commit_id, content) in enumerate(blame):
+        body_content += content + "\n"
+    if body_content:
+        body_content = body_content[0:-1]
+    return body_content
+
 
 def build_git_file_view(project_name, branch_name, commit_id, path):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
@@ -490,6 +501,8 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
     body_content = ""
     for i, (last_commit_id, content) in enumerate(blame):
         body_content += content + "\n"
+    if body_content:
+        body_content = body_content[0:-1]
 
     ext = path[path.rfind(".") + 1:].lower()
     if ext == "py":
@@ -502,12 +515,31 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
         language = "yaml"
     else:
         language = "none"
+
+    query_attrs = {
+        "branch": branch_name,
+        'path': path,
+        "raw": 1
+    }
+    if commit_id is not None:
+        query_attrs['commit'] = commit_id
+
     return Tag("div",
         { "class": "git-fileoverview" },
         Tag("div",
             { "class": "navigation-row" },
             Tag("div",
                 build_git_path_navigator(branch_name, commit_id, path)
+            ),
+            Tag("div",
+                VH_MID,
+                Tag("a",
+                    {
+                        "href": "?" + urlencode(query_attrs),
+                        "download": path[path.rfind("/") + 1:]
+                    },
+                    Tag("button", "Download File")
+                )
             ),
             Tag("div",
                 { "title": "Branch" },
