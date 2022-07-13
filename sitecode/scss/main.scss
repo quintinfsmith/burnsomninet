@@ -121,6 +121,7 @@ body {
     background-color: var(--col_dark);
     margin: 0;
     font-family: primary;
+    color: var(--col_light);
 }
 
 .vh_top,
@@ -693,7 +694,6 @@ body {
 
 .git-overview,
 .git-fileoverview {
-    color: var(--col_light);
 
     .title-row {
         text-align: center;
@@ -733,7 +733,6 @@ body {
 
 .slug-GitActivityWidget {
     > div:first-child {
-        color: var(--col_light);
         text-align: center;
         font-size: 1.7rem;
         font-weight: bold;
@@ -760,12 +759,25 @@ body {
             font-family: monospace;
             font-size: .9em;
         }
-        td {
+        td:not(.year-delim) {
             text-align: center;
             > div {
                 display: inline-block;
                 width: 1.4em;
                 height: 1em;
+            }
+        }
+        td.year-delim {
+            > span {
+                display: flex;
+                > hr {
+                    border: none;
+                    border-top: 1px solid var(--col_lightb);
+                    flex: 1 1 auto;
+                }
+                > div {
+                    flex: 0 1 auto;
+                }
             }
         }
         td:not(.oob) {
