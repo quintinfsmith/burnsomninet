@@ -15,21 +15,20 @@ class GitActivityWidget extends SlugWidget {
     constructor(element, options) {
         super(element, options);
         this.commits = [];
-        this.year_elements = {};
         this.commit_block_elements = {};
-        this.element_wrapper = crel('div');
-        this.element_title = crel('div');
+        this.element_table = this.build_table(52 * 7);
+        this.element_wrapper = crel('div', this.element_table);
+        this.element_title = crel('div', "Activity over the previous 52 weeks");
         this.element.appendChild(this.element_title);
         this.element.appendChild(crel('div', this.element_wrapper));
 
         let now = new Date();
+        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        let then_stamp = ((today.getTime() - (1000 * 60 * 60 * 24 * 52 * 7)) / 1000);
 
-        let from_date = new Date(now.getFullYear(), 0, 1);
-        let to_date = new Date(now.getFullYear() + 1, 0, 1);
         let url = "/api/git/commits" +
             "?project=" + options.project +
-            "&datefrom=" + (from_date.getTime() / 1000) +
-            "&dateto=" + (to_date.getTime() / 1000);
+            "&datefrom=" + then_stamp;
 
         api_call(url,
             function(response) {
@@ -38,7 +37,6 @@ class GitActivityWidget extends SlugWidget {
                     this.new_year_table(year);
                 }
                 this.update_commits(response);
-                this.show_year(year);
             }.bind(this),
             function(response) {
                 console.log(response);
@@ -47,46 +45,39 @@ class GitActivityWidget extends SlugWidget {
 
     }
 
-    show_year(year) {
-        if (this.year_elements[year]) {
-            for (let k in this.year_elements) {
-                this.year_elements[k].style.display = "none";
-            }
-            this.year_elements[year].style.display = "inline-block";
-            this.set_title("Git Activity in " + year);
-        }
-    }
-
-    set_title(title) {
-        this.element_title.innerText = title;
-    }
-
-    new_year_table(new_year) {
+    build_table(day_count) {
         let year_table = crel('table', { class: "year-table" });
-        let day_one = new Date(new_year, 0, 1);
-        let day_offset = (day_one).getDay();
-        let day_count = 365;
-        // Leap Year?
-        if (new Date(new_year, 1, 29).getMonth() == 1) {
-            day_count += 1;
-        }
+        let now = new Date();
+        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        let day_one = new Date(today.getTime() - (1000 * 60 * 60 * 24 * day_count));
+        let day_offset = (today).getDay();
 
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         let weekdays = ['Sun', 'Mon', 'Tue', 'Wed', "Thu", 'Fri', 'Sat'];
-        year_table.appendChild(crel('tr'));
-        for (let i = 0; i < 14; i++) {
+        year_table.appendChild(crel('tr', crel('th')));
+        for (let i = 0; i < 7; i++) {
             year_table.lastChild.appendChild(crel('th', weekdays[i % 7]));
         }
 
         year_table.appendChild(crel('tr'));
-        for (let i = 0; i < day_offset; i++) {
+        for (let i = 0; i < 7 - day_offset; i++) {
             year_table.lastChild.appendChild(crel('td', { 'class': 'oob' }, crel('div')));
         }
 
         let day_one_ts = day_one.getTime();
-        for (let i = 0; i < day_count; i++) {
+        let previous_month = today.getMonth();
+        let month_changed = true;
+
+        let previous_year = today.getFullYear();
+        let year_changed = false;
+
+        for (let i = day_count; i >= 0; i--) {
             let timestamp = day_one_ts + (i * (24 * 60 * 60 * 1000));
             let working_date = new Date(timestamp);
             let date_string = build_simple_date_string(working_date);
+            let doy = working_date.getTime() - (new Date(working_date.getFullYear(), 0, 0));
+            doy = parseInt(doy / (1000 * 60 * 60 * 24));
+
 
             let td = crel('td',
                 {
@@ -95,55 +86,63 @@ class GitActivityWidget extends SlugWidget {
                 },
                 crel('div')
             );
+            this.commit_block_elements[(working_date.getFullYear() * 366) + doy] = td;
 
-            this.commit_block_elements[(new_year * 366) + i] = td;
+            if ((i + day_offset) % 7 == 6) {
+                let buffer = crel('td');
+                if (month_changed) {
+                    buffer = crel('td', months[working_date.getMonth()]);
+                    month_changed = false;
+                }
+                year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
 
-            if ((i + day_offset) % 14 == 0) {
+                if (year_changed) {
+                    let divider = crel('tr',
+                        crel('td'),
+                        crel('td',
+                            {
+                                'colspan': 7,
+                                'class': 'year-delim'
+                            },
+                            crel('span',
+                                crel('hr'),
+                                crel('div', previous_year),
+                                crel('hr')
+                            )
+                        )
+                    );
+                    year_table.insertBefore(divider, year_table.lastChild);
+                    year_changed = false;
+                }
                 year_table.appendChild(crel('tr'));
             }
+            year_changed |= previous_year != working_date.getFullYear();
+            previous_year = working_date.getFullYear();
+            month_changed |= previous_month != working_date.getMonth();
+            previous_month = working_date.getMonth();
 
-            year_table.lastChild.appendChild(td);
+            year_table.lastChild.insertBefore(td,year_table.lastChild.firstChild);
+        }
+        if (year_table.lastChild.childNodes.length != 0) {
+            year_table.lastChild.insertBefore(crel('td'), year_table.lastChild.firstChild);
         }
 
 
-        // Insert new table
-        let added = false;
-        let existing_years = Object.keys(this.year_elements);
-        existing_years.sort();
 
-        for (let i = 0; i < existing_years; i++) {
-            let working_year = existing_years[i];
-            if (new_year < working_year) {
-                this.element_wrapper.insertBefore(
-                    year_table,
-                    this.year_elements[working_year]
-                );
-                added = true;
-                break;
-            }
-        }
-
-        if (! added) {
-            this.element_wrapper.appendChild(year_table);
-        }
-
-        this.year_elements[new_year] = year_table;
+        return year_table;
     }
+
 
     update_commits(new_commits) {
         for (let i = 0; i < new_commits.length; i++) {
             let commit = new_commits[i];
             let date = new Date(commit.date * 1000);
             let working_year = date.getFullYear();
-            if (! this.year_elements[working_year]) {
-                this.new_year_table(working_year);
-            }
 
             let day_one = new Date(working_year, 0, 1);
             let one_day = 1000 * 60 * 60 * 24
             let doy = (date.getTime() - day_one.getTime()) / one_day;
             let key = Math.floor((366 * working_year) + doy);
-
 
             let element_td = this.commit_block_elements[key];
 
@@ -151,6 +150,7 @@ class GitActivityWidget extends SlugWidget {
             if (!commit_count) {
                 commit_count = 0;
             }
+
             commit_count = parseInt(commit_count) + 1;
             element_td.setAttribute('data-count', commit_count);
             element_td.setAttribute('title', commit_count + " commits on " + element_td.getAttribute('data-date'));
