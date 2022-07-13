@@ -756,7 +756,7 @@ body {
     .year-table {
         th {
             color: var(--col_light);
-            font-weight: bold;
+            font-weight: normal;
             font-family: monospace;
             font-size: .9em;
         }
@@ -764,7 +764,7 @@ body {
             text-align: center;
             > div {
                 display: inline-block;
-                width: 1em;
+                width: 1.4em;
                 height: 1em;
             }
         }
