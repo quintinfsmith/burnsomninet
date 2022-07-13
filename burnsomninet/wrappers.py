@@ -400,31 +400,35 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     body_content = Tag("div",
         { "class": "git-overview" },
         Tag("div",
-            { "class": "option-row" },
             Tag("div",
-                VH_MID,
-                slug_tag('/javascript/git.js', 'CloneButtonWidget', project = project_name)
-            ),
-            Tag("div",
+                { "class": "option-row" },
                 Tag("div",
                     VH_MID,
-                    build_git_branch_select(project_name, branch_name)
+                    slug_tag('/javascript/git.js', 'CloneButtonWidget', project = project_name)
                 ),
                 Tag("div",
-                    VH_MID,
-                    build_git_commit_select(project_name, branch_name, active_commit, path)
+                    Tag("div",
+                        VH_MID,
+                        build_git_branch_select(project_name, branch_name)
+                    ),
+                    Tag("div",
+                        VH_MID,
+                        build_git_commit_select(project_name, branch_name, active_commit, path)
+                    )
                 )
+            ),
+            Tag("div",
+                { "class": "files-wrapper" },
+                file_table
             )
-        ),
-        Tag("div",
-            { "class": "files-wrapper" },
-            file_table
         )
     )
 
     if (active_commit is None or active_commit == branch.get_latest_commit_id()) and path == "":
         body_content.append(
-            slug_tag('/javascript/git.js', 'GitActivityWidget', project = project_name)
+            Tag("div",
+                slug_tag('/javascript/git.js', 'GitActivityWidget', project = project_name)
+            )
         )
 
 
@@ -486,9 +490,10 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
                 Tag("a",
                     {
                         "href": "?" + urlencode(query_attrs),
-                        "download": path[path.rfind("/") + 1:]
+                        "download": path[path.rfind("/") + 1:],
+                        "class": "button"
                     },
-                    Tag("button", "Download File")
+                    "Download File"
                 )
             )
         ),

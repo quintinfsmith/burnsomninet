@@ -733,8 +733,9 @@ body {
 
 .slug-GitActivityWidget {
     > div:first-child {
+        display: none;
         text-align: center;
-        font-size: 1.7rem;
+        font-size: 1rem;
         font-weight: bold;
     }
     > div:nth-child(2) {
@@ -817,6 +818,7 @@ body {
 }
 
 .custom-select {
+    box-shadow: .5em .5em 0 0 #000;
     > .wrapper {
         position: relative;
         > select {
@@ -847,3 +849,16 @@ body {
         }
     }
 }
+.button {
+    appearance: none;
+    text-align: center;
+    color: var(--col_dark);
+    background-color: var(--col_light);
+    padding: .5em 1em;
+    box-shadow: .5em .5em 0 0 #000;
+    margin: 0 .5em .5em 0;
+}
+.button:hover {
+    background-color: var(--col_hover);
+}
+
