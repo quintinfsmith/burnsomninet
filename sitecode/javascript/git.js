@@ -123,11 +123,10 @@ class GitActivityWidget extends SlugWidget {
 
             year_table.lastChild.insertBefore(td,year_table.lastChild.firstChild);
         }
+
         if (year_table.lastChild.childNodes.length != 0) {
             year_table.lastChild.insertBefore(crel('td'), year_table.lastChild.firstChild);
         }
-
-
 
         return year_table;
     }
