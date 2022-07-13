@@ -824,6 +824,7 @@ body {
             > div:first-child {
                 flex: 1 1 auto;
                 padding-right: .5em;
+                white-space: nowrap;
             }
             > div.arrow {
                 flex: 0 1 auto;
