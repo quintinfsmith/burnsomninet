@@ -361,7 +361,6 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
             icon = RawHTML(fp.read())
 
         commit_query_attrs = {
-            "view": "commit",
             "commit": commit_id,
             "branch": branch_name
         }
@@ -386,7 +385,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 ),
                 Tag("td",
                     Tag("a",
-                        { "href": f"/project/{project_name}?" + urlencode(commit_query_attrs) },
+                        { "href": f"?" + urlencode(commit_query_attrs) },
                         str(commit_date)
                     )
                 )
