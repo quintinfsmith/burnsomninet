@@ -31,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
+    "burnsomni.stage",
     "burnsomni.net",
     "www.burnsomni.net"
 ]
