@@ -590,20 +590,29 @@ body {
 .git-overview {
     padding: 1em 2em;
     color: var(--col_light);
-    .clone-path {
+    .slug-CloneButtonWidget {
+        white-space: nowrap;
         > div {
             font-family: monospace;
             display: inline-block;
             padding: .5em;
         }
         > div:first-child {
+            cursor: pointer;
+            text-align: center;
             user-select: none;
             color: var(--col_dark);
             background-color: var(--col_light);
             border: 1px solid var(--col_light);
+            width: calc(7.5em - 1em - 2px);
+        }
+        > div:first-child.copied {
+            font-weight: bold;
+            background-color: var(--col_highlight);
+            border-color: var(--col_highlight);
+            color: var(--col_hover);
         }
         > div:last-child {
-            cursor: pointer;
             border: 1px solid var(--col_light);
         }
     }
@@ -684,6 +693,21 @@ body {
 
 .git-overview,
 .git-fileoverview {
+    color: var(--col_light);
+
+    .title-row {
+        text-align: center;
+        padding-bottom: .5em;
+        > div:last-child {
+            text-align: center;
+            > div {
+                display: inline-block;
+            }
+            > div:nth-child(2) {
+                padding: 0 .5em;
+            }
+        }
+    }
     .breadcrumb-nav {
         font-weight: bold;
         a:hover {
@@ -730,14 +754,16 @@ body {
     }
 
     .year-table {
-        td:first-child {
+        th {
             color: var(--col_light);
             font-weight: bold;
             font-family: monospace;
             font-size: .9em;
         }
         td {
+            text-align: center;
             > div {
+                display: inline-block;
                 width: 1em;
                 height: 1em;
             }
@@ -768,5 +794,43 @@ body {
             }
         }
     }
+}
 
+.slug-GitBranchSelect {
+
+}
+
+.slug-GitCommitSelect {
+
+}
+
+.custom-select {
+    > .wrapper {
+        position: relative;
+        > select {
+            cursor: pointer;
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        > .facade {
+            display: flex;
+            padding: .25em .5em .25em .5em;
+            color: var(--col_dark);
+            background-color: var(--col_light);
+            > div:first-child {
+                flex: 1 1 auto;
+                padding-right: .5em;
+            }
+            > div.arrow {
+                flex: 0 1 auto;
+                margin-top: -.1em;
+            }
+            > div.arrow:before {
+            }
+        }
+    }
 }

@@ -178,6 +178,69 @@ function load_widget_slugs() {
     }
 }
 
+class CustomSelect {
+    constructor(option_nodes, onchange) {
+        this.value = null;
+        this.display = null;
+        this.onchange = onchange;
+        this.element_select = crel('select');
+        this.element_display = crel('div');
+        this.element_facade = crel('div',
+            {
+                "class": "facade",
+                "tabindex": 0,
+            },
+            this.element_display,
+            crel('div',
+                { 'class': 'arrow' },
+                crel('div', { "class": "vh_mid" }),
+                crel('div', "\u25BC")
+            )
+        );
+
+        for (let i = 0; i < option_nodes.length; i++) {
+            this.element_select.appendChild(option_nodes[i]);
+        }
+
+        this.element = crel('div',
+            { "class": "custom-select" },
+            crel('div',
+                { 'class': 'wrapper' },
+                this.element_select,
+                this.element_facade
+            )
+        );
+
+        this.element_select.addEventListener('change', function(e) {
+            this.set(this.element_select.value);
+            this.onchange(this.element_select.value);
+        }.bind(this));
+
+    }
+
+    set(new_value) {
+        this.value = new_value;
+        this.display = '';
+        let option_tags = this.element_select.childNodes;
+        for (let i = 0; i < option_tags.length; i++) {
+            let option = option_tags[i];
+            if (option.value == new_value) {
+                option.setAttribute('selected', true);
+                this.display = option.text;
+            } else {
+                option.removeAttribute('selected');
+            }
+        }
+
+        this.element_display.innerText = this.display;
+    }
+
+    get() {
+        return this.value;
+    }
+}
+
 window.onload = function() {
     load_widget_slugs();
 }
+

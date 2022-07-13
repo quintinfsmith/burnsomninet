@@ -151,17 +151,21 @@ body {
 }
 .git-overview {
     .option-row {
-        padding-bottom: 1px;
+        padding-bottom: .25em;
         display: flex;
         > div:first-child {
-            flex: 1 1 auto;
-        }
-        > div:not(:first-child) {
             flex: 0 1 auto;
-            margin-left: 1em;
         }
-        > div {
-            display: inline-block;
+        > div:last-child {
+            flex: 1 1 auto;
+            display: flex;
+            flex-wrap: wrap;
+            > div {
+                flex: 1 1 auto;
+                text-align: right;
+                padding: .25em;
+                margin-right: -.25em;
+            }
         }
     }
 }

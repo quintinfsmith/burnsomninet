@@ -223,47 +223,44 @@ def media_content(mediamap):
 
     return output
 
-def build_git_branch_select(git_project: GitProject, active_branch_name: Optional[str]=None) -> Tag:
+def build_git_branch_select(project_name, active_branch_name: Optional[str]=None) -> Tag:
     if active_branch_name is None:
         active_branch_name = 'master'
 
-    output: Tag = Tag("select", {
-        'class': 'branch-selector'
-    })
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch_names = git_project.get_branch_names()
     branch_names = sorted(branch_names, key=lambda x: int(x != "master"))
-    for branch_name in branch_names:
-        tag_attrs = {
-            "value": branch_name
-        }
 
-        if branch_name == active_branch_name:
-            tag_attrs["selected"] = True
-
-        output.append(
-            Tag("option",
-                tag_attrs,
-                branch_name
-            )
+    if len(branch_names) > 1:
+        output = slug_tag(
+            '/javascript/git.js',
+            'GitBranchSelect',
+            branches=branch_names,
+            active=active_branch_name,
+            project=project_name
         )
+    else:
+        output = None
+
     return output
 
-def build_git_commit_select(git_project: GitProject, branch_name: str, active_commit: Optional[str]=None) -> Tag:
-    branch = git_project.get_branch(branch_name)
-    output: Tag = Tag("select", { "class": "commit-selector" })
-    for i, commit in enumerate(branch.get_commits()):
-        tag_attrs = {
-            "value": commit.id
-        }
+def build_git_commit_select(project_name, branch_name: str, active_commit: Optional[str]=None, active_path="") -> Tag:
+    from sitecode.py.api.git.commits import process_request
+    commits = process_request(
+        project=project_name,
+        branch=branch_name
+    )
 
-        if (i == 0 and active_commit is None) or commit.id == active_commit:
-            tag_attrs['selected'] = True
-
-        output.append(
-            Tag("option",
-                tag_attrs,
-                str(commit.date)
-            )
+    output = None
+    if len(commits) > 1:
+        output = slug_tag(
+            '/javascript/git.js',
+            'GitCommitSelect',
+            path=active_path,
+            project=project_name,
+            branch=branch_name,
+            commits=commits,
+            active=active_commit
         )
 
     return output
@@ -309,52 +306,6 @@ def is_leap_year(year):
     except ValueError:
         return False
 
-def build_git_activity_chart(git_branch) -> Tag:
-    commits = git_branch.get_commits()
-    years = set()
-    commit_days: Dict[Tuple[int, int], int] = {}
-    for commit in commits:
-        years.add(commit.date.year)
-        commit_key = (commit.date.year, commit.date.timetuple().tm_yday)
-        if commit_key not in commit_days:
-            commit_days[commit_key] = 0
-        commit_days[commit_key] += 1
-
-    years = list(years)
-    years.sort()
-    #for year in years:
-    working_year = 2022 #For Dev, switch to loop when done
-    offset = datetime(year=working_year, month=1, day=1).weekday()
-    day_count = 365
-    if is_leap_year(working_year):
-        day_count += 1
-
-    year_table = Tag("table", { "class": "year-table" })
-    day_tds = []
-    rows = []
-    for i in range(7):
-        rows.append(Tag("tr"))
-        year_table.append(rows[i])
-
-    for i in range(day_count + offset):
-        if i < offset:
-            classname = "oob"
-        else:
-            classname = ""
-
-        td = Tag("td", { "class": classname })
-        rows[i % 7].append(td)
-        day_tds.append(td)
-
-    for (year, day), count in commit_days.items():
-        if year != working_year:
-            continue
-        td = day_tds[day + offset]
-        td.set_attribute('class', 'active')
-
-
-    return Tag("div", { "class": "activity-overview"}, year_table)
-
 def build_git_overview(request, project_name: str, branch_name: str, active_commit: Optional[str], path: str = ""):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch = git_project.get_branch(branch_name)
@@ -378,7 +329,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         )
     )
 
-    filelist = branch.get_filelist(path)
+    filelist = branch.get_filelist(path, active_commit)
     sorter_list = []
     max_commit_ids = {}
 
@@ -446,26 +397,24 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     if ":" in host:
         host = host[0:host.rfind(":")]
 
+
     body_content = Tag("div",
         { "class": "git-overview" },
         Tag("div",
             { "class": "option-row" },
             Tag("div",
-                { "class": "clone-path" },
-                Tag("div", "Clone URL:"),
+                VH_MID,
+                slug_tag('/javascript/git.js', 'CloneButtonWidget', project = project_name)
+            ),
+            Tag("div",
                 Tag("div",
-                    f"git://{host}/{project_name}"
+                    VH_MID,
+                    build_git_branch_select(project_name, branch_name)
+                ),
+                Tag("div",
+                    VH_MID,
+                    build_git_commit_select(project_name, branch_name, active_commit, path)
                 )
-            ),
-            Tag("div",
-                { "title": "Branch" },
-                build_git_branch_select(git_project, branch_name),
-                VH_MID
-            ),
-            Tag("div",
-                { "title": "Commit" },
-                build_git_commit_select(git_project, branch_name, active_commit),
-                VH_MID
             )
         ),
         Tag("div",
@@ -474,7 +423,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         )
     )
 
-    if active_commit is None and path == "":
+    if (active_commit is None or active_commit == branch.get_latest_commit_id()) and path == "":
         body_content.append(
             slug_tag('/javascript/git.js', 'GitActivityWidget', project = project_name)
         )
@@ -485,24 +434,14 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
 def get_raw_file_content(project_name, branch_name, commit_id, path):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch = git_project.get_branch(branch_name)
-    blame = branch.get_blame(path, commit_id)
-    body_content = ""
-    for i, (last_commit_id, content) in enumerate(blame):
-        body_content += content + "\n"
-    if body_content:
-        body_content = body_content[0:-1]
+    body_content = branch.get_file_content(path, commit_id)
     return body_content
 
 
 def build_git_file_view(project_name, branch_name, commit_id, path):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch = git_project.get_branch(branch_name)
-    blame = branch.get_blame(path, commit_id)
-    body_content = ""
-    for i, (last_commit_id, content) in enumerate(blame):
-        body_content += content + "\n"
-    if body_content:
-        body_content = body_content[0:-1]
+    body_content = branch.get_file_content(path, commit_id)
 
     ext = path[path.rfind(".") + 1:].lower()
     if ext == "py":
@@ -523,9 +462,21 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
     }
     if commit_id is not None:
         query_attrs['commit'] = commit_id
+    else:
+        commit_id = branch.get_latest_commit_id()
 
     return Tag("div",
         { "class": "git-fileoverview" },
+        Tag("div",
+            { "class": "title-row" },
+            Tag("h1", path),
+            Tag("hr"),
+            Tag("div",
+                Tag("div", branch_name),
+                Tag("div", "|"),
+                Tag("div", commit_id)
+            )
+        ),
         Tag("div",
             { "class": "navigation-row" },
             Tag("div",
@@ -540,16 +491,6 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
                     },
                     Tag("button", "Download File")
                 )
-            ),
-            Tag("div",
-                { "title": "Branch" },
-                VH_MID,
-                build_git_branch_select(git_project, branch_name)
-            ),
-            Tag("div",
-                { "title": "Commit" },
-                VH_MID,
-                build_git_commit_select(git_project, branch_name, commit_id)
             )
         ),
         Tag("div",

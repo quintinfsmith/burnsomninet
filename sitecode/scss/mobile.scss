@@ -128,7 +128,6 @@ body {
             padding: .25em 0;
         }
         > div:first-child {
-            width: 100%;
             flex: 1 1 auto;
         }
         > div:not(:first-child) {
@@ -145,25 +144,26 @@ body {
 
 .git-overview {
     .option-row {
-        display: flex;
-        flex-wrap: wrap;
         > div {
-            flex: 1 1 auto;
+            display: block;
             text-align: center;
             margin: 0;
-        }
-        > div:first-child {
-            width: 100%;
-            padding-bottom: 1px;
-        }
-        > div:not(:first-child) {
-            height: 2em;
-        }
-        > div:nth-child(2) {
-            text-align: left;
+            .vh_mid {
+                display: none;
+            }
         }
         > div:last-child {
-            text-align: right;
+            display:flex;
+            padding: .5em 0;
+            > div {
+                flex: 1 1 auto;
+            }
+            > div:first-child {
+                text-align: left;
+            }
+            > div:last-child {
+                text-align:right;
+            }
         }
     }
 }
