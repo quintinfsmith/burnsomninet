@@ -287,7 +287,11 @@ def api_controller(request, section_path):
     except ModuleNotFoundError:
         raise Http404()
 
-    content = controller.process_request(request)
+    kwargs = {}
+    for key in request.GET:
+        kwargs[key] = request.GET.get(key, None)
+
+    content = controller.process_request(**kwargs)
     content = json.dumps(content)
 
     return HttpResponse(content, content_type="application/json")

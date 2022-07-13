@@ -53,7 +53,7 @@ class ProjectBranch:
                     self.commits[commit.id] = commit
 
     def get_latest_commit_id(self):
-        return self.get_commits()[0].date
+        return self.get_commits()[0].id
 
     def get_commit(self, commit_id):
         output = None
@@ -117,6 +117,22 @@ class ProjectBranch:
             adj_files.append((file, commit_map[file]))
         return adj_files
 
+    def get_file_content(self, filepath, commit_id=None):
+        if not commit_id:
+            commit_id = ""
+
+        cwd = os.getcwd()
+        os.chdir(f"{self.project.path}")
+        os.system(f"git show {commit_id}:\"{filepath}\" > /tmp/gitmanipb")
+        content = ""
+        with open("/tmp/gitmanipb", "r") as fp:
+            content = fp.read()
+
+        os.system("rm /tmp/gitmanipb")
+        os.chdir(cwd)
+
+        return content
+
     def get_blame(self, filepath, commit_id=None):
         if not commit_id:
             commit_chunk = ""
@@ -125,7 +141,7 @@ class ProjectBranch:
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
-        os.system(f"git blame {self.branch} {commit_chunk} \"{filepath}\" > /tmp/gitmanip")
+        os.system(f"git blame {self.branch} \"{filepath}\" {commit_chunk} > /tmp/gitmanip")
         content = ""
         with open("/tmp/gitmanip", "r") as fp:
             content = fp.read()
