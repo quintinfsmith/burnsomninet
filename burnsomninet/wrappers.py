@@ -381,7 +381,10 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
             Tag("tr",
                 Tag("td",
                     Tag("a",
-                        { "href": f"/project/{project_name}?" + urlencode(query_attrs) },
+                        {
+                            "class": "pathlink",
+                            "href": f"/project/{project_name}?" + urlencode(query_attrs)
+                        },
                         VH_MID,
                         Tag("span",
                             { "class": "icon-svg" },

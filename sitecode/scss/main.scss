@@ -593,28 +593,34 @@ body {
     color: var(--col_light);
     .slug-CloneButtonWidget {
         white-space: nowrap;
+        max-width: 100%;
         > div {
-            font-family: monospace;
-            display: inline-block;
-            padding: .5em;
-        }
-        > div:first-child {
-            cursor: pointer;
-            text-align: center;
-            user-select: none;
-            color: var(--col_dark);
-            background-color: var(--col_light);
-            border: 1px solid var(--col_light);
-            width: calc(7.5em - 1em - 2px);
-        }
-        > div:first-child.copied {
-            font-weight: bold;
-            background-color: var(--col_highlight);
-            border-color: var(--col_highlight);
-            color: var(--col_hover);
-        }
-        > div:last-child {
-            border: 1px solid var(--col_light);
+            display: flex;
+            > div {
+                flex: 0 1 auto;
+                font-family: monospace;
+                padding: .5em;
+            }
+            > div:first-child {
+                cursor: pointer;
+                text-align: center;
+                user-select: none;
+                color: var(--col_dark);
+                background-color: var(--col_light);
+                border: 1px solid var(--col_light);
+                width: calc(7.5em - 1em - 2px);
+            }
+            > div:first-child.copied {
+                font-weight: bold;
+                background-color: var(--col_highlight);
+                border-color: var(--col_highlight);
+                color: var(--col_hover);
+            }
+            > div:last-child {
+                border: 1px solid var(--col_light);
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
         }
     }
     .files-wrapper {
@@ -652,6 +658,7 @@ body {
                     > th:last-child {
                         text-align: right;
                         padding-right: .5em;
+                        white-space: nowrap;
                     }
                 }
                 > tr:not(:first-child) {
@@ -659,6 +666,7 @@ body {
                         padding: .5rem;
                     }
                     > td {
+                        white-space: nowrap;
                         border-top: solid 1px var(--col_light);
                         padding: .5rem 0;
                     }
@@ -687,8 +695,6 @@ body {
                 stroke: var(--col_light);
             }
         }
-    }
-    .option-row {
     }
 }
 
