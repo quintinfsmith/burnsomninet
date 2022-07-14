@@ -131,6 +131,7 @@ def build_sitemap(*active_path):
             entry
         )
     )
+
     #------------------------------------------#
     sectionsdir = f"{SITECODE}/sections/"
 
@@ -142,10 +143,13 @@ def build_sitemap(*active_path):
         files = os.listdir(sectionsdir + heading)
         files.sort()
         for f in files:
-            if not os.path.isdir(sectionsdir + heading + '/' + f):
-                continue
+            title = f[0:f.rfind(".")]
+            alias = title
+            if f[f.rfind('.') + 1:] == "json":
+                with open(f"{sectionsdir}{heading}/{f}", "r") as fp:
+                    prefs = json.loads(fp.read())
+                    alias = prefs.get('alias', title)
 
-            title = f
             classname = "item"
             if (heading, title) == active_path:
                 classname += " active"
@@ -157,7 +161,7 @@ def build_sitemap(*active_path):
                         'href': f"/{heading}/{title}"
                     },
                     VH_MID,
-                    Tag('div', title.title())
+                    Tag('div', alias.title())
                 )
             )
 
@@ -171,7 +175,6 @@ def build_sitemap(*active_path):
                 entry
             )
         )
-    #sitemap_sub.append(subsitemap)
 
     sitemap_sub.append(subsitemap)
     return sitemap
@@ -180,12 +183,20 @@ def media_content(mediamap):
     output = Tag("div",
         { "class": "media" }
     )
-    for media in mediamap:
+    src = mediamap["src"]
+    media_path = f"{STATIC_PATH}/{src}/"
+    for directory in os.listdir(media_path):
+        section_path = f"{media_path}/{directory}/"
+        sources = []
+        for filename in os.listdir(section_path):
+            ext = filename[filename.rfind(".") + 1:]
+            if ext == "jpg":
+                continue
+            if not os.path.isfile(f"{section_path}{filename}.jpg"):
+                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.jpg\"")
+            sources.append(f"/content/{src}/{directory}/{filename}")
         # Create screenshots
-        for src in media['srcs']:
-            abs_src = f"{BASE_DIR}/{src}"
-            if not os.path.isfile(abs_src + ".jpg"):
-                os.system("ffmpeg -i \"%s\" -ss 00:00:00 -vframes 1 \"%s.jpg\"" % (abs_src, abs_src))
+        title = directory.capitalize()
 
         output.append(
             Tag("div",
@@ -193,13 +204,13 @@ def media_content(mediamap):
                 VH_MID,
                 Tag("div",
                     {
-                        "id": media["title"].replace(" ", "_").lower(),
+                        "id": title.replace(" ", "_").lower(),
                         "class": "polaroid",
-                        "data-srcs": json.dumps(media["srcs"])
+                        "data-srcs": json.dumps(sources)
                     },
                     Tag("div",
                         Tag("img", {
-                            "src": media["srcs"][0] + ".jpg",
+                            "src": sources[0] + ".jpg",
                         })
                     ),
                     Tag("div",
@@ -207,7 +218,7 @@ def media_content(mediamap):
                         Tag("div",
                             { 'class': 'label' },
                             VH_MID,
-                            Tag("div", media["title"])
+                            Tag("div", title)
                         )
                     )
                 )
