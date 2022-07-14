@@ -167,9 +167,12 @@ class CloneButtonWidget extends SlugWidget {
         this.url = 'git://' + location.hostname + '/' + options.project;
         this.element_clone = crel('div', 'Clone URL');
         this.element_url = crel('div', { 'tabindex': 0 }, this.url);
-
-        this.element.appendChild(this.element_clone);
-        this.element.appendChild(this.element_url);
+        this.element.appendChild(
+            crel('div',
+                this.element_clone,
+                this.element_url
+            )
+        );
 
         event_listen(this.element_clone, 'click', function() {
             navigator.clipboard.writeText(this.element_url.innerText)

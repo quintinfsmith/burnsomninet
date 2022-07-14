@@ -6,6 +6,7 @@ import importlib
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML
+from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from burnsomninet import wrappers
 
 SITECODE = settings.SITECODE
@@ -106,24 +107,40 @@ def favicon(request):
     return HttpResponse(content)
 
 def style(request):
-    midsize = 800
-    content = ""
-    with open(f"{SCSS_PATH}/main.scss", "r") as file_pipe:
-        content = file_pipe.read()
+    main_path = f"{SCSS_PATH}/main.scss"
+    mobile_path = f"{SCSS_PATH}/mobile.scss"
+    desktop_path = f"{SCSS_PATH}/desktop.scss"
 
-    with open(f"{SCSS_PATH}/mobile.scss", "r") as file_pipe:
-        content += f"\n@media only screen and (max-width: {midsize}px) {{\n"
-        content += file_pipe.read()
-        content += "\n}\n"
+    is_cached = check_cache(
+        "sass_main",
+        main_path,
+        mobile_path,
+        desktop_path
+    )
 
-    with open(f"{SCSS_PATH}/desktop.scss", "r") as file_pipe:
-        content += f"\n@media only screen and (min-width: {midsize}px) {{\n"
-        content += file_pipe.read()
-        content += "\n}\n"
+    if is_cached:
+        content, mimetype = get_cached("sass_main")
+    else:
+        midsize = 800
+        content = ""
+        with open(main_path, "r") as file_pipe:
+            content = file_pipe.read()
 
-    content = sass_compile(content)
+        with open(mobile_path, "r") as file_pipe:
+            content += f"\n@media only screen and (max-width: {midsize}px) {{\n"
+            content += file_pipe.read()
+            content += "\n}\n"
 
-    return HttpResponse(content, content_type="text/css")
+        with open(desktop_path, "r") as file_pipe:
+            content += f"\n@media only screen and (min-width: {midsize}px) {{\n"
+            content += file_pipe.read()
+            content += "\n}\n"
+
+        content = sass_compile(content)
+        mimetype = "text/css"
+        update_cache("sass_main", content, mimetype)
+
+    return HttpResponse(content, mimetype)
 
 def javascript_controller(request, file_path):
     active_path = file_path.split("/")
@@ -252,32 +269,47 @@ def git_controller(request, project):
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
     commit = request.GET.get('commit', None)
+    path = request.GET.get('path', '')
+    raw = request.GET.get("raw", 0)
 
-    # TODO: Clean up this structure
-    if view == 'files':
-        path = request.GET.get('path', '')
-        if path == '' or path[-1] == '/':
-            body = wrappers.build_git_overview(request, project, branch, commit, path)
-        elif request.GET.get('raw', 0):
-            raw_content = wrappers.get_raw_file_content(project, branch, commit, path)
-            return HttpResponse(raw_content, content_type="text/plain")
-        else:
-            body = wrappers.build_git_file_view(project, branch, commit, path)
-    elif view == "commit":
-        body = wrappers.build_git_commit_view(project, branch, commit)
-
-
-    top = Tag("html",
-        wrappers.build_head(title=f"{project.capitalize()} overview"),
-        Tag("body",
-            wrappers.build_sitemap('project', project),
-            Tag("div",
-                { "class": "content" },
-                body
-            )
-        )
+    CACHE_KEY = f"GIT_{project}/{branch}/{commit}/{path}"
+    is_cached = check_cache(CACHE_KEY,
+        f"{GIT_PATH}/{project}"
     )
-    return HttpResponse(repr(top))
+
+    if is_cached:
+        content, mimetype = get_cached(CACHE_KEY)
+    else:
+        is_directory = (path == '' or path[-1] == '/')
+
+        content = None
+        if view == "files" and not is_directory and raw:
+            content = wrappers.get_raw_file_content(project, branch, commit, path)
+            mimetype = "text/plain"
+        else:
+            if view == 'files':
+                if is_directory:
+                    body = wrappers.build_git_overview(request, project, branch, commit, path)
+                else:
+                    body = wrappers.build_git_file_view(project, branch, commit, path)
+            elif view == "commit":
+                body = wrappers.build_git_commit_view(project, branch, commit)
+
+            content = Tag("html",
+                wrappers.build_head(title=f"{project.capitalize()} overview"),
+                Tag("body",
+                    wrappers.build_sitemap('project', project),
+                    Tag("div",
+                        { "class": "content" },
+                        body
+                    )
+                )
+            )
+            mimetype = "text/html"
+
+        update_cache(CACHE_KEY, repr(content))
+
+    return HttpResponse(content, mimetype)
 
 def api_controller(request, section_path):
     section_split = section_path.split("/")

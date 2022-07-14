@@ -170,7 +170,9 @@ body {
     .option-row {
         padding-bottom: .25em;
         display: flex;
+        flex-wrap: wrap;
         > div:first-child {
+            max-width: 100%;
             flex: 0 1 auto;
         }
         > div:last-child {
