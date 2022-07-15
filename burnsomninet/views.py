@@ -111,14 +111,14 @@ def style(request):
     mobile_path = f"{SCSS_PATH}/mobile.scss"
     desktop_path = f"{SCSS_PATH}/desktop.scss"
 
-    is_cached = check_cache(
+    cache_needs_update = check_cache(
         "sass_main",
         main_path,
         mobile_path,
         desktop_path
     )
 
-    if is_cached:
+    if not cache_needs_update:
         content, mimetype = get_cached("sass_main")
     else:
         midsize = 800
@@ -273,20 +273,21 @@ def git_controller(request, project):
     raw = request.GET.get("raw", 0)
 
     CACHE_KEY = f"GIT_{project}/{branch}/{commit}/{path}"
-    is_cached = check_cache(CACHE_KEY,
+    cache_needs_update = check_cache(CACHE_KEY,
         f"{GIT_PATH}/{project}"
     )
 
-    if is_cached:
+    if not cache_needs_update:
         content, mimetype = get_cached(CACHE_KEY)
     else:
         is_directory = (path == '' or path[-1] == '/')
 
         content = None
         if view == "files" and not is_directory and raw:
-            content = wrappers.get_raw_file_content(project, branch, commit, path)
             mimetype = "text/plain"
+            content = wrappers.get_raw_file_content(project, branch, commit, path)
         else:
+            mimetype = "text/html"
             if view == 'files':
                 if is_directory:
                     body = wrappers.build_git_overview(request, project, branch, commit, path)
@@ -305,9 +306,8 @@ def git_controller(request, project):
                     )
                 )
             )
-            mimetype = "text/html"
 
-        update_cache(CACHE_KEY, repr(content))
+        update_cache(CACHE_KEY, repr(content), mimetype)
 
     return HttpResponse(content, mimetype)
 
