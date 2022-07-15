@@ -469,6 +469,8 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
         language = "bash"
     elif ext == "yml":
         language = "yaml"
+    elif ext == "toml":
+        language = "toml"
     else:
         language = "none"
 
