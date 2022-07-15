@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -133,6 +134,11 @@ SITE_PATH = str(BASE_DIR.joinpath('burnsomninet'))
 COMMIT_ID = None
 with open(f"{BASE_DIR}/.git/HEAD", "r") as fp:
     branch_path = fp.read()
-    branch_path = branch_path[5:].strip()
-    with open(f"{BASE_DIR}/.git/{branch_path}", "r") as fp:
-        COMMIT_ID = fp.read().strip()
+
+    branch_path_part = branch_path[5:].strip()
+    full_branch_path = f"{BASE_DIR}/.git/{branch_path_part}"
+    if os.path.isfile(full_branch_path):
+        with open(full_branch_path, "r") as fp:
+            COMMIT_ID = fp.read().strip()
+    else:
+        COMMIT_ID = branch_path.strip()
