@@ -82,6 +82,7 @@ class GitActivityWidget extends SlugWidget {
         let day_one_ts = day_one.getTime();
         let previous_month = today.getMonth();
         let month_changed = true;
+        let month_changed_last_row = false;
 
         let previous_year = today.getFullYear();
         let year_changed = false;
@@ -107,13 +108,26 @@ class GitActivityWidget extends SlugWidget {
             // That means day_offset is saturday and we don't need a new row yet
             if (i < day_count) {
                 if ((i + day_offset) % 7 == 6) {
-                    let buffer = crel('td');
                     // If the month changed, add the month label to the buffer column cell
                     if (month_changed) {
-                        buffer = crel('td', months[working_date.getMonth()]);
+                        let buffer = crel('td',
+                            {
+                                'rowspan': 2,
+                                "class": "month-label"
+                            },
+                            months[working_date.getMonth()]
+                        );
                         month_changed = false;
+                        month_changed_last_row = true;
+                        year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
+                    } else if (month_changed_last_row) {
+                        // Don't add a buffer cell
+                        month_changed_last_row = false;
+                    } else {
+                        let buffer = crel('td');
+                        year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
                     }
-                    year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
+
                     // Add an entire new row to delimit a new year
                     if (year_changed) {
                         let divider = crel('tr',

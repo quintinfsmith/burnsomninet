@@ -740,6 +740,7 @@ body {
 }
 
 .slug-GitActivityWidget {
+    font-size: 1rem;
     > div.title {
         display: none;
         text-align: center;
@@ -762,19 +763,12 @@ body {
     }
 
     .year-table {
+        border-collapse: collapse;
         th {
+            display: none;
             color: var(--col_light);
             font-weight: normal;
             font-family: monospace;
-            font-size: .9em;
-        }
-        td:not(.year-delim) {
-            text-align: center;
-            > div {
-                display: inline-block;
-                width: 1.4em;
-                height: 1em;
-            }
         }
         td.year-delim {
             > span {
@@ -789,9 +783,17 @@ body {
                 }
             }
         }
+        td:not(.year-delim) {
+            text-align: center;
+            > div {
+                display: inline-block;
+                width: .9em;
+                height: .7em;
+            }
+        }
         td:not(.oob) {
             > div {
-                border: 1px solid var(--col_light);
+                background-color: var(--col_light);
             }
         }
         td.active {
@@ -799,19 +801,22 @@ body {
                 background-color: var(--col_light);
             }
         }
-        td.evenmonth {
+        td.active:hover {
             > div {
-                border: 1px solid var(--col_lightb);
+                background-color: var(--col_hover);
+            }
+        }
+        td:not(.active):not(.year-delim):not(.month-label) {
+            opacity: .2;
+        }
+        td:not(.active).evenmonth {
+            > div {
+                background-color: var(--col_lightb);
             }
         }
         td:hover {
             > div {
                 border-color: var(--col_hover);
-            }
-        }
-        td.active:hover {
-            > div {
-                background-color: var(--col_hover);
             }
         }
     }
