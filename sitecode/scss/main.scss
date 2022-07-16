@@ -740,13 +740,13 @@ body {
 }
 
 .slug-GitActivityWidget {
-    > div:first-child {
+    > div.title {
         display: none;
         text-align: center;
         font-size: 1rem;
         font-weight: bold;
     }
-    > div:nth-child(2) {
+    > div.table-wrapper {
         display: flex;
         > div {
             flex: 1 1 auto;
