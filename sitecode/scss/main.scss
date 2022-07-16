@@ -684,8 +684,10 @@ body {
             }
         }
     }
-
-    .icon-svg {
+    .icon-svg:empty {
+        display: none;
+    }
+    .icon-svg:not(:empty) {
         width: 2em;
         display: inline-block;
         svg {
