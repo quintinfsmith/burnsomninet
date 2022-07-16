@@ -441,7 +441,11 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 { "class": "option-row" },
                 Tag("div",
                     VH_MID,
-                    slug_tag('/javascript/git.js', 'CloneButtonWidget', project = project_name)
+                    slug_tag(
+                        '/javascript/git.js',
+                        'CloneButtonWidget',
+                        project = project_name
+                    )
                 ),
                 Tag("div",
                     Tag("div",
@@ -464,7 +468,11 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     if (active_commit is None or active_commit == branch.get_latest_commit_id()) and path == "":
         body_content.append(
             Tag("div",
-                slug_tag('/javascript/git.js', 'GitActivityWidget', project = project_name)
+                slug_tag(
+                    '/javascript/git.js',
+                    'GitActivityWidget',
+                    project = project_name
+                )
             )
         )
 

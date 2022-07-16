@@ -17,9 +17,16 @@ class GitActivityWidget extends SlugWidget {
         this.commits = [];
         this.commit_block_elements = {};
         this.element_table = this.build_table(52 * 7);
-        this.element_wrapper = crel('div', this.element_table);
-        this.element_title = crel('div', "Activity over the previous 52 weeks");
-        this.element.appendChild(this.element_title);
+        this.element_wrapper = crel('div',
+            { "class": "table-wrapper"},
+            this.element_table
+        );
+        // Title isn't used ATM
+        //this.element_title = crel('div',
+        //    { "class": "title" },
+        //    "Activity over the previous 52 weeks"
+        //);
+        //this.element.appendChild(this.element_title);
         this.element.appendChild(crel('div', this.element_wrapper));
 
         let now = new Date();
@@ -46,6 +53,7 @@ class GitActivityWidget extends SlugWidget {
     }
 
     build_table(day_count) {
+        /* Create the dom table */
         let year_table = crel('table', { class: "year-table" });
         let now = new Date();
         let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -54,14 +62,21 @@ class GitActivityWidget extends SlugWidget {
 
         let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
         let weekdays = ['Sun', 'Mon', 'Tue', 'Wed', "Thu", 'Fri', 'Sat'];
+        // Create a new row for the weekday labels,
+        // The first column is a usually empty column that may contain a month label
         year_table.appendChild(crel('tr', crel('th')));
         for (let i = 0; i < 7; i++) {
             year_table.lastChild.appendChild(crel('th', weekdays[i % 7]));
         }
 
         year_table.appendChild(crel('tr'));
-        for (let i = 0; i < 7 - day_offset; i++) {
-            year_table.lastChild.appendChild(crel('td', { 'class': 'oob' }, crel('div')));
+
+        // Add padding on the right-hand side of the table
+        // None is needed for Saturday
+        if (day_offset != 6) {
+            for (let i = 0; i < 7 - day_offset; i++) {
+                year_table.lastChild.appendChild(crel('td', { 'class': 'oob' }, crel('div')));
+            }
         }
 
         let day_one_ts = day_one.getTime();
@@ -88,33 +103,38 @@ class GitActivityWidget extends SlugWidget {
             );
             this.commit_block_elements[(working_date.getFullYear() * 366) + doy] = td;
 
-            if ((i + day_offset) % 7 == 6) {
-                let buffer = crel('td');
-                if (month_changed) {
-                    buffer = crel('td', months[working_date.getMonth()]);
-                    month_changed = false;
-                }
-                year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
-
-                if (year_changed) {
-                    let divider = crel('tr',
-                        crel('td'),
-                        crel('td',
-                            {
-                                'colspan': 7,
-                                'class': 'year-delim'
-                            },
-                            crel('span',
-                                crel('hr'),
-                                crel('div', previous_year),
-                                crel('hr')
+            // If this is the first pass through the loop AND a new row is requested,
+            // That means day_offset is saturday and we don't need a new row yet
+            if (i < day_count) {
+                if ((i + day_offset) % 7 == 6) {
+                    let buffer = crel('td');
+                    // If the month changed, add the month label to the buffer column cell
+                    if (month_changed) {
+                        buffer = crel('td', months[working_date.getMonth()]);
+                        month_changed = false;
+                    }
+                    year_table.lastChild.insertBefore(buffer, year_table.lastChild.firstChild);
+                    // Add an entire new row to delimit a new year
+                    if (year_changed) {
+                        let divider = crel('tr',
+                            crel('td'),
+                            crel('td',
+                                {
+                                    'colspan': 7,
+                                    'class': 'year-delim'
+                                },
+                                crel('span',
+                                    crel('hr'),
+                                    crel('div', previous_year),
+                                    crel('hr')
+                                )
                             )
-                        )
-                    );
-                    year_table.insertBefore(divider, year_table.lastChild);
-                    year_changed = false;
+                        );
+                        year_table.insertBefore(divider, year_table.lastChild);
+                        year_changed = false;
+                    }
+                    year_table.appendChild(crel('tr'));
                 }
-                year_table.appendChild(crel('tr'));
             }
             year_changed |= previous_year != working_date.getFullYear();
             previous_year = working_date.getFullYear();
@@ -133,6 +153,7 @@ class GitActivityWidget extends SlugWidget {
 
 
     update_commits(new_commits) {
+        /* Add a list of new commits to the widget. Update the table cells accordingly */
         for (let i = 0; i < new_commits.length; i++) {
             let commit = new_commits[i];
             let date = new Date(commit.date * 1000);
