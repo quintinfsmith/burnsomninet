@@ -153,7 +153,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     > div:first-child:not(:last-child) {
-        min-width: calc(100vw - 34em);
+        min-width: calc(100vw - 27em);
         flex: 1 1 auto;
     }
     > div:first-child:last-child {
