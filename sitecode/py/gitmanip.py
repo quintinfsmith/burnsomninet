@@ -196,6 +196,9 @@ class Commit:
             tzinfo=timezone(time_offset)
         )
 
+        timestamp = date.timestamp()
+        date = datetime.fromtimestamp(timestamp)
+
         author_line = lines[1][7:].strip()
         author_email = author_line[author_line.rfind("<") + 1:author_line.rfind(">")]
 

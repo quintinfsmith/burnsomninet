@@ -4,7 +4,8 @@ from django.conf import settings
 from sitecode.py.gitmanip import Project as GitProject
 from typing import Optional, Tuple, List, Dict
 from urllib.parse import urlencode
-from datetime import datetime
+from datetime import datetime, timedelta
+from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -15,6 +16,31 @@ GIT_PATH = "/srv/git"
 VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
+
+def relative_vague_date(date):
+    now = datetime.now()
+    delta = now - date
+    output = ""
+    if delta < timedelta(seconds=120):
+        output = "Just now"
+    elif delta < timedelta(minutes=120):
+        output = f"{round(delta.seconds / 60)} minutes ago"
+    elif delta < timedelta(hours=48):
+        output = f"{round(delta.seconds / (60 * 60))} hours ago"
+    elif delta < timedelta(days=7):
+        output = f"{delta.days} days ago"
+    elif delta < timedelta(days=11):
+        output = f"A week ago"
+    elif delta < timedelta(weeks=4, days=6):
+        output = f"{round(delta.days / 7)} weeks ago"
+    elif delta < timedelta(weeks=6):
+        output = f"A month ago"
+    elif delta < timedelta(weeks=52 + 27):
+        output = f"{round(delta.days / 30)} months ago"
+    else:
+        year_count = round(delta.days / 365.25)
+        output = f"{year_count} years ago"
+    return output
 
 def build_head(**kwargs):
     title = ""
@@ -361,15 +387,12 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     for is_file, pathname, commit_id, description, commit_date in sorter_list:
         full_path = path + pathname
 
+        icon = ""
         if not is_file:
             full_path += "/"
             icon_path = f"{STATIC_PATH}/dir-icon.svg"
-        else:
-            icon_path = f"{STATIC_PATH}/file-icon.svg"
-
-        icon = ""
-        with open(icon_path, 'r') as fp:
-            icon = RawHTML(fp.read())
+            with open(icon_path, 'r') as fp:
+                icon = RawHTML(fp.read())
 
         commit_query_attrs = {
             "commit": commit_id,
@@ -400,7 +423,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 Tag("td",
                     Tag("a",
                         { "href": f"?" + urlencode(commit_query_attrs) },
-                        str(commit_date)
+                        relative_vague_date(commit_date)
                     )
                 )
             )
