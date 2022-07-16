@@ -671,7 +671,7 @@ body {
                         padding: .5rem 0;
                     }
                     > td.description {
-                        max-width: 30vw;
+                        max-width: calc(30vw - 2em);
                         text-overflow: ellipsis;
                         overflow: hidden;
                         padding-left: 1em;
