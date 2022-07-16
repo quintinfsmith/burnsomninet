@@ -272,42 +272,32 @@ def git_controller(request, project):
     path = request.GET.get('path', '')
     raw = request.GET.get("raw", 0)
 
-    CACHE_KEY = f"GIT_{project}/{branch}/{commit}/{path}"
-    cache_needs_update = check_cache(CACHE_KEY,
-        f"{GIT_PATH}/{project}"
-    )
+    is_directory = (path == '' or path[-1] == '/')
 
-    if not cache_needs_update:
-        content, mimetype = get_cached(CACHE_KEY)
+    content = None
+    if view == "files" and not is_directory and raw:
+        mimetype = "text/plain"
+        content = wrappers.get_raw_file_content(project, branch, commit, path)
     else:
-        is_directory = (path == '' or path[-1] == '/')
+        mimetype = "text/html"
+        if view == 'files':
+            if is_directory:
+                body = wrappers.build_git_overview(request, project, branch, commit, path)
+            else:
+                body = wrappers.build_git_file_view(project, branch, commit, path)
+        elif view == "commit":
+            body = wrappers.build_git_commit_view(project, branch, commit)
 
-        content = None
-        if view == "files" and not is_directory and raw:
-            mimetype = "text/plain"
-            content = wrappers.get_raw_file_content(project, branch, commit, path)
-        else:
-            mimetype = "text/html"
-            if view == 'files':
-                if is_directory:
-                    body = wrappers.build_git_overview(request, project, branch, commit, path)
-                else:
-                    body = wrappers.build_git_file_view(project, branch, commit, path)
-            elif view == "commit":
-                body = wrappers.build_git_commit_view(project, branch, commit)
-
-            content = Tag("html",
-                wrappers.build_head(title=f"{project.capitalize()} overview"),
-                Tag("body",
-                    wrappers.build_sitemap('project', project),
-                    Tag("div",
-                        { "class": "content" },
-                        body
-                    )
+        content = Tag("html",
+            wrappers.build_head(title=f"{project.capitalize()} overview"),
+            Tag("body",
+                wrappers.build_sitemap('project', project),
+                Tag("div",
+                    { "class": "content" },
+                    body
                 )
             )
-
-        update_cache(CACHE_KEY, repr(content), mimetype)
+        )
 
     return HttpResponse(content, mimetype)
 
