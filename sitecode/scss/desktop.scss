@@ -11,6 +11,7 @@ body {
     width: 12em;
     height: 100vh;
     flex: 0 0 auto;
+    overflow-y: auto;
     > div {
         display: flex;
         flex-direction: column;
