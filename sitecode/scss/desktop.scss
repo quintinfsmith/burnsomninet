@@ -153,7 +153,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     > div:first-child {
-        flex: 1 1 auto;
+        flex: 10 1 auto;
     }
     > div:last-child:not(:first-child) {
         flex: 1 1 1px;
