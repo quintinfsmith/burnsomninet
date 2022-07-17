@@ -152,16 +152,11 @@ body {
 .git-overview {
     display: flex;
     flex-wrap: wrap;
-    > div:first-child:not(:last-child) {
-        min-width: calc(100vw - 27em);
-        flex: 1 1 auto;
-    }
-    > div:first-child:last-child {
+    > div:first-child {
         flex: 1 1 auto;
     }
     > div:last-child:not(:first-child) {
-        text-align: center;
-        flex: 1 1 auto;
+        flex: 1 1 1px;
         padding-left: 1em;
         > div {
             display: inline-block;

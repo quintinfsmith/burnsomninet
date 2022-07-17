@@ -591,6 +591,9 @@ body {
 .git-overview {
     padding: 1em 2em;
     color: var(--col_light);
+    > div:last-child:not(:first-child) {
+        text-align: center;
+    }
     .slug-CloneButtonWidget {
         white-space: nowrap;
         max-width: 100%;
@@ -747,22 +750,12 @@ body {
         font-size: 1rem;
         font-weight: bold;
     }
-    > div.table-wrapper {
-        display: flex;
-        > div {
-            flex: 1 1 auto;
-                text-align: center;
-            > * {
-                display: inline-block;
-            }
-        }
-        > div:first-child:not(:last-child),
-        > div:last-child:not(:first-child){
-            flex: 0 1 auto;
-        }
+    > .table-wrapper {
+        text-align: center;
     }
 
     .year-table {
+        display: inline-table;
         border-collapse: collapse;
         th {
             display: none;
@@ -786,7 +779,6 @@ body {
         td:not(.year-delim) {
             text-align: center;
             > div {
-                display: inline-block;
                 width: .9em;
                 height: .7em;
             }

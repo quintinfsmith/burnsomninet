@@ -41,7 +41,12 @@ class Tag(Node):
         return self.to_markup()
 
     def to_markup(self, depth=0):
-        output = "<%s" % self.name
+        if self.name.lower() == "html" and depth == 0:
+            output = "<!DOCTYPE html>"
+        else:
+            output = ""
+
+        output += "<%s" % self.name
         for key, value in self.attributes.items():
             if isinstance(value, dict):
                 tojoin = []
