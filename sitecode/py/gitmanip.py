@@ -118,12 +118,12 @@ class ProjectBranch:
         return adj_files
 
     def get_file_content(self, filepath, commit_id=None):
-        if not commit_id:
-            commit_id = ""
-
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
-        os.system(f"git show {commit_id}:\"{filepath}\" > /tmp/gitmanipb")
+        if not commit_id:
+            os.system(f"git show {self.branch}:\"{filepath}\" > /tmp/gitmanipb")
+        else:
+            os.system(f"git show {commit_id}:\"{filepath}\" > /tmp/gitmanipb")
         content = ""
         with open("/tmp/gitmanipb", "r") as fp:
             content = fp.read()
