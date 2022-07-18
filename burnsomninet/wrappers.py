@@ -229,25 +229,26 @@ def media_content(mediamap):
 
         output.append(
             Tag("div",
-                {},
-                VH_MID,
                 Tag("div",
-                    {
-                        "id": title.replace(" ", "_").lower(),
-                        "class": "polaroid",
-                        "data-srcs": json.dumps(sources)
-                    },
+                    VH_MID,
                     Tag("div",
-                        Tag("img", {
-                            "src": sources[0] + ".jpg",
-                        })
-                    ),
-                    Tag("div",
-                        { 'class': 'label-wrapper' },
+                        {
+                            "id": title.replace(" ", "_").lower(),
+                            "class": "polaroid",
+                            "data-srcs": json.dumps(sources)
+                        },
                         Tag("div",
-                            { 'class': 'label' },
-                            VH_MID,
-                            Tag("div", title)
+                            Tag("img", {
+                                "src": sources[0] + ".jpg",
+                            })
+                        ),
+                        Tag("div",
+                            { 'class': 'label-wrapper' },
+                            Tag("div",
+                                { 'class': 'label' },
+                                VH_MID,
+                                Tag("div", title)
+                            )
                         )
                     )
                 )
