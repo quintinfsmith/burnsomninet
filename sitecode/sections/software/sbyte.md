@@ -1,7 +1,7 @@
 # Sbyte
 An in-console byte editor.
 
-[GitHub](https://github.com/quintinfsmith/sbyte)
+[Git Project](/project/sbyte)
 [Crates.io](https://crates.io/crates/sbyte)
 
 ## Table of Contents
