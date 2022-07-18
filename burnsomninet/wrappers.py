@@ -1,11 +1,14 @@
 import json, os
-from sitecode.py.httree import Tag, Text, RawHTML
 from django.conf import settings
-from sitecode.py.gitmanip import Project as GitProject
 from typing import Optional, Tuple, List, Dict
 from urllib.parse import urlencode
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
+
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
+from sitecode.py.gitmanip import Project as GitProject
+from sitecode.py.httree import Tag, Text, RawHTML
+from sitecode.py import api
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -282,8 +285,8 @@ def build_git_branch_select(project_name, active_branch_name: Optional[str]=None
     return output
 
 def build_git_commit_select(project_name, branch_name: str, active_commit: Optional[str]=None, active_path="") -> Tag:
-    from sitecode.py.api.git.commits import process_request
-    commits = process_request(
+    commits = api.handle(
+        'git', 'commits',
         project=project_name,
         branch=branch_name
     )
@@ -466,12 +469,24 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     )
 
     if (active_commit is None or active_commit == branch.get_latest_commit_id()) and path == "":
+        now = datetime.now()
+        first_commit_date = branch.get_first_commit_date()
+        from_date = now - relativedelta(years=1, hours=now.hour, minutes=now.minute)
+        from_date = max(first_commit_date, from_date)
+
         body_content.append(
             Tag("div",
                 slug_tag(
                     '/javascript/git.js',
                     'GitActivityWidget',
-                    project = project_name
+                    project=project_name,
+                    days=(now-from_date).days,
+                    commits=api.handle(
+                        'git', 'commits',
+                        project=project_name,
+                        branch=branch_name,
+                        datefrom=from_date.timestamp()
+                    )
                 )
             )
         )

@@ -16,7 +16,12 @@ class GitActivityWidget extends SlugWidget {
         super(element, options);
         this.commits = [];
         this.commit_block_elements = {};
-        this.element_table = this.build_table(52 * 7);
+        let day_count = 52 * 7;
+        let day_ms = (1000 * 60 * 60 * 24)
+        if (options.days) {
+            day_count = options.days;
+        }
+        this.element_table = this.build_table(day_count);
         this.element_wrapper = crel('div',
             { "class": "table-wrapper"},
             this.element_table
@@ -29,26 +34,30 @@ class GitActivityWidget extends SlugWidget {
         //this.element.appendChild(this.element_title);
         this.element.appendChild(crel('div', this.element_wrapper));
 
-        let now = new Date();
-        let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        let then_stamp = ((today.getTime() - (1000 * 60 * 60 * 24 * 52 * 7)) / 1000);
+        if (options.commits.length) {
+            this.update_commits(options.commits);
+        } else {
+            let now = new Date();
+            let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let then_stamp = ((today.getTime() - (1000 * 60 * 60 * 24 * 52 * 7)) / 1000);
 
-        let url = "/api/git/commits" +
-            "?project=" + options.project +
-            "&datefrom=" + then_stamp;
+            let url = "/api/git/commits" +
+                "?project=" + options.project +
+                "&datefrom=" + then_stamp;
 
-        api_call(url,
-            function(response) {
-                let year = (new Date()).getFullYear();
-                if (response.length == 0) {
-                    this.new_year_table(year);
+            api_call(url,
+                function(response) {
+                    let year = (new Date()).getFullYear();
+                    if (response.length == 0) {
+                        this.new_year_table(year);
+                    }
+                    this.update_commits(response);
+                }.bind(this),
+                function(response) {
+                    console.log(response);
                 }
-                this.update_commits(response);
-            }.bind(this),
-            function(response) {
-                console.log(response);
-            }
-        );
+            );
+        }
 
     }
 
@@ -71,13 +80,6 @@ class GitActivityWidget extends SlugWidget {
 
         year_table.appendChild(crel('tr'));
 
-        // Add padding on the right-hand side of the table
-        // None is needed for Saturday
-        if (day_offset != 6) {
-            for (let i = 0; i < 7 - day_offset; i++) {
-                year_table.lastChild.appendChild(crel('td', { 'class': 'oob' }, crel('div')));
-            }
-        }
 
         let day_one_ts = day_one.getTime();
         let previous_month = today.getMonth();

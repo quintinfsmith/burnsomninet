@@ -2,12 +2,12 @@ import os
 import json
 import time
 import marko
-import importlib
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from burnsomninet import wrappers
+from sitecode.py import api
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -305,20 +305,18 @@ def api_controller(request, section_path):
     section_split = section_path.split("/")
     while "" in section_split:
         section_split.remove("")
-    module_name = f"sitecode.py.api.{'.'.join(section_split)}"
-
-    try:
-        controller = importlib.import_module(module_name)
-    except ModuleNotFoundError:
-        raise Http404()
 
     kwargs = {}
     for key in request.GET:
         kwargs[key] = request.GET.get(key, None)
 
-    content = controller.process_request(**kwargs)
-    content = json.dumps(content)
+    response = {}
+    try:
+        content = api.handle(*section_split, **kwargs)
+    except ModuleNotFoundError:
+        raise Http404()
 
+    content = json.dumps(content)
     return HttpResponse(content, content_type="application/json")
 
 
