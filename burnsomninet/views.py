@@ -4,10 +4,12 @@ import time
 import marko
 from django.http import HttpResponse, Http404
 from django.conf import settings
-from sitecode.py.httree import Tag, Text, RawHTML
+from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from burnsomninet import wrappers
 from sitecode.py import api
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -222,6 +224,24 @@ def index(request):
     while "" in active_path:
         active_path.remove("")
 
+    # Do Git Commit Overview
+    #repositories = os.listdir(GIT_PATH)
+    #repositories.sort()
+    #working_repositories = []
+    #for path in repositories:
+    #    if os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok"):
+    #        working_repositories.append(path)
+    #repositories = working_repositories
+
+    #all_commits = []
+    #from_date = datetime.now() - relativedelta(years=1)
+    #for project in repositories:
+    #    all_commits.extend(api.handle(
+    #        'git', 'commits',
+    #        project=project,
+    #        datefrom=from_date.timestamp()
+    #    ))
+
     top = Tag("html",
         wrappers.build_head(title="Quintin Smith - Developer, Unicyclist"),
         Tag("body",
@@ -254,6 +274,11 @@ def index(request):
                                 "Find me on GitHub"
                             )
                         )
+                    #),
+                    #slug_tag(
+                    #    '/javascript/git.js',
+                    #    'GitActivityWidget',
+                    #    commits=all_commits,
                     )
                 )
             )
