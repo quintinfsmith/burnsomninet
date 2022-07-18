@@ -260,6 +260,9 @@ body {
 
 
 .content {
+    padding: 1em;
+    width: calc(100vw - 2em);
+    height: calc(100vh - 2em);
     > div { }
 }
 .content.daisy {
@@ -325,17 +328,16 @@ body {
 .media {
     display: flex;
     flex-wrap: wrap;
-    width: calc(100% - 1em);
-    padding-left: 1em;
-    padding-bottom: 1em;
     overflow: hidden;
+    margin-right: -1em;
+    margin-bottom: -1em;
     > div {
+        padding: 0 1em 1em 0;
         flex: 1 1 auto;
         vertical-align: bottom;
         text-align: center;
         width: 20%;
         min-width: 16em;
-        padding: 1em 1em 0 0;
     }
 }
 
@@ -499,7 +501,6 @@ body {
 
 .markdown-wrapper {
     > .markdown {
-        padding: 1em;
         color: var(--col_light);
 
         > * {
@@ -589,7 +590,6 @@ body {
 }
 
 .git-overview {
-    padding: 1em 2em;
     color: var(--col_light);
     > div:last-child:not(:first-child) {
         text-align: center;
