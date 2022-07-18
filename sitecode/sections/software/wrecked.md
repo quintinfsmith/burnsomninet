@@ -1,10 +1,11 @@
 # Wrecked
 A library for terminal-based interfaces.
 
-[GitHub - Main Project](https://github.com/quintinfsmith/wrecked)
-[GitHub - Bindings](https://github.com/quintinfsmith/wrecked_bindings)
+[GitHub - Main Project](/project/wrecked)
+[GitHub - Bindings](/project/wrecked_bindings)
 [Rust Documentation](https://docs.rs/wrecked/)
-[Pypi](https://pypi.org/project/wrecked)
+[Crates.io](https://crates.io/crates/wrecked/)
+[Pypi.org](https://pypi.org/project/wrecked)
 
 ## About
 Wrecked is an environment that uses nested rectangles to aid in construction of in-terminal interfaces. Designed to be simple and intuitive.

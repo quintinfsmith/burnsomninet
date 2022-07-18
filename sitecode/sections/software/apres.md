@@ -1,8 +1,8 @@
 # Apres
 A Rust MIDI library
 
-[GitHub - Main Project](https://github.com/quintinfsmith/apres)
-[GitHub - Bindings](https://github.com/quintinfsmith/apres_bindings)
+[Git Project - Main Project](/project/apres)
+[Git Project - Bindings](/project/apres_bindings)
 [Rust Documentation](https://docs.rs/apres/)
 [Pypi](https://pypi.org/project/apres)
 
