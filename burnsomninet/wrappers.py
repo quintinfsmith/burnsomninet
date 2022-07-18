@@ -560,13 +560,11 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
                 )
             )
         ),
-        Tag("div",
-            Tag("pre",
-                { "class": f"language-{language} line-numbers" },
-                Tag("code",
-                    { "class": f"language-{language}" },
-                    body_content
-                )
+        Tag("pre",
+            { "class": f"language-{language} line-numbers" },
+            Tag("code",
+                { "class": f"language-{language}" },
+                body_content
             )
         )
     )
