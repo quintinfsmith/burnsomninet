@@ -696,6 +696,7 @@ body {
         svg {
             width: 1.6em;
             height: 1.6em;
+            display: block;
             rect, path {
                 stroke: var(--col_light);
             }
