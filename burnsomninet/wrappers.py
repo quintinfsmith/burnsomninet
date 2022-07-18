@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject
-from sitecode.py.httree import Tag, Text, RawHTML
+from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py import api
 
 SITECODE = settings.SITECODE
@@ -578,12 +578,3 @@ def build_git_commit_view(project_name, branch_name, commit_id=None):
     branch.get_commit(commit_id)
     return Tag("div", f"commit/diff oviewview of {commit_id}")
 
-def slug_tag(remote, classname, **kwargs):
-    opts = {
-        "class": f"widget-slug slug-{classname}",
-        "data-remote": remote,
-        "data-class": classname,
-        "data-json": json.dumps(kwargs)
-    }
-
-    return Tag("div", opts)
