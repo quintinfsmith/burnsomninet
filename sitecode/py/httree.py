@@ -1,4 +1,5 @@
 import html
+import json
 TABWIDTH = 0
 RETURN = ""
 
@@ -84,3 +85,13 @@ class Text(Node):
     def to_markup(self, depth=0):
         return html.escape(self.text)
 
+
+def slug_tag(remote, classname, **kwargs):
+    opts = {
+        "class": f"widget-slug slug-{classname}",
+        "data-remote": remote,
+        "data-class": classname,
+        "data-json": json.dumps(kwargs)
+    }
+
+    return Tag("div", opts)
