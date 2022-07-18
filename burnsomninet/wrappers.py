@@ -481,7 +481,8 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     '/javascript/git.js',
                     'GitActivityWidget',
                     project=project_name,
-                    days=(now-from_date).days,
+                    datefrom=from_date.timestamp() * 1000, # JS timestamp
+                    datefirst=first_commit_date.timestamp() * 1000,
                     commits=api.handle(
                         'git', 'commits',
                         project=project_name,
