@@ -36,7 +36,12 @@ class GitActivityWidget extends SlugWidget {
             first_date = null;
         }
 
-        this.element_table = this.build_vertical_table(day_one, first_date);
+        if (options.orientation && options.orientation == 'horizontal') {
+            this.element_table = this.build_horizontal_table(day_one, first_date);
+        } else {
+            this.element_table = this.build_vertical_table(day_one, first_date);
+        }
+
         this.element_wrapper = crel('div',
             { "class": "table-wrapper"},
             this.element_table
@@ -76,20 +81,26 @@ class GitActivityWidget extends SlugWidget {
 
     }
 
-    build_row_data(from_date, first_date) {
+    build_week_data(from_date, first_date) {
         let now = new Date();
         let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
         let day_count = parseInt((today - from_date) / (24 * 60 * 60 * 1000)) + 1;
         let day_offset = from_date.getDay();
         let from_date_ts = from_date.getTime();
 
-        let row_properties = [];
+        let index_bump = 0;
+        if (Math.floor((day_offset - this.WEEKDAY_OFFSET) / 7) < 0) {
+            index_bump = 1;
+        }
+
+        let week_properties = [];
         for (let i = 0; i < day_count; i++) {
-            let row_index = parseInt((i + day_offset - this.WEEKDAY_OFFSET) / 7);
+            let week_index = Math.floor((i + day_offset - this.WEEKDAY_OFFSET) / 7) + index_bump;
             let timestamp = from_date_ts + (i * (24 * 60 * 60 * 1000));
             let working_date = new Date(timestamp);
-            while (row_index >= row_properties.length) {
-                row_properties.push({
+
+            while (week_index >= week_properties.length) {
+                week_properties.push({
                     year_at_start: working_date.getFullYear(),
                     month_at_start: working_date.getMonth(),
                     days: [],
@@ -109,17 +120,16 @@ class GitActivityWidget extends SlugWidget {
             );
 
             this.commit_block_elements[(working_date.getFullYear() * 366) + doy] = td;
-            row_properties[row_index].days.push(td);
+            week_properties[week_index].days.push(td);
         }
-
-        return row_properties;
+        return week_properties;
     }
 
     build_vertical_table(from_date, first_date) {
         /* Create the dom table */
         let year_table = crel('table', { class: "year-table" });
-        let row_properties = this.build_row_data(from_date, first_date);
-        row_properties.reverse();
+        let week_properties = this.build_week_data(from_date, first_date);
+        week_properties.reverse();
 
         // Create a new row for the weekday labels,
         // The first column is a usually empty column that may contain a month label
@@ -128,28 +138,28 @@ class GitActivityWidget extends SlugWidget {
                 "class": "month-label",
                 "rowspan": 2
             },
-            this.MONTHS[row_properties[0].month_at_start]
+            this.MONTHS[week_properties[0].month_at_start]
         );
         year_table.insertBefore(crel('tr', first_month_label), year_table.firstChild);
         for (let i = 0; i < 7; i++) {
             year_table.firstChild.appendChild(crel('th', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
         }
 
-        for (let i = 0; i < row_properties.length; i++) {
-            let current_row = row_properties[i];
+        for (let i = 0; i < week_properties.length; i++) {
+            let current_week = week_properties[i];
             let row_element = crel('tr');
             let buffer = null;
-            if (i == row_properties.length - 1) {
+            if (i == week_properties.length - 1) {
                 if (i > 0) {
-                    if (current_row.month_at_start == row_properties[i - 1].month_at_start) {
+                    if (current_week.month_at_start == week_properties[i - 1].month_at_start) {
                         buffer = crel('td');
                     }
                 } else {
                     // only one row, label was set before loop
                 }
             } else {
-                if (current_row.month_at_start != row_properties[i + 1].month_at_start) {
-                    if (current_row.month_at_start == 0) {
+                if (current_week.month_at_start != week_properties[i + 1].month_at_start) {
+                    if (current_week.month_at_start == 0) {
                         buffer = crel('td');
                     } else {
                         buffer = crel('td',
@@ -157,12 +167,12 @@ class GitActivityWidget extends SlugWidget {
                                 "class": "month-label",
                                 "rowspan": 2
                             },
-                            this.MONTHS[row_properties[i + 1].month_at_start]
+                            this.MONTHS[week_properties[i + 1].month_at_start]
                         );
                     }
                 } else {
                     if (i > 0) {
-                        if (current_row.month_at_start == row_properties[i - 1].month_at_start) {
+                        if (current_week.month_at_start == week_properties[i - 1].month_at_start) {
                             buffer = crel('td');
                         }
                     }
@@ -174,18 +184,19 @@ class GitActivityWidget extends SlugWidget {
             }
 
             if (i > 0) {
-                for (let j = current_row.days.length; j < 7; j++) {
+                for (let j = current_week.days.length; j < 7; j++) {
                     row_element.appendChild(crel('td'));
                 }
             }
 
-            for (let j = 0; j < current_row.days.length; j++) {
-                row_element.appendChild(current_row.days[j]);
+            for (let j = 0; j < current_week.days.length; j++) {
+                row_element.appendChild(current_week.days[j]);
             }
-            if (i > 0 && current_row.year_at_start != row_properties[i - 1].year_at_start) {
+
+            if (i > 0 && current_week.year_at_start != week_properties[i - 1].year_at_start) {
                 year_table.appendChild(
                     crel('tr',
-                        crel('td', 
+                        crel('td',
                             {
                                 "class": "month-label",
                                 "rowspan": 2
@@ -200,7 +211,7 @@ class GitActivityWidget extends SlugWidget {
                             crel('span',
                                 crel('hr'),
                                 crel('div',
-                                    current_row.year_at_start
+                                    current_week.year_at_start
                                 ),
                                 crel('hr')
                             )
@@ -214,6 +225,68 @@ class GitActivityWidget extends SlugWidget {
         return year_table;
     }
 
+    build_horizontal_table(from_date, first_date) {
+        /* Create the dom table */
+        let year_table = crel('table', { class: "year-table" });
+        let week_properties = this.build_week_data(from_date, first_date);
+        week_properties.reverse();
+
+        let rows = [];
+        for (let i = 0; i < 7; i++) {
+            let row = crel('tr');
+            //let row = crel('tr', crel('td', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
+            year_table.appendChild(row);
+            rows.push(row);
+        }
+
+        let month_spans = {};
+        for (let i = 0; i < week_properties.length; i++) {
+            let week = week_properties[i];
+            if (! month_spans[week.year_at_start]) {
+                month_spans[week.year_at_start] = {};
+            }
+            if (! month_spans[week.year_at_start][week.month_at_start]) {
+                month_spans[week.year_at_start][week.month_at_start] = 0;
+            }
+            month_spans[week.year_at_start][week.month_at_start] += 1;
+            if (i == 0) {
+                month_spans[week.year_at_start][week.month_at_start] += 1;
+            }
+
+            for (let j = 0; j < 7; j++) {
+                let cell = week.days[j];
+                let pushpoint = j;
+
+                // Insert day cells from the bottom-up at end
+                if (i == week_properties.length - 1) {
+                    pushpoint = (pushpoint + (7 - week.days.length)) % 7;
+                }
+
+                if (cell) {
+                    rows[pushpoint].appendChild(cell);
+                } else {
+                    rows[pushpoint].appendChild(crel('td'));
+                }
+            }
+        }
+
+        let header_row = crel('tr');
+        let i = 0;
+        while (i < week_properties.length) {
+            let year = week_properties[i].year_at_start;
+            let month = week_properties[i].month_at_start;
+            header_row.appendChild(
+                crel('th',
+                    { colspan: month_spans[year][month] },
+                    this.MONTHS[month]
+                )
+            );
+            i += month_spans[year][month];
+        }
+        year_table.insertBefore(header_row, year_table.firstChild);
+
+        return year_table;
+    }
 
     update_commits(new_commits) {
         /* Add a list of new commits to the widget. Update the table cells accordingly */
