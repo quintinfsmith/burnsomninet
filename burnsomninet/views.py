@@ -275,18 +275,18 @@ def index(request):
                                     Tag("div",
                                         Tag("a",
                                             { "href": "mailto:smith.quintin@protonmail.com" },
-                                            "Email me"
+                                            "Email"
                                         )
                                     ),
                                     Tag("div",
                                         Tag("a",
                                             { "href": "https://keybase.io/quintinfsmith" },
-                                            "Find me on keybase"
+                                            "Keybase"
                                         )
                                     ),
                                     Tag("div",
                                         { "class": "nvm" },
-                                        "Find me on GitHub"
+                                        "GitHub"
                                     ),
                                 )
                             )
