@@ -269,10 +269,10 @@ def index(request):
                         ),
                         Tag("div",
                             { "class": "externals" },
-                            Tag("a",
-                                { "href": "https://github.com/quintinfsmith/" },
+                            Tag("div",
+                                { "class": "nvm" },
                                 "Find me on GitHub"
-                            )
+                            ),
                         )
                     #),
                     #slug_tag(
