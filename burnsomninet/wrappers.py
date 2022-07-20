@@ -1,4 +1,5 @@
 import json, os
+import marko
 from django.conf import settings
 from typing import Optional, Tuple, List, Dict
 from urllib.parse import urlencode
@@ -437,36 +438,36 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     if ":" in host:
         host = host[0:host.rfind(":")]
 
-
-    body_content = Tag("div",
-        { "class": "git-overview" },
+    left_half = Tag("div",
         Tag("div",
+            { "class": "option-row" },
             Tag("div",
-                { "class": "option-row" },
-                Tag("div",
-                    VH_MID,
-                    slug_tag(
-                        '/javascript/git.js',
-                        'CloneButtonWidget',
-                        project = project_name
-                    )
-                ),
-                Tag("div",
-                    Tag("div",
-                        VH_MID,
-                        build_git_branch_select(project_name, branch_name)
-                    ),
-                    Tag("div",
-                        VH_MID,
-                        build_git_commit_select(project_name, branch_name, active_commit, path)
-                    )
+                VH_MID,
+                slug_tag(
+                    '/javascript/git.js',
+                    'CloneButtonWidget',
+                    project = project_name
                 )
             ),
             Tag("div",
-                { "class": "files-wrapper" },
-                file_table
+                Tag("div",
+                    VH_MID,
+                    build_git_branch_select(project_name, branch_name)
+                ),
+                Tag("div",
+                    VH_MID,
+                    build_git_commit_select(project_name, branch_name, active_commit, path)
+                )
             )
+        ),
+        Tag("div",
+            { "class": "files-wrapper" },
+            file_table
         )
+    )
+
+    body_content = Tag("div",
+        { "class": "git-overview" },
     )
 
     if (active_commit is None or active_commit == branch.get_latest_commit_id()) and path == "":
@@ -483,6 +484,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     project=project_name,
                     datefrom=from_date.timestamp() * 1000, # JS timestamp
                     datefirst=first_commit_date.timestamp() * 1000,
+                    orientation="horizontal",
                     commits=api.handle(
                         'git', 'commits',
                         project=project_name,
@@ -492,6 +494,22 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 )
             )
         )
+
+        readme_content = branch.get_file_content("README.md", active_commit)
+        if readme_content:
+            readme_markdown = marko.convert(readme_content)
+            left_half.append(
+                Tag('div',
+                    { 'class': 'markdown-wrapper' },
+                    Tag('div',
+                        { "class": "markdown readme" },
+                        RawHTML(readme_markdown)
+                    )
+                )
+            )
+
+
+    body_content.append(left_half)
 
 
     return body_content
