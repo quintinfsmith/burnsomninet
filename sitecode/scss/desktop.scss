@@ -74,6 +74,39 @@ body {
 
 .content.index {
     height: calc(100% - 4em - 1px);
+    > :last-child {
+        display: flex;
+        max-height: 100%;
+        > :first-child {
+            flex: 1 1 auto;
+            text-align: center;
+            > div.details-img-wrapper {
+                > .img_wrapper {
+                    img {
+                        display: inline-block;
+                        width: 24em;
+                        max-width: 100%;
+                        border-radius: 50%;
+                    }
+                }
+                > .details {
+                    > div {
+                        text-align: center;
+                    }
+                }
+            }
+        }
+        > .slug-GitActivityWidget {
+            flex: 0 1 auto;
+            overflow-y: auto;
+            padding: 0 .5em 0 1em;
+        }
+        > .slug-GitActivityWidget:empty {
+            height: 100%;
+            width: 170px;
+            background-color: var(--col_light);
+        }
+    }
 }
 
 .content.daisy {

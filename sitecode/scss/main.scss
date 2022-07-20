@@ -299,14 +299,8 @@ body {
     color: var(--col_light);
     text-align: center;
     padding: 2em;
-    .img_wrapper {
-        padding: 0 10vw;
-        img {
-            display: inline-block;
-            width: 24em;
-            max-width: 100%;
-            border-radius: 50%;
-        }
+    > div {
+        max-width: 100%;
     }
     .details {
         > div {

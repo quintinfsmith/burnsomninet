@@ -225,22 +225,22 @@ def index(request):
         active_path.remove("")
 
     # Do Git Commit Overview
-    #repositories = os.listdir(GIT_PATH)
-    #repositories.sort()
-    #working_repositories = []
-    #for path in repositories:
-    #    if os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok"):
-    #        working_repositories.append(path)
-    #repositories = working_repositories
+    repositories = os.listdir(GIT_PATH)
+    repositories.sort()
+    working_repositories = []
+    for path in repositories:
+        if os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") or path == "burnsomninet":
+            working_repositories.append(path)
+    repositories = working_repositories
 
-    #all_commits = []
-    #from_date = datetime.now() - relativedelta(years=1)
-    #for project in repositories:
-    #    all_commits.extend(api.handle(
-    #        'git', 'commits',
-    #        project=project,
-    #        datefrom=from_date.timestamp()
-    #    ))
+    all_commits = []
+    from_date = datetime.now() - relativedelta(years=1)
+    for project in repositories:
+        all_commits.extend(api.handle(
+            'git', 'commits',
+            project=project,
+            datefrom=from_date.timestamp()
+        ))
 
     top = Tag("html",
         wrappers.build_head(title="Quintin Smith - Developer, Unicyclist"),
@@ -248,37 +248,54 @@ def index(request):
             wrappers.build_sitemap(*active_path),
             Tag("div",
                 { "class": "content index" },
-                Tag("div", { "class": "vh_mid" }),
                 Tag("div",
                     Tag("div",
-                        { "class": "img_wrapper" },
-                        Tag("img", {
-                            "src": "https://avatars.githubusercontent.com/u/72575658?v=4"
-                        })
-                    ),
-                    Tag("div",
-                        { "class": "details"},
+                        Tag("div", { "class": "vh_mid" }),
                         Tag("div",
+                            { "class": "details-img-wrapper" },
                             Tag("div",
-                                { "class": "nametag" },
-                                "Quintin Smith",
+                                { "class": "img_wrapper" },
+                                Tag("img", {
+                                    "src": "https://avatars.githubusercontent.com/u/72575658?v=4"
+                                })
                             ),
                             Tag("div",
-                                "Software Developer"
+                                { "class": "details"},
+                                Tag("div",
+                                    Tag("div",
+                                        { "class": "nametag" },
+                                        "Quintin Smith",
+                                    ),
+                                    Tag("div",
+                                        "Software Developer"
+                                    )
+                                ),
+                                Tag("div",
+                                    { "class": "externals" },
+                                    Tag("div",
+                                        Tag("a",
+                                            { "href": "mailto:smith.quintin@protonmail.com" },
+                                            "Email me"
+                                        )
+                                    ),
+                                    Tag("div",
+                                        Tag("a",
+                                            { "href": "https://keybase.io/quintinfsmith" },
+                                            "Find me on keybase"
+                                        )
+                                    ),
+                                    Tag("div",
+                                        { "class": "nvm" },
+                                        "Find me on GitHub"
+                                    ),
+                                )
                             )
-                        ),
-                        Tag("div",
-                            { "class": "externals" },
-                            Tag("div",
-                                { "class": "nvm" },
-                                "Find me on GitHub"
-                            ),
                         )
-                    #),
-                    #slug_tag(
-                    #    '/javascript/git.js',
-                    #    'GitActivityWidget',
-                    #    commits=all_commits,
+                    ),
+                    slug_tag(
+                        '/javascript/git.js',
+                        'GitActivityWidget',
+                        commits=all_commits,
                     )
                 )
             )
