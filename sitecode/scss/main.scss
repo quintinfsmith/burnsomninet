@@ -321,6 +321,12 @@ body {
             font-style: italic;
             font-weight: 200;
         }
+
+        .externals {
+            .nvm {
+                text-decoration: line-through;
+            }
+        }
     }
 }
 
