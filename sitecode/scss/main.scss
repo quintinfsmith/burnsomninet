@@ -591,6 +591,10 @@ body {
 
 .git-overview {
     color: var(--col_light);
+    > div.markdown-wrapper {
+        border: 1px solid var(--col_light);
+        padding: 1em;
+    }
     .slug-CloneButtonWidget {
         white-space: nowrap;
         max-width: 100%;
