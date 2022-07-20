@@ -77,6 +77,7 @@ body {
     > :last-child {
         display: flex;
         max-height: 100%;
+        min-height: 100%;
         > :first-child {
             flex: 1 1 auto;
             text-align: center;
@@ -97,9 +98,11 @@ body {
             }
         }
         > .slug-GitActivityWidget {
-            flex: 0 1 auto;
+            flex: 0 0 auto;
             overflow-y: auto;
+            overflow-x: clip;
             padding: 0 .5em 0 1em;
+            margin-right: -.5em;
         }
         > .slug-GitActivityWidget:empty {
             height: 100%;
