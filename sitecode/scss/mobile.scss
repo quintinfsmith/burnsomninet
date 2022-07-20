@@ -76,6 +76,19 @@ body {
 .content.index {
     height: calc(100vh - 8em - 1px);
     width: calc(100vw - 4em);
+
+    .img_wrapper {
+        padding: 0 10vw;
+        img {
+            display: inline-block;
+            width: 24em;
+            max-width: 100%;
+            border-radius: 50%;
+        }
+    }
+    .slug-GitActivityWidget {
+        margin-top: 1em;
+    }
 }
 
 .content.daisy {
