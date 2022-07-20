@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/quintinfsmith
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://burnsomni.net
+  * I am quintinfsmith (https://keybase.io/quintinfsmith) on keybase.
+  * I have a public key ASBxcwK4PCY1XYH5kOnsipy8j-R4j6BinyCEvimGwAZvhAo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120b5c708e865a65a1d64e75c04206a9d7b4bd1bb4ed153fe1468cda292b91cdac70a",
+      "host": "keybase.io",
+      "kid": "0120717302b83c26355d81f990e9ec8a9cbc8fe4788fa0629f2084be2986c0066f840a",
+      "uid": "2a78e7979f2239e3928dd1740e462d19",
+      "username": "quintinfsmith"
+    },
+    "merkle_root": {
+      "ctime": 1658332856,
+      "hash": "daf9ae193097ac66f5b14add4024223aaaa105e0ea3357eb70a29db1d8f8584dac719303f5fa782deeac54e7ebe96e02dd9215ccbb136b75bf979f4a4ca7fd31",
+      "hash_meta": "2645f7a9dc7a33d7dfc6ec697e5898b7a100a19986c21877166ed753a2534e6f",
+      "seqno": 22882565
+    },
+    "service": {
+      "entropy": "7BVSixgyisKLeQByEZML7DTV",
+      "hostname": "burnsomni.net",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "6.0.2"
+  },
+  "ctime": 1658332874,
+  "expire_in": 504576000,
+  "prev": "817a4455fc8fb090509ed5f755f4ee0b2d67052a4be8ad7d2e9101cfa67bb616",
+  "seqno": 35,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgcXMCuDwmNV2B+ZDp7IqcvI/keI+gYp8ghL4phsAGb4QKp3BheWxvYWTESpcCI8QggXpEVfyPsJBQntX3VfTuCy1nBSpL6K19LpEBz6Z7thbEIDDVyPh52zn0rEbOak2PVERtE+V1YwWscPCVN/pbT0wXAgHCo3NpZ8RAF7t9CUrjGqMTgvhxxeP+E7o59OxbKCpVwW8N2sf7Wq0en2rthKbPs8oX9lhJktBmi8VETUxajpLoEyBYM7AfAahzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIARL/amNfnvvm7aUFjJ9gul507Y7fpMlNpSc2GdO6Hcjo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/quintinfsmith
+
+==================================================================
