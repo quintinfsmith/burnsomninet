@@ -37,6 +37,7 @@ class GitActivityWidget extends SlugWidget {
         }
 
         if (options.orientation && options.orientation == 'horizontal') {
+            this.element.classList.add('horizontal');
             this.element_table = this.build_horizontal_table(day_one, first_date);
         } else {
             this.element_table = this.build_vertical_table(day_one, first_date);
@@ -46,12 +47,12 @@ class GitActivityWidget extends SlugWidget {
             { "class": "table-wrapper"},
             this.element_table
         );
-        // Title isn't used ATM
-        //this.element_title = crel('div',
-        //    { "class": "title" },
-        //    "Activity over the previous 52 weeks"
-        //);
-        //this.element.appendChild(this.element_title);
+
+        this.element_title = crel('div',
+            { "class": "title" },
+            "Git activity"
+        );
+        this.element.appendChild(this.element_title);
         this.element.appendChild(crel('div', this.element_wrapper));
 
         if (options.commits.length) {

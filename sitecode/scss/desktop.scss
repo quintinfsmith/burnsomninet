@@ -149,18 +149,6 @@ body {
     }
 }
 .git-overview {
-    display: flex;
-    flex-wrap: wrap;
-    > div:first-child {
-        flex: 10 1 auto;
-    }
-    > div:last-child:not(:first-child) {
-        flex: 1 1 1px;
-        padding-left: 1em;
-        > div {
-            display: inline-block;
-        }
-    }
     .option-row {
         padding-bottom: .25em;
         display: flex;

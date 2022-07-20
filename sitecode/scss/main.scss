@@ -591,9 +591,6 @@ body {
 
 .git-overview {
     color: var(--col_light);
-    > div:last-child:not(:first-child) {
-        text-align: center;
-    }
     .slug-CloneButtonWidget {
         white-space: nowrap;
         max-width: 100%;
@@ -702,6 +699,9 @@ body {
             }
         }
     }
+    .readme {
+        text-align: left;
+    }
 }
 
 .git-fileoverview {
@@ -757,7 +757,6 @@ body {
 .slug-GitActivityWidget {
     font-size: 1rem;
     > div.title {
-        display: none;
         text-align: center;
         font-size: 1rem;
         font-weight: bold;
@@ -822,6 +821,14 @@ body {
                 border-color: var(--col_hover);
             }
         }
+    }
+}
+
+.slug-GitActivityWidget.horizontal {
+    text-align: center;
+    .table-wrapper {
+        overflow-x: scroll;
+        padding-bottom: 1em;
     }
 }
 
