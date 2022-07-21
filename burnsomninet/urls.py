@@ -26,7 +26,7 @@ SITECODE = settings.SITECODE
 urlpatterns = [
     path("", views.index, name="index"),
     path("javascript/<path:file_path>", views.javascript_controller),
-    path("style.css", views.style, name="style"),
+    path("style/<str:style_name>.css", views.style, name="style"),
     path("keybase.txt", views.keybase, name="keybase"),
     path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),

@@ -37,7 +37,6 @@ ALLOWED_HOSTS = [
     "www.burnsomni.net"
 ]
 
-
 # Application definition
 
 INSTALLED_APPS = [

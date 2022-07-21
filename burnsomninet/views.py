@@ -32,6 +32,7 @@ def sass_compile(input_scss):
         os.system(f"rm {css_path}")
     if os.path.isfile(scss_path):
         os.system(f"rm {scss_path}")
+
     return output
 
 #NOTE: Do not change the argument names. that fucks django
@@ -108,39 +109,34 @@ def favicon(request):
         content = file_pipe.read()
     return HttpResponse(content)
 
-def style(request):
-    main_path = f"{SCSS_PATH}/main.scss"
-    mobile_path = f"{SCSS_PATH}/mobile.scss"
-    desktop_path = f"{SCSS_PATH}/desktop.scss"
+def style(request, style_name):
+    style_directory = f"{SCSS_PATH}/{style_name}"
+    if not os.path.isdir(style_directory):
+        return handler404(request, None)
+
+    cache_key = f"sass_{style_name}"
+    paths = []
+    for filename in os.listdir(style_directory):
+        if filename[filename.rfind(".") + 1:].lower() == "scss":
+            paths.append(f"{style_directory}/{filename}")
 
     cache_needs_update = check_cache(
-        "sass_main",
-        main_path,
-        mobile_path,
-        desktop_path
+        cache_key,
+        *paths
     )
 
     if not cache_needs_update:
-        content, mimetype = get_cached("sass_main")
+        content, mimetype = get_cached(cache_key)
     else:
-        midsize = 800
         content = ""
-        with open(main_path, "r") as file_pipe:
-            content = file_pipe.read()
-
-        with open(mobile_path, "r") as file_pipe:
-            content += f"\n@media only screen and (max-width: {midsize}px) {{\n"
-            content += file_pipe.read()
-            content += "\n}\n"
-
-        with open(desktop_path, "r") as file_pipe:
-            content += f"\n@media only screen and (min-width: {midsize}px) {{\n"
-            content += file_pipe.read()
-            content += "\n}\n"
+        paths.sort()
+        for filepath in paths:
+            with open(filepath, 'r', encoding='utf-8') as file_pipe:
+                content += "\n" + file_pipe.read()
 
         content = sass_compile(content)
         mimetype = "text/css"
-        update_cache("sass_main", content, mimetype)
+        update_cache(cache_key, content, mimetype)
 
     return HttpResponse(content, mimetype)
 
