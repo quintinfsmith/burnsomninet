@@ -7,105 +7,106 @@
     --col_highlight: #3c4b66;
     --col_hover: #b287a3;
     --code: #0f1419;
+    --midwidth: 800px;
 }
 
 @font-face {
     font-family: primary;
     font-weight: 800;
-    src: url(content/fonts/FiraSans/Heavy.otf);
+    src: url(/content/fonts/FiraSans/Heavy.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 700;
-    src: url(content/fonts/FiraSans/ExtraBold.otf);
+    src: url(/content/fonts/FiraSans/ExtraBold.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 600;
-    src: url(content/fonts/FiraSans/Bold.otf);
+    src: url(/content/fonts/FiraSans/Bold.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 500;
-    src: url(content/fonts/FiraSans/SemiBold.otf);
+    src: url(/content/fonts/FiraSans/SemiBold.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 400;
-    src: url(content/fonts/FiraSans/Regular.otf);
+    src: url(/content/fonts/FiraSans/Regular.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 300;
-    src: url(content/fonts/FiraSans/Light.otf);
+    src: url(/content/fonts/FiraSans/Light.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 200;
-    src: url(content/fonts/FiraSans/ExtraLight.otf);
+    src: url(/content/fonts/FiraSans/ExtraLight.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 100;
-    src: url(content/fonts/FiraSans/Thin.otf);
+    src: url(/content/fonts/FiraSans/Thin.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 800;
     font-style: italic;
-    src: url(content/fonts/FiraSans/HeavyItalic.otf);
+    src: url(/content/fonts/FiraSans/HeavyItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 700;
     font-style: italic;
-    src: url(content/fonts/FiraSans/ExtraBoldItalic.otf);
+    src: url(/content/fonts/FiraSans/ExtraBoldItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 600;
     font-style: italic;
-    src: url(content/fonts/FiraSans/BoldItalic.otf);
+    src: url(/content/fonts/FiraSans/BoldItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 500;
     font-style: italic;
-    src: url(content/fonts/FiraSans/SemiBoldItalic.otf);
+    src: url(/content/fonts/FiraSans/SemiBoldItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 400;
     font-style: italic;
-    src: url(content/fonts/FiraSans/Italic.otf);
+    src: url(/content/fonts/FiraSans/Italic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 300;
     font-style: italic;
-    src: url(content/fonts/FiraSans/LightItalic.otf);
+    src: url(/content/fonts/FiraSans/LightItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 200;
     font-style: italic;
-    src: url(content/fonts/FiraSans/ExtraLightItalic.otf);
+    src: url(/content/fonts/FiraSans/ExtraLightItalic.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 100;
     font-style: italic;
-    src: url(content/fonts/FiraSans/ThinItalic.otf);
+    src: url(/content/fonts/FiraSans/ThinItalic.otf);
 }
 
 @font-face {
     font-family: monospace;
-    src: url(content/fonts/FiraMono/Regular.woff2);
+    src: url(/content/fonts/FiraMono/Regular.woff2);
 }
 @font-face {
     font-family: monospace;
     font-weight: bold;
-    src: url(content/fonts/FiraMono/Bold.woff2);
+    src: url(/content/fonts/FiraMono/Bold.woff2);
 }
 
 a {
@@ -897,4 +898,3 @@ body {
 .button:hover {
     background-color: var(--col_hover);
 }
-
