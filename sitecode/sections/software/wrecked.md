@@ -16,4 +16,4 @@ Both [Rory](/software/rory) and [Sbyte](/software/sbyte) use the Wrecked environ
 ## Usage
 For Rust, see [Documentation](https://docs.rs/wrecked/).
 
-Docs for the python bindings are in the works. For now, there are a few examples on the [GitHub page](https://github.com/quintinfsmith/wrecked_bindings).
+Docs for the python bindings are in the works. For now, there are a few examples on the [project page](/project/wrecked).
