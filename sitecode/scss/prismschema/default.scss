@@ -44,7 +44,7 @@ pre, code {
     .token.prolog,
     .token.doctype,
     .token.cdata {
-        color: var(--RED);
+        color: var(--BRIGHTBLUE);
     }
 
     .token.namespace,
@@ -113,3 +113,6 @@ code.style .token.string {
     color: var(--RED);
 }
 
+code.language-python .triple-quoted-string.string {
+    color: var(--BRIGHTBLUE);
+}
