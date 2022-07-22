@@ -174,7 +174,11 @@ function load_widget_slugs() {
     }
 
     for (let url in payloads) {
-        load_script(url, widget_slug_callback.bind(payloads[url]))
+        if (url == "main") {
+            widget_slug_callback.apply(payloads[url])
+        } else {
+            load_script(url, widget_slug_callback.bind(payloads[url]))
+        }
     }
 }
 
@@ -237,6 +241,40 @@ class CustomSelect {
 
     get() {
         return this.value;
+    }
+}
+
+class RelativeVagueDate extends SlugWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.element.innerText = this.convert_timestamp(options.date);
+    }
+    convert_timestamp(timestamp) {
+        let then = new Date(timestamp);
+        let now = new Date();
+        let delta = (now - then);
+        let output;
+        if (delta <                   2 * 60 * 1000) {
+            output = "Just now";
+        } else if (delta <       2 * 60 * 60 * 1000) {
+            output = Math.round(delta / 60000) + " minutes ago";
+        } else if (delta <  2 * 24 * 60 * 60 * 1000) {
+            output = Math.round(delta / (60 * 60000)) + " hours ago";
+        } else if (delta <  7 * 24 * 60 * 60 * 1000) {
+            output = Math.round(delta / (24 * 60 * 60 * 1000)) + " days ago";
+        } else if (delta < 11 * 24 * 60 * 60 * 1000) {
+            output = "A week ago";
+        } else if (delta < 30 * 24 * 60 * 60 * 1000) {
+            output = Math.round(delta / (7 * 24 * 60 * 60 * 1000)) + " weeks ago";
+        } else if (delta < 42 * 24 * 60 * 60 * 1000) {
+            output = "A month ago";
+        } else if (delta < 7 * 79 * 24 * 60 * 60 * 1000) {
+            output = Math.round(delta / (30 * 24 * 60 * 60 * 1000)) + " months ago";
+        } else {
+            let year_count = Math.round(delta / (365.25 * 24 * 60 * 60 * 1000));
+            output = year_count + " years ago";
+        }
+        return output;
     }
 }
 

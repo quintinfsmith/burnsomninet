@@ -21,31 +21,6 @@ VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
 
-def relative_vague_date(date):
-    now = datetime.now()
-    delta = now - date
-    output = ""
-    if delta < timedelta(seconds=120):
-        output = "Just now"
-    elif delta < timedelta(minutes=120):
-        output = f"{round(delta.seconds / 60)} minutes ago"
-    elif delta < timedelta(hours=48):
-        output = f"{round(delta.seconds / (60 * 60))} hours ago"
-    elif delta < timedelta(days=7):
-        output = f"{delta.days} days ago"
-    elif delta < timedelta(days=11):
-        output = f"A week ago"
-    elif delta < timedelta(weeks=4, days=6):
-        output = f"{round(delta.days / 7)} weeks ago"
-    elif delta < timedelta(weeks=6):
-        output = f"A month ago"
-    elif delta < timedelta(weeks=52 + 27):
-        output = f"{round(delta.days / 30)} months ago"
-    else:
-        year_count = round(delta.days / 365.25)
-        output = f"{year_count} years ago"
-    return output
-
 def build_head(**kwargs):
     title = ""
     if "title" in kwargs:
@@ -428,7 +403,11 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 Tag("td",
                     Tag("a",
                         { "href": f"?" + urlencode(commit_query_attrs) },
-                        relative_vague_date(commit_date)
+                        slug_tag(
+                            'main',
+                            'RelativeVagueDate',
+                            date=commit_date.timestamp() * 1000
+                        )
                     )
                 )
             )
