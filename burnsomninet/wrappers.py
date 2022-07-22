@@ -78,27 +78,8 @@ def build_sitemap(*active_path):
             Tag("div")
         )
     )
-    sitemap_sub.append(
-        Tag("div",
-            { "class": "hamburger-wrapper" },
-            Tag("div",
-                { "class": "hamburger" },
-                Tag("div",
-                    Tag("div"),
-                    Tag("div"),
-                    Tag("div"),
-                    Tag("div"),
-                    Tag("div")
-                )
-            ),
-            Tag("script", {
-                "src": f"/javascript/hamburger.js?commit={COMMIT_ID}",
-                "type": "text/javascript"
-            })
-        )
-    )
 
-    subsitemap = Tag("div", { "class": "treemap" })
+    section_map = []
     #------------------------------------------#
     repositories = os.listdir(GIT_PATH)
     repositories.sort()
@@ -108,34 +89,17 @@ def build_sitemap(*active_path):
             working_repositories.append(path)
     repositories = working_repositories
 
-
-    entry = Tag("div", { "class": "entry" })
+    section_map.append({
+        'name': 'Repositories',
+        'sections': []
+    })
     for i, repo in enumerate(repositories):
-        classname = "item"
-        if ('project', repo) == active_path:
-            classname += " active"
+        section_map[-1]['sections'].append((
+            ('project', repo) == active_path,
+            f"/project/{repo}",
+            repo
+        ))
 
-        entry.append(
-            Tag('a',
-                {
-                    'class': classname,
-                    'href': f"/project/{repo}"
-                },
-                VH_MID,
-                Tag('div', repo)
-            )
-        )
-
-    subsitemap.append(
-        Tag("div",
-            Tag('div',
-                { 'class': 'header' },
-                VH_MID,
-                Tag('div', 'Repositories')
-            ),
-            entry
-        )
-    )
 
     #------------------------------------------#
     sectionsdir = f"{SITECODE}/sections/"
@@ -144,7 +108,11 @@ def build_sitemap(*active_path):
     headings.sort()
 
     for i, heading in enumerate(headings):
-        entry = Tag("div", { "class": "entry" })
+        section_map.append({
+            'name': heading,
+            'sections': []
+        })
+
         files = os.listdir(sectionsdir + heading)
         files.sort()
         for f in files:
@@ -155,18 +123,30 @@ def build_sitemap(*active_path):
                     prefs = json.loads(fp.read())
                     alias = prefs.get('alias', title)
 
+            section_map[-1]['sections'].append((
+                (heading, title) == active_path,
+                f"/{heading}/{title}",
+                alias.title()
+            ))
+
+
+    subsitemap = Tag("div", { "class": "treemap" })
+    for section in section_map:
+        heading = section['name']
+        entry = Tag("div", { "class": "entry" })
+        for (is_active, href, title) in section['sections']:
             classname = "item"
-            if (heading, title) == active_path:
+            if is_active:
                 classname += " active"
 
             entry.append(
                 Tag('a',
                     {
                         'class': classname,
-                        'href': f"/{heading}/{title}"
+                        'href': href
                     },
                     VH_MID,
-                    Tag('div', alias.title())
+                    Tag('div', title.title())
                 )
             )
 
@@ -181,7 +161,16 @@ def build_sitemap(*active_path):
             )
         )
 
+    sitemap_sub.append(
+        slug_tag(
+            "main",
+            "HamburgerMenu",
+            sitemap=section_map
+        )
+    )
+
     sitemap_sub.append(subsitemap)
+
     return sitemap
 
 def media_content(mediamap):

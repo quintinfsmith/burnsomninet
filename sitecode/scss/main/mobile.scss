@@ -25,11 +25,16 @@ body {
                 max-height: 4em;
             }
         }
-        > .hamburger-wrapper {
+        .slug-HamburgerMenu {
+            .custom-select {
+                box-shadow: none;
+            }
             flex: 1 1 auto;
-            text-align: right;
-            .hamburger {
-                display: inline-block;
+            .hamburger-wrapper {
+                text-align: right;
+                .hamburger {
+                    display: inline-block;
+                }
             }
         }
         > div:last-child:not(.visible) {

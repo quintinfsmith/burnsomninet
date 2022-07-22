@@ -210,8 +210,8 @@ class CustomSelect {
             { "class": "custom-select" },
             crel('div',
                 { 'class': 'wrapper' },
-                this.element_select,
-                this.element_facade
+                this.element_facade,
+                this.element_select
             )
         );
 
@@ -282,3 +282,49 @@ window.onload = function() {
     load_widget_slugs();
 }
 
+class HamburgerMenu extends SlugWidget {
+    constructor(element, options) {
+        super(element, options);
+
+        let opt_groups = [];
+        for (let i = 0; i < options.sitemap.length; i++) {
+            let section = options.sitemap[i];
+            let opt_group = crel('optgroup', { label: section.name });
+            for (let j = 0; j < section.sections.length; j++) {
+                let subsection = section.sections[j];
+                let opt_args = {
+                    value: subsection[1]
+                };
+                if (subsection[0]){
+                    opt_args['selected'] = true;
+                }
+                opt_group.appendChild(
+                    crel('option',
+                        opt_args,
+                        subsection[2]
+                    )
+                );
+            }
+            opt_groups.push(opt_group);
+        }
+        this.select = new CustomSelect(opt_groups, function(href) {
+            location.href = href;
+        });
+
+        this.element.appendChild(this.select.element);
+        this.select.element_facade.replaceWith(crel('div',
+            { "class": "hamburger-wrapper" },
+            crel('div',
+                { "class": "hamburger" },
+                crel("div",
+                    crel("div"),
+                    crel("div"),
+                    crel("div"),
+                    crel("div"),
+                    crel("div")
+                )
+            )
+        ));
+
+    }
+}
