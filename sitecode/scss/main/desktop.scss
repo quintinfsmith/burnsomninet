@@ -155,12 +155,12 @@ body {
 .markdown {
     > h1 + p + p {
         display: flex;
+        flex-wrap: wrap;
+        padding-right: .5em;
         > * {
             flex: 1 1 auto;
-            margin: 0;
-        }
-        > :not(:first-child) {
-            margin-left: 1em;
+            margin-bottom: .5em;
+            margin-left: .5em;
         }
     }
 }
