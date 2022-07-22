@@ -6,19 +6,45 @@ https://prismjs.com/download.html#themes=prism-dark&languages=markup+css+clike+j
  * Based on the slides of the talk “/Reg(exp){2}lained/”
  * @author Lea Verou
  */
+
+:root {
+    --FG: #F8F8F2;
+    --BG: #282A36;
+    --BLACK: #21222C;
+    --RED: #FF5555;
+    --GREEN: #50FA7B;
+    --YELLOW: #F1FA8C;
+    --BLUE: #BD93F9;
+    --MAGENTA: #FF79C6;
+    --CYAN: #8BE9FD;
+    --WHITE: #F8F8F2;
+    --BRIGHTBLACK: #6272A4;
+    --BRIGHTRED: #FF6E6E;
+    --BRIGHTGREEN: #69FF94;
+    --BRIGHTYELLOW: #FFFFA5;
+    --BRIGHTBLUE: #D6ACFF;
+    --BRIGHTMAGENTA: #FF92DF;
+    --BRIGHTCYAN: #A4FFFF;
+    --BRIGHTWHITE: #FFFFFF;
+}
+
 pre, code {
-    background-color: var(--code);
-	color: white;
+    background-color: var(--BG);
+	color: var(--FG);
 
     .line-numbers-rows > span:before {
-        color: #999;
+        color: var(--YELLOW);
+    }
+
+    .token.function {
+        color: var(--CYAN);
     }
 
     .token.comment,
     .token.prolog,
     .token.doctype,
     .token.cdata {
-        color: #36a3d9;
+        color: var(--RED);
     }
 
     .token.namespace,
@@ -32,37 +58,37 @@ pre, code {
     .token.number,
     .token.constant,
     .token.symbol {
-        color: #eafe84;
+        color: var(--RED);
     }
 
     .token.selector,
     .token.attr-name,
     .token.builtin,
     .token.inserted {
-        color: hsl(75, 70%, 60%);
+        color: var(--GREEN);
     }
 
     .token.char,
     .token.string {
-        color: #ff3333;
+        color: var(--RED);
     }
 
     .token.operator,
     .token.entity,
     .token.url,
     .token.variable {
-        color: hsl(40, 90%, 60%);
+        color: var(--RED);
     }
 
     .token.atrule,
     .token.attr-value,
     .token.keyword {
-        color: #e7c547;
+        color: var(--MAGENTA);
     }
 
     .token.regex,
     .token.important {
-        color: #e90;
+        color: var(--BLUE);
     }
 
     .token.important,
@@ -78,12 +104,12 @@ pre, code {
     }
 
     .token.deleted {
-        color: red;
+        color: var(--RED);
     }
 }
 
 code.language-css .token.string,
 code.style .token.string {
-    color: hsl(40, 90%, 60%);
+    color: var(--RED);
 }
 
