@@ -173,34 +173,45 @@ body {
             }
         }
 
-        > .hamburger-wrapper {
-            .hamburger {
+        > .slug-HamburgerMenu {
+            text-align: right;
+            .custom-select {
+                display: inline-block;
                 height: 100%;
-                width: 5em;
-                background-color: var(--col_light);
-                cursor: pointer;
-                > div {
-                    padding: 1.2em;
-                    height: calc(100% - 2.4em);
-                    > div {
-                        width: 100%;
-                    }
-                    > div:nth-child(even) {
-                        height: 17%;
-                    }
-                    > div:nth-child(odd) {
-                        height: 22%;
-                        background-color: var(--col_dark);
-                        border-radius: 3em;
-                        opacity: .3;
-                    }
+                > .wrapper {
+                    height: 100%;
                 }
             }
-            .hamburger.active {
-                > div {
-                    > div:nth-child(odd) {
-                        background-color: var(--col_highlight);
-                        opacity: 1;
+            .hamburger-wrapper {
+                height: 100%;
+                .hamburger {
+                    height: 100%;
+                    width: 5em;
+                    background-color: var(--col_light);
+                    cursor: pointer;
+                    > div {
+                        padding: 1.2em;
+                        height: calc(100% - 2.4em);
+                        > div {
+                            width: 100%;
+                        }
+                        > div:nth-child(even) {
+                            height: 17%;
+                        }
+                        > div:nth-child(odd) {
+                            height: 22%;
+                            background-color: var(--col_dark);
+                            border-radius: 3em;
+                            opacity: .3;
+                        }
+                    }
+                }
+                .hamburger.active {
+                    > div {
+                        > div:nth-child(odd) {
+                            background-color: var(--col_highlight);
+                            opacity: 1;
+                        }
                     }
                 }
             }
