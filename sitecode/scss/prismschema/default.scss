@@ -47,9 +47,11 @@ pre, code {
         color: var(--BRIGHTBLUE);
     }
 
-    .token.namespace,
     .token.punctuation {
-        color: #ff6565;
+        color: var(--BRIGHTWHITE);
+    }
+    .token.namespace {
+        color: var(--BRIGHTCYAN);
     }
 
     .token.property,
@@ -68,15 +70,12 @@ pre, code {
         color: var(--GREEN);
     }
 
-    .token.char,
-    .token.string {
-        color: var(--RED);
-    }
-
     .token.operator,
     .token.entity,
     .token.url,
-    .token.variable {
+    .token.variable,
+    .token.char,
+    .token.string {
         color: var(--RED);
     }
 

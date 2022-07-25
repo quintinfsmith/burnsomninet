@@ -109,7 +109,7 @@ def build_sitemap(*active_path):
 
     for i, heading in enumerate(headings):
         section_map.append({
-            'name': heading,
+            'name': heading.title(),
             'sections': []
         })
 
