@@ -221,12 +221,14 @@ def index(request):
         active_path.remove("")
 
     # Do Git Commit Overview
+    private_projects = set()
     repositories = os.listdir(GIT_PATH)
     repositories.sort()
     working_repositories = []
     for path in repositories:
-        if os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") or path == "burnsomninet":
-            working_repositories.append(path)
+        if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path != "burnsomninet":
+            private_projects.add(path)
+        working_repositories.append(path)
     repositories = working_repositories
 
     all_commits = []
@@ -237,8 +239,12 @@ def index(request):
             project=project,
             datefrom=from_date.timestamp()
         )
+        if project in private_projects:
+            project_alias = "a private project";
+        else:
+            project_alias = project
         for i, _commit in enumerate(working_commits):
-            working_commits[i]['group'] = project
+            working_commits[i]['group'] = project_alias
 
         all_commits.extend(working_commits)
 
