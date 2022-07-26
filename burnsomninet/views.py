@@ -232,11 +232,15 @@ def index(request):
     all_commits = []
     from_date = datetime.now() - relativedelta(years=1)
     for project in repositories:
-        all_commits.extend(api.handle(
+        working_commits = api.handle(
             'git', 'commits',
             project=project,
             datefrom=from_date.timestamp()
-        ))
+        )
+        for i, _commit in enumerate(working_commits):
+            working_commits[i]['group'] = project
+
+        all_commits.extend(working_commits)
 
     top = Tag("html",
         wrappers.build_head(title="Quintin Smith - Developer, Unicyclist"),

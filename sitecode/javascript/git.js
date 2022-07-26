@@ -302,14 +302,42 @@ class GitActivityWidget extends SlugWidget {
             let key = Math.floor((366 * working_year) + doy);
             let element_td = this.commit_block_elements[key];
 
-            let commit_count = element_td.getAttribute('data-count');
-            if (!commit_count) {
-                commit_count = 0;
+            let commit_counts;
+            if (element_td.getAttribute('data-counts')) {
+                commit_counts = JSON.parse(element_td.getAttribute('data-counts'));
+            } else {
+                commit_counts = {};
+            }
+            let commit_group_name = commit['group'];
+            if (!commit_group_name) {
+                commit_group_name = "_";
             }
 
-            commit_count = parseInt(commit_count) + 1;
-            element_td.setAttribute('data-count', commit_count);
-            element_td.setAttribute('title', commit_count + " commits on " + element_td.getAttribute('data-date'));
+            if (!commit_counts[commit_group_name]) {
+                commit_counts[commit_group_name] = 0;
+            }
+
+            commit_counts[commit_group_name] += 1;
+            element_td.setAttribute('data-counts', JSON.stringify(commit_counts));
+            let title = "";
+            if (Object.keys(commit_counts).length > 1) {
+                title = element_td.getAttribute("data-date") + ":\n";
+                for (let k in commit_counts) {
+                    title += commit_counts[k] + " commit";
+                    if (commit_counts[k] != 1) {
+                        title += "s";
+                    }
+                    title += " to " + k + "\n";
+                }
+                title = title.substr(0, title.length - 1);
+            } else {
+                title = commit_counts[commit_group_name] + " commit";
+                if (commit_counts[commit_group_name] != 1) {
+                    title += "s";
+                }
+                title += " on " + element_td.getAttribute('data-date');
+            }
+            element_td.setAttribute('title', title);
             element_td.classList.add('active');
 
             this.commits.push[commit];
