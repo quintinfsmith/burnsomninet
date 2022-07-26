@@ -234,17 +234,27 @@ def index(request):
     all_commits = []
     from_date = datetime.now() - relativedelta(years=1)
     for project in repositories:
-        working_commits = api.handle(
-            'git', 'commits',
-            project=project,
-            datefrom=from_date.timestamp()
+        cache_key = f"INDEX_GIT_{project}"
+        needs_update = check_cache(
+            cache_key,
+            f"{GIT_PATH}/{project}"
         )
-        if project in private_projects:
-            project_alias = "a private project";
+        if not needs_update:
+            working_commits = json.loads(get_cached(cache_key)[0])
         else:
-            project_alias = project
-        for i, _commit in enumerate(working_commits):
-            working_commits[i]['group'] = project_alias
+            working_commits = api.handle(
+                'git', 'commits',
+                project=project,
+                datefrom=from_date.timestamp()
+            )
+            if project in private_projects:
+                project_alias = "a private project";
+            else:
+                project_alias = project
+            for i, _commit in enumerate(working_commits):
+                working_commits[i]['group'] = project_alias
+
+            update_cache(cache_key, json.dumps(working_commits))
 
         all_commits.extend(working_commits)
 
