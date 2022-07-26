@@ -310,7 +310,7 @@ class GitActivityWidget extends SlugWidget {
             }
             let commit_group_name = commit['group'];
             if (!commit_group_name) {
-                commit_group_name = "_";
+                commit_group_name = "";
             }
 
             if (!commit_counts[commit_group_name]) {
@@ -334,6 +334,9 @@ class GitActivityWidget extends SlugWidget {
                 title = commit_counts[commit_group_name] + " commit";
                 if (commit_counts[commit_group_name] != 1) {
                     title += "s";
+                }
+                if (commit_group_name) {
+                    title += " to " + commit_group_name;
                 }
                 title += " on " + element_td.getAttribute('data-date');
             }
