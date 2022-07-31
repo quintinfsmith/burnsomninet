@@ -49,12 +49,18 @@ cargo install sbyte
 sbyte <filename>
 ```
 
-
 <a name="ctrls"></a>
 ## Controls
 The current defaults *(while prone to change until v1.0.0 is released)* are as follows:
+
+**NOTE**: If the register is set, user actions are applied that many times
 #### While in default mode
 <a name="ctrls_a"></a>
+- `0-9` add digit to register
+- `=` cycle between hex/binary/decimal views
+- `x` cut selection
+- `p` paste
+##### Movement & Selection
 - `h` Move Cursor Left
 - `j` Move Cursor Down
 - `k` Move Cursor Up
@@ -65,15 +71,28 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `L` Increase length of selection
 - `R` Jump to index denoted by selection (Big Endian)
 - `T` Jump to index denoted by selection (Little Endian)
-- `p` paste
-- `x` cut selection
+- `/` search
+
+##### Mode Switching
+- `o` switch to mode overwrite
+- `i` switch to mode insert
+- `:` switch to shell
+
+##### History & Automation
 - `u` undo action
 - `ctrl+r` redo action
-- `/` search
-- `o` switch to mode: overwrite
-- `i` switch to mode: insert
-- `:` switch to mode: shell
-- `=` cycle between hex/binary/decimal views
+- `q` start/stop recording user actions
+- `@` play back recorded user actions
+
+##### Masking
+- `~` apply NOT to cursor selection
+- `&` apply AND to cursor selection
+- `|` apply OR to cursor selection
+- `^` apply XOR to cursor selection
+
+##### Math
+- `+` increment selection (ignore overflow)
+- `-` decrement selection (ignore overflow)
 
 #### While in overwrite mode
 <a name="ctrls_b"></a>
@@ -85,7 +104,6 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `l` Move sub-cursor to previous digit
 - `esc` return to default mode
 
-
 <a name="shell"></a>
 ## Shell Commands
 - `find <pattern>` Search for, and jump to, a pattern
@@ -94,6 +112,7 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `overwrite <pattern>` Overwrite with pattern
 - `q` Quit
 - `w` Save
+- `w <path>` Save to *path*
 - `wq` Save & Quit
 
 #### Bitwise Masks
@@ -104,6 +123,11 @@ The current defaults *(while prone to change until v1.0.0 is released)* are as f
 - `xor <mask>`
 - `not`
 
+#### Record & Play
+- `rec <keyword>` Start recording user actions and save playback to *keyword*
+- `rec` If recording, stop the recording
+- `play <keyword>` Replay user actions saved to *keyword*
+
 
 <a name="rgx"></a>
 ## Regex modifications
@@ -111,6 +135,7 @@ Regex is supported in searches, however some modifications have been made to mak
 <a name="rgx_a"></a>
 ### Byte Wildcarding
 Use a `.` to indicate a wildcard within a byte.
+
 #### Examples
 This will find all bytes from \x90 to \x9F:
 ```
