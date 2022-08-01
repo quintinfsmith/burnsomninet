@@ -6,6 +6,7 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
+from sitecode.py.gitmanip import Project as GitProject
 from burnsomninet import wrappers
 from sitecode.py import api
 from datetime import datetime
@@ -168,7 +169,14 @@ def section_json(request):
     return HttpResponse(content, content_type="application/json")
 
 
-def section_controller(request, section, subsection):
+def section_controller(request, section, subsection_path):
+    subsections = subsection_path.split("/")
+
+    if section == "git":
+        return git_controller(request, section, *subsections)
+
+    subsection = subsections[0]
+
     sectionsdir = f"{SITECODE}/sections/"
     kwargs = {}
     directory_path = f"{sectionsdir}/{section}/"
@@ -226,6 +234,8 @@ def index(request):
     repositories.sort()
     working_repositories = []
     for path in repositories:
+        if path == ".htpasswd":
+            continue
         if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path != "burnsomninet":
             private_projects.add(path)
         working_repositories.append(path)
@@ -320,9 +330,25 @@ def index(request):
 
     return HttpResponse(repr(top))
 
-def git_controller(request, project):
-    if project not in os.listdir(f"{GIT_PATH}"):
+def git_dumb_server(request, project_name, *path):
+    git_project = GitProject(f"{GIT_PATH}/{project_name}")
+    output = ""
+    if "/".join(path) == "/info/refs":
+        refs = git_project.get_refs()
+        for path, hashstr in refs.items():
+            output += f"{hashstr}\t{path}\n"
+
+        if output:
+            output[0:-1]
+
+    return HttpResponse(output)
+
+def git_controller(request, project, *path):
+    if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
+
+    if path:
+        return git_dumb_server(request, project, *path)
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')

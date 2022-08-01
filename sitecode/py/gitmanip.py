@@ -26,6 +26,17 @@ class Project:
     def get_path(self):
         return self.path
 
+    def get_refs(self):
+        cwd = os.getcwd()
+        refsmap = {}
+        for main, dirs, files in os.walk(f"{self.path}/refs/"):
+            for f in files:
+                with open(f"{main}/{f}", "r") as fp:
+                    key = f"{main}/{f}"
+                    key = key[len(f"{self.path}"):]
+                    refsmap[key] = fp.read().strip()
+
+        return refsmap
 
 class ProjectBranch:
     def __init__(self, project, branch=""):
@@ -257,6 +268,7 @@ class Commit:
 
     def get_author_email(self):
         return self.author
+
 
 
 if __name__ == "__main__":
