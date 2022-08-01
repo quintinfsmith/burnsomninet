@@ -146,38 +146,34 @@ class GitActivityWidget extends SlugWidget {
             year_table.firstChild.appendChild(crel('th', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
         }
 
+        let flag_month_labelled = true;
+        let flag_month_changed = false;
         for (let i = 0; i < week_properties.length; i++) {
             let current_week = week_properties[i];
             let row_element = crel('tr');
             let buffer = null;
-            if (i == week_properties.length - 1) {
-                if (i > 0) {
-                    if (current_week.month_at_start == week_properties[i - 1].month_at_start) {
-                        buffer = crel('td');
-                    }
+
+            let is_december_next = i < week_properties.length - 1 && week_properties[i + 1].month_at_start == 11;
+            let different_month_next = i < week_properties.length -1 && current_week.month_at_start != week_properties[i + 1].month_at_start;
+            if (flag_month_labelled) {
+                flag_month_changed = different_month_next;
+                flag_month_labelled = false;
+            } else if (flag_month_changed || different_month_next) {
+                if (! is_december_next) {
+                    buffer = crel('td',
+                        {
+                            "class": "month-label",
+                            "rowspan": 2
+                        },
+                        this.MONTHS[week_properties[i + 1].month_at_start]
+                    );
                 } else {
-                    // only one row, label was set before loop
+                    buffer = crel('td');
                 }
+                flag_month_labelled = true;
+                flag_month_changed = false;
             } else {
-                if (current_week.month_at_start != week_properties[i + 1].month_at_start) {
-                    if (current_week.month_at_start == 0) {
-                        buffer = crel('td');
-                    } else {
-                        buffer = crel('td',
-                            {
-                                "class": "month-label",
-                                "rowspan": 2
-                            },
-                            this.MONTHS[week_properties[i + 1].month_at_start]
-                        );
-                    }
-                } else {
-                    if (i > 0) {
-                        if (current_week.month_at_start == week_properties[i - 1].month_at_start) {
-                            buffer = crel('td');
-                        }
-                    }
-                }
+                buffer = crel('td');
             }
 
             if (buffer) {
