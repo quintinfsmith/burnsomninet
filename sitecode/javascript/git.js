@@ -301,9 +301,12 @@ class GitActivityWidget extends SlugWidget {
             let doy = (date.getTime() - day_one.getTime()) / one_day;
             let key = Math.floor((366 * working_year) + doy);
             let element_td = this.commit_block_elements[key];
+            // TODO: figure out why element_td doesn't exist on jul31
+            if (! element_td) {
+                continue;
+            }
 
             let commit_counts;
-            // TODO: figure out why element_td doesn't exist on jul31
             if (element_td && element_td.getAttribute('data-counts')) {
                 commit_counts = JSON.parse(element_td.getAttribute('data-counts'));
             } else {
