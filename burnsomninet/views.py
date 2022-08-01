@@ -172,8 +172,8 @@ def section_json(request):
 def section_controller(request, section, subsection_path):
     subsections = subsection_path.split("/")
 
-    if section == "git":
-        return git_controller(request, section, *subsections)
+    if section == "git" or section == "project":
+        return git_controller(request, subsections[0], *subsections[1:])
 
     subsection = subsections[0]
 
@@ -343,12 +343,12 @@ def git_dumb_server(request, project_name, *path):
 
     return HttpResponse(output)
 
-def git_controller(request, project, *path):
+def git_controller(request, project, *project_path):
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
-    if path:
-        return git_dumb_server(request, project, *path)
+    #if path:
+    #    return git_dumb_server(request, project, *path)
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
