@@ -303,7 +303,8 @@ class GitActivityWidget extends SlugWidget {
             let element_td = this.commit_block_elements[key];
 
             let commit_counts;
-            if (element_td.getAttribute('data-counts')) {
+            // TODO: figure out why element_td doesn't exist on jul31
+            if (element_td && element_td.getAttribute('data-counts')) {
                 commit_counts = JSON.parse(element_td.getAttribute('data-counts'));
             } else {
                 commit_counts = {};
