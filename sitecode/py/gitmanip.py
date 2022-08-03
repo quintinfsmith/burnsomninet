@@ -1,5 +1,5 @@
 import os, sys
-import re
+import re, time
 from datetime import datetime, timedelta, timezone
 
 class Author:
@@ -11,7 +11,6 @@ _MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
 MONTHMAP = {}
 for i, m in enumerate(_MONTHS):
     MONTHMAP[m] = i + 1
-
 
 class Project:
     def __init__(self, path):
@@ -28,15 +27,52 @@ class Project:
 
     def get_refs(self):
         cwd = os.getcwd()
+        os.chdir(f"{self.path}")
         refsmap = {}
         for main, dirs, files in os.walk(f"{self.path}/refs/"):
             for f in files:
+                if f == "HEAD":
+                    continue
+
                 with open(f"{main}/{f}", "r") as fp:
                     key = f"{main}/{f}"
                     key = key[len(f"{self.path}"):]
                     refsmap[key] = fp.read().strip()
 
         return refsmap
+
+    def get_objects(self):
+        cwd = os.getcwd()
+        os.chdir(f"{self.path}")
+        t = time.time()
+        os.system(f"git cat-file --batch-all-objects --batch-check > /tmp/.gitgetobjects{t}")
+        lines = []
+        with open(f"/tmp/.gitgetobjects{t}", "r") as fp:
+            lines = fp.read().split("\n")
+        os.system(f"rm /tmp/.gitgetobjects{t}")
+
+        output = {}
+        for line in lines:
+            key = line[0:line.find(" ")]
+            obtype = line[line.find(" ") + 1:line.rfind(" ")]
+            obnumber = line[line.rfind(" ") + 1:]
+            output[key] = {
+                'type': obtype,
+                'number': obnumber
+            }
+        return output
+
+    def get_blob(self, commit_id, obj_type='blob'):
+        cwd = os.getcwd()
+        os.chdir(f"{self.path}")
+        os.system(f"git cat-file {obj_type} {commit_id} > /tmp/.gitblob{commit_id}")
+
+        content = b''
+        with open(f"/tmp/.gitblob{commit_id}", "rb") as fp:
+            content = fp.read()
+
+        return content
+
 
 class ProjectBranch:
     def __init__(self, project, branch=""):
