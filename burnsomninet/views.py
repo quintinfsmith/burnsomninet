@@ -2,6 +2,7 @@ import os
 import json
 import time
 import marko
+import zlib
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
@@ -331,24 +332,79 @@ def index(request):
     return HttpResponse(repr(top))
 
 def git_dumb_server(request, project_name, *path):
+    service = request.GET.get('service', None)
+
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     output = ""
-    if "/".join(path) == "/info/refs":
+    path_str = "/".join(path)
+
+    mimetype = 'application/octet-stream'
+    status = 200
+    file_path = f"{GIT_PATH}/{project_name}/{path_str}"
+    if path_str == "info/refs":
         refs = git_project.get_refs()
         for path, hashstr in refs.items():
-            output += f"{hashstr}\t{path}\n"
+            output += f"{hashstr}\t{path}\r\n"
 
-        if output:
-            output[0:-1]
+        output = output.strip() + "^{}"
+        mimetype = 'text/plain; charset=utf-8'
+    #elif path_str == "object/info/packs":
+    #    packs = set()
+    #    for p in os.listdir(f"{GIT_PATH}/{project_name}/objects/pack"):
+    #        refid = p[5:p.rfind(".")]
+    #        packs.append(refid)
+    #    output = "\r\n".join(list(packs))
+    elif path_str == "HEAD":
+        ref = ''
+        with open(f"{GIT_PATH}/{project_name}/HEAD", "r") as fp:
+            ref = fp.read()
+            ref = ref[ref.find(" ") + 1:].strip()
+        with open(f"{GIT_PATH}/{project_name}/{ref}", "r") as fp:
+            output = fp.read().strip()
+    elif path[0] == 'objects' and len(path[1]) == 2:
+        object_key = "".join(path[1:])
+        objects = git_project.get_objects()
+        if object_key not in objects:
+            raise Http404()
 
-    return HttpResponse(output)
+        if os.path.isfile(file_path):
+            # TODO: SECURITY ISSUE!
+            with open(file_path, "rb") as fp:
+                filebytes = fp.read()
+            #output = ''
+            #for b in filebytes:
+            #    output += hex(b)[2:]
+            output = filebytes
+        else:
+            working_object = objects[object_key]
+            obj_type = working_object['type']
+            obj_number = working_object['number']
+
+            blob_content = git_project.get_blob(object_key, obj_type)
+            blob_content = f"{obj_type} {obj_number}".encode('utf8') + b'\x00' + blob_content
+            output = zlib.compress(blob_content)
+
+    elif os.path.isfile(file_path):
+        # TODO: SECURITY ISSUE!
+        with open(file_path, "rb") as fp:
+            filebytes = fp.read()
+        #output = ''
+        #for b in filebytes:
+        #    output += hex(b)[2:]
+        output = filebytes
+    else:
+        raise Http404()
+
+
+    return HttpResponse(output, mimetype, status=status)
+
 
 def git_controller(request, project, *project_path):
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
-    #if path:
-    #    return git_dumb_server(request, project, *path)
+    if project_path:
+        return git_dumb_server(request, project, *project_path)
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
