@@ -28,16 +28,33 @@ class Project:
     def get_refs(self):
         cwd = os.getcwd()
         os.chdir(f"{self.path}")
-        refsmap = {}
-        for main, dirs, files in os.walk(f"{self.path}/refs/"):
-            for f in files:
-                if f == "HEAD":
-                    continue
 
-                with open(f"{main}/{f}", "r") as fp:
-                    key = f"{main}/{f}"
-                    key = key[len(f"{self.path}"):]
-                    refsmap[key] = fp.read().strip()
+        branches = self.get_branch_names()
+        heads = {}
+        remotes = {}
+        for branch in branches:
+            ref_path = f"{self.path}/refs/heads/{branch}"
+            if not os.path.isfile(ref_path):
+                continue
+            with open(ref_path, "r") as fp:
+                heads[branch] = fp.read().strip()
+
+        for branch in branches:
+            ref_path = f"{self.path}/refs/remotes/{branch}"
+            if not os.path.isfile(ref_path):
+                if branch in heads:
+                    remotes[branch] = heads[branch]
+            else:
+                with open(ref_path, "r") as fp:
+                    remotes[branch] = fp.read().strip()
+
+
+        refsmap = {}
+        for branch, hashstr in heads.items():
+            refsmap[f"refs/heads/{branch}"] = hashstr
+        for branch, hashstr in remotes.items():
+            refsmap[f"refs/remotes/origin/{branch}"] = hashstr
+
 
         return refsmap
 
