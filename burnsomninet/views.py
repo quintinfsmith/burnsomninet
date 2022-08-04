@@ -396,9 +396,12 @@ def git_controller(request, project, *project_path):
 class GitDumbServer:
     @classmethod
     def main(cls, request, project_name, *path):
-        service = request.GET.get('service', None)
+        project_path = f"{GIT_PATH}/{project_name}"
+        if not os.path.isfile(f"{project_path}/git-daemon-export-ok"):
+            raise Http404()
 
-        git_project = GitProject(f"{GIT_PATH}/{project_name}")
+        service = request.GET.get('service', None)
+        git_project = GitProject(project_path)
         path_str = "/".join(path)
         file_path = f"{GIT_PATH}/{project_name}/{path_str}"
 
