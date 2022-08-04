@@ -3,6 +3,7 @@ import json
 import time
 import marko
 import zlib
+import re
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
@@ -236,8 +237,6 @@ def index(request):
     repositories.sort()
     working_repositories = []
     for path in repositories:
-        if path == ".htpasswd":
-            continue
         if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path != "burnsomninet":
             private_projects.add(path)
         working_repositories.append(path)
@@ -332,92 +331,31 @@ def index(request):
 
     return HttpResponse(repr(top))
 
-def git_dumb_server(request, project_name, *path):
-    service = request.GET.get('service', None)
+def api_controller(request, section_path):
+    section_split = section_path.split("/")
+    while "" in section_split:
+        section_split.remove("")
 
-    git_project = GitProject(f"{GIT_PATH}/{project_name}")
-    output = ""
-    path_str = "/".join(path)
+    kwargs = {}
+    for key in request.GET:
+        kwargs[key] = request.GET.get(key, None)
 
-    mimetype = 'application/octet-stream'
-    status = 200
-
-    file_path = f"{GIT_PATH}/{project_name}/{path_str}"
-    if False and path_str == "info/refs":
-        os.chdir(f"{GIT_PATH}/{project_name}/")
-        os.system(f"echo 0000 | /usr/lib/git-core/{service} --http-backend-info-refs ./ > /tmp/.dumbtest")
-        with open("/tmp/.dumbtest", "r") as fp:
-            lines = fp.read().split("\n")
-            for line in lines:
-                if "HEAD" in line:
-                    continue
-                output += line[4:44] + "\t" + line[45:] + "\n"
-            output = output.strip() + "^{}"
-        mimetype = f"text/plain; charset=utf-8"
-
-    elif path_str == "info/refs":
-        refs = git_project.get_refs()
-        keys = list(refs.keys())
-        keys.sort()
-        for i, path in enumerate(keys):
-            hashstr = refs[path]
-            if "HEAD" in path:
-                continue
-
-            line = f"{hashstr}\t{path.strip()}"
-            line += "\n"
-            if i == len(refs) - 1:
-                line += "^{}"
-
-            output += line
-
-        mimetype = f"text/plain; charset=utf-8"
-
-    elif path_str == "HEAD":
-        ref = ''
-        with open(f"{GIT_PATH}/{project_name}/HEAD", "r") as fp:
-            ref = fp.read()
-            ref = ref[ref.find(" ") + 1:].strip()
-        with open(f"{GIT_PATH}/{project_name}/{ref}", "r") as fp:
-            output = fp.read().strip()
-    elif path[0] == 'objects' and len(path[1]) == 2:
-        object_key = "".join(path[1:])
-        objects = git_project.get_objects()
-        if object_key not in objects:
-            raise Http404()
-
-        if os.path.isfile(file_path):
-            # TODO: SECURITY ISSUE!
-            with open(file_path, "rb") as fp:
-                filebytes = fp.read()
-            output = filebytes
-        else:
-            working_object = objects[object_key]
-            obj_type = working_object['type']
-            obj_number = working_object['number']
-
-            blob_content = git_project.get_blob(object_key, obj_type)
-            blob_content = f"{obj_type} {obj_number}".encode('utf8') + b'\x00' + blob_content
-            output = zlib.compress(blob_content)
-
-    elif os.path.isfile(file_path):
-        # TODO: SECURITY ISSUE!
-        with open(file_path, "rb") as fp:
-            filebytes = fp.read()
-        output = filebytes
-    else:
+    response = {}
+    try:
+        content = api.handle(*section_split, **kwargs)
+    except ModuleNotFoundError:
         raise Http404()
 
-
-    return HttpResponse(output, mimetype, status=status)
+    content = json.dumps(content)
+    return HttpResponse(content, content_type="application/json")
 
 
 def git_controller(request, project, *project_path):
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
-    if project_path:
-        return git_dumb_server(request, project, *project_path)
+    if request.headers['User-Agent'][0:3] == 'git':
+        return GitDumbServer.main(request, project, *project_path)
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
@@ -454,23 +392,73 @@ def git_controller(request, project, *project_path):
 
     return HttpResponse(content, mimetype)
 
-def api_controller(request, section_path):
-    section_split = section_path.split("/")
-    while "" in section_split:
-        section_split.remove("")
 
-    kwargs = {}
-    for key in request.GET:
-        kwargs[key] = request.GET.get(key, None)
+class GitDumbServer:
+    @classmethod
+    def main(cls, request, project_name, *path):
+        service = request.GET.get('service', None)
 
-    response = {}
-    try:
-        content = api.handle(*section_split, **kwargs)
-    except ModuleNotFoundError:
-        raise Http404()
+        git_project = GitProject(f"{GIT_PATH}/{project_name}")
+        path_str = "/".join(path)
+        file_path = f"{GIT_PATH}/{project_name}/{path_str}"
 
-    content = json.dumps(content)
-    return HttpResponse(content, content_type="application/json")
+        mimetype = 'application/octet-stream'
+        status = 200
+
+        output = ""
+        if path_str == "info/refs" and service == "git-upload-pack":
+            refs = git_project.get_refs()
+            keys = list(refs.keys())
+            keys.sort()
+            for i, path in enumerate(keys):
+                hashstr = refs[path]
+
+                # We dont' want HEAD in the info/refs advertisement
+                if "HEAD" in path:
+                    continue
+
+                line = f"{hashstr}\t{path.strip()}"
+                line += "\n"
+                if i == len(refs) - 1:
+                    line += "^{}"
+
+                output += line
+
+            mimetype = f"text/plain; charset=utf-8"
+
+        elif path_str == "HEAD":
+            ref = ''
+            with open(f"{GIT_PATH}/{project_name}/HEAD", "r") as fp:
+                ref = fp.read()
+                ref = ref[ref.find(" ") + 1:].strip()
+            with open(f"{GIT_PATH}/{project_name}/{ref}", "r") as fp:
+                output = fp.read().strip()
+
+        elif re.search("^objects/[0-9a-zA-Z]{2}/[0-9a-zA-Z]{38}$", path_str):
+            if os.path.isfile(file_path):
+                with open(file_path, "rb") as fp:
+                    filebytes = fp.read()
+                output = filebytes
+            else:
+                object_key = "".join(path[1:])
+                objects = git_project.get_objects()
+
+                if object_key not in objects:
+                    raise Http404()
+
+                working_object = objects[object_key]
+                obj_type = working_object['type']
+                obj_number = working_object['number']
+
+                blob_content = git_project.get_blob(object_key, obj_type)
+                blob_content = f"{obj_type} {obj_number}".encode('utf8') + b'\x00' + blob_content
+                output = zlib.compress(blob_content)
+
+        else:
+            raise Http404()
+
+        return HttpResponse(output, mimetype, status=status)
+
 
 
 VIEWMAP = {

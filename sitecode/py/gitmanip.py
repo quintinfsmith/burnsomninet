@@ -62,11 +62,8 @@ class Project:
         cwd = os.getcwd()
         os.chdir(f"{self.path}")
         t = time.time()
-        os.system(f"git cat-file --batch-all-objects --batch-check > /tmp/.gitgetobjects{t}")
-        lines = []
-        with open(f"/tmp/.gitgetobjects{t}", "r") as fp:
-            lines = fp.read().split("\n")
-        os.system(f"rm /tmp/.gitgetobjects{t}")
+
+        lines = get_cmd_output("git cat-file --batch-all-objects --batch-check").split("\n")
 
         output = {}
         for line in lines:
@@ -82,13 +79,12 @@ class Project:
     def get_blob(self, commit_id, obj_type='blob'):
         cwd = os.getcwd()
         os.chdir(f"{self.path}")
-        os.system(f"git cat-file {obj_type} {commit_id} > /tmp/.gitblob{commit_id}")
 
-        content = b''
-        with open(f"/tmp/.gitblob{commit_id}", "rb") as fp:
-            content = fp.read()
+        output = get_cmd_output(f"git cat-file {obj_type} {commit_id}", "rb")
 
-        return content
+        os.chdir(cwd)
+
+        return output
 
 
 class ProjectBranch:
@@ -99,14 +95,9 @@ class ProjectBranch:
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.get_path()}")
-        os.system(f"git whatchanged {branch} > /tmp/gitmanip")
-        whatchanged_dump = ""
-
-        with open("/tmp/gitmanip", "r") as fp:
-            whatchanged_dump = fp.read()
-
-        os.system("rm /tmp/gitmanip")
+        whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
         os.chdir(cwd)
+
         if whatchanged_dump:
             whatchanged_dump = whatchanged_dump[7:]
             chunks = whatchanged_dump.split("\ncommit ")
@@ -185,17 +176,14 @@ class ProjectBranch:
         return adj_files
 
     def get_file_content(self, filepath, commit_id=None):
+        if not commit_id:
+            cmd = f"git show {self.branch}:\"{filepath}\""
+        else:
+            cmd = f"git show {commit_id}:\"{filepath}\""
+
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
-        if not commit_id:
-            os.system(f"git show {self.branch}:\"{filepath}\" > /tmp/gitmanipb")
-        else:
-            os.system(f"git show {commit_id}:\"{filepath}\" > /tmp/gitmanipb")
-        content = ""
-        with open("/tmp/gitmanipb", "r") as fp:
-            content = fp.read()
-
-        os.system("rm /tmp/gitmanipb")
+        content = get_cmd_output(cmd)
         os.chdir(cwd)
 
         return content
@@ -208,15 +196,9 @@ class ProjectBranch:
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
-        os.system(f"git blame {self.branch} \"{filepath}\" {commit_chunk} > /tmp/gitmanip")
-        content = ""
-        with open("/tmp/gitmanip", "r") as fp:
-            content = fp.read()
-
-        os.system("rm /tmp/gitmanip")
+        lines = get_cmd_output(f"git blame {self.branch} \"{filepath}\" {commit_chunk}").split("\n")
         os.chdir(cwd)
 
-        lines = content.split("\n")
         output = []
         for i, line in enumerate(lines):
             last_commit_id = line[0:line.find(" ")]
@@ -323,6 +305,20 @@ class Commit:
         return self.author
 
 
+def get_cmd_output(cmd, mode="r"):
+    if mode not in ["rb", "r"]:
+        raise Exception(f"Bad Mode: {mode}")
+
+    timestamp = time.time()
+    file_path = f"/tmp/.cmd_output{timestamp}"
+    os.system(f"{cmd} > {file_path}")
+
+    output = ""
+    with open(file_path, mode) as fp:
+        output = fp.read()
+    os.system(f"rm {file_path}")
+
+    return output
 
 if __name__ == "__main__":
     test_project = Project(sys.argv[1])

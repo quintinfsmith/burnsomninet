@@ -568,4 +568,7 @@ def build_git_commit_view(project_name, branch_name, commit_id=None):
     branch.get_commit(commit_id)
     return Tag("div", f"commit/diff oviewview of {commit_id}")
 
+def log(msg, suffix=""):
+    with open("/var/log/httpd/burnsomninet/log", "a") as fp:
+        fp.write(msg + "\n")
 
