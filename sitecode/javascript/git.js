@@ -352,7 +352,7 @@ class GitActivityWidget extends SlugWidget {
 class CloneButtonWidget extends SlugWidget {
     constructor(element, options) {
         super(element, options);
-        this.url = 'git://' + location.hostname + '/' + options.project;
+        this.url = 'https://' + location.hostname + '/git/' + options.project;
         this.element_clone = crel('div', 'Clone URL');
         this.element_url = crel('div', { 'tabindex': 0 }, this.url);
         this.element.appendChild(
