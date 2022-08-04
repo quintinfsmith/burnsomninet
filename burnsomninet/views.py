@@ -202,6 +202,7 @@ def section_controller(request, section, subsection_path):
 
         if content is not None:
             kwargs[ext] = content
+
         break
 
     head_kwargs = {}
@@ -340,20 +341,38 @@ def git_dumb_server(request, project_name, *path):
 
     mimetype = 'application/octet-stream'
     status = 200
-    file_path = f"{GIT_PATH}/{project_name}/{path_str}"
-    if path_str == "info/refs":
-        refs = git_project.get_refs()
-        for path, hashstr in refs.items():
-            output += f"{hashstr}\t{path}\r\n"
 
-        output = output.strip() + "^{}"
-        mimetype = 'text/plain; charset=utf-8'
-    #elif path_str == "object/info/packs":
-    #    packs = set()
-    #    for p in os.listdir(f"{GIT_PATH}/{project_name}/objects/pack"):
-    #        refid = p[5:p.rfind(".")]
-    #        packs.append(refid)
-    #    output = "\r\n".join(list(packs))
+    file_path = f"{GIT_PATH}/{project_name}/{path_str}"
+    if False and path_str == "info/refs":
+        os.chdir(f"{GIT_PATH}/{project_name}/")
+        os.system(f"echo 0000 | /usr/lib/git-core/{service} --http-backend-info-refs ./ > /tmp/.dumbtest")
+        with open("/tmp/.dumbtest", "r") as fp:
+            lines = fp.read().split("\n")
+            for line in lines:
+                if "HEAD" in line:
+                    continue
+                output += line[4:44] + "\t" + line[45:] + "\n"
+            output = output.strip() + "^{}"
+        mimetype = f"text/plain; charset=utf-8"
+
+    elif path_str == "info/refs":
+        refs = git_project.get_refs()
+        keys = list(refs.keys())
+        keys.sort()
+        for i, path in enumerate(keys):
+            hashstr = refs[path]
+            if "HEAD" in path:
+                continue
+
+            line = f"{hashstr}\t{path.strip()}"
+            line += "\n"
+            if i == len(refs) - 1:
+                line += "^{}"
+
+            output += line
+
+        mimetype = f"text/plain; charset=utf-8"
+
     elif path_str == "HEAD":
         ref = ''
         with open(f"{GIT_PATH}/{project_name}/HEAD", "r") as fp:
@@ -371,9 +390,6 @@ def git_dumb_server(request, project_name, *path):
             # TODO: SECURITY ISSUE!
             with open(file_path, "rb") as fp:
                 filebytes = fp.read()
-            #output = ''
-            #for b in filebytes:
-            #    output += hex(b)[2:]
             output = filebytes
         else:
             working_object = objects[object_key]
@@ -388,9 +404,6 @@ def git_dumb_server(request, project_name, *path):
         # TODO: SECURITY ISSUE!
         with open(file_path, "rb") as fp:
             filebytes = fp.read()
-        #output = ''
-        #for b in filebytes:
-        #    output += hex(b)[2:]
         output = filebytes
     else:
         raise Http404()
