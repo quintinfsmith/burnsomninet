@@ -827,7 +827,7 @@ body {
         }
         td.active {
              > div {
-                background-color: var(--col_hover);
+                background-color: var(--col_logo_a);
             }
         }
         td:not(.active):not(.year-delim):not(.month-label) {
