@@ -827,16 +827,16 @@ body {
         }
         td.active {
              > div {
-                background-color: var(--col_light);
-            }
-        }
-        td.active:hover {
-            > div {
                 background-color: var(--col_hover);
             }
         }
         td:not(.active):not(.year-delim):not(.month-label) {
             opacity: .2;
+        }
+        td.active.evenmonth {
+            > div {
+                opacity: .5;
+            }
         }
         td:not(.active).evenmonth {
             > div {
