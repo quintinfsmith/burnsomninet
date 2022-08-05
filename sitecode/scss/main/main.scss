@@ -6,6 +6,8 @@
     --col_dark: #2d2d2d;
     --col_highlight: #3c2b20;
     --col_hover: #baa163;
+    --col_logo_a: #64e561;
+    --col_logo_b: #17af13;
 }
 
 @font-face {
@@ -231,13 +233,13 @@ body {
     }
 }
 
-.project.sitemap > div > .logo {
+.git.sitemap > div > .logo {
     svg {
         path.frame,
         path.tire {
             opacity: 1;
-            fill: var(--col_highlight);
-            stroke: var(--col_hover);
+            fill: var(--col_logo_b);
+            stroke: var(--col_logo_a);
             stroke-width: 20;
         }
     }
@@ -248,8 +250,8 @@ body {
         path.frame,
         path.tire {
             opacity: 1;
-            fill: var(--col_hover);
-            stroke: var(--col_highlight);
+            fill: var(--col_logo_a);
+            stroke: var(--col_logo_b);
             stroke-width: 20;
         }
     }
@@ -261,8 +263,8 @@ body {
         path.tire,
         path.frame {
             opacity: 1;
-            fill: var(--col_hover);
-            stroke: var(--col_highlight);
+            fill: var(--col_logo_a);
+            stroke: var(--col_logo_b);
             stroke-width: 20;
         }
     }
