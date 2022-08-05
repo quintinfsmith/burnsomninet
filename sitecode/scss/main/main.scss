@@ -6,8 +6,10 @@
     --col_dark: #2d2d2d;
     --col_highlight: #3c2b20;
     --col_hover: #baa163;
-    --col_logo_a: #64e561;
-    --col_logo_b: #17af13;
+    --col_logo_a: #a9ea00;
+    --col_logo_b: #4e7d25;
+    --col_git_red: #f04f33;
+    --col_git_white: #FFFFFF;
 }
 
 @font-face {
@@ -238,8 +240,8 @@ body {
         path.frame,
         path.tire {
             opacity: 1;
-            fill: var(--col_logo_b);
-            stroke: var(--col_logo_a);
+            fill: var(--col_git_red);
+            stroke: var(--col_git_white);
             stroke-width: 20;
         }
     }
