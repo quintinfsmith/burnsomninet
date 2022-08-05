@@ -1,8 +1,8 @@
 # Apres
 A Rust MIDI library
 
-[Git Project - Main Project](/project/apres)
-[Git Project - Bindings](/project/apres_bindings)
+[Git Project - Main Project](/git/apres)
+[Git Project - Bindings](/git/apres_bindings)
 [Rust Documentation](https://docs.rs/apres/)
 [Crates.io](https://crates.io/crates/apres/)
 [Pypi.org](https://pypi.org/project/apres)
@@ -16,4 +16,4 @@ The Apres MIDI Library is a rust implementation of the MIDI 1.0 Standard.
 ## Usage
 For Rust, see [Documentation](https://docs.rs/apres/).
 
-Docs for the python bindings are in the works. For now, there are a few examples on the [project page](/project/apres).
+Docs for the python bindings are in the works. For now, there are a few examples on the [project page](/git/apres).

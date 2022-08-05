@@ -95,8 +95,8 @@ def build_sitemap(*active_path):
     })
     for i, repo in enumerate(repositories):
         section_map[-1]['sections'].append((
-            ('project', repo) == active_path,
-            f"/project/{repo}",
+            ('git', repo) == active_path,
+            f"/git/{repo}",
             repo
         ))
 
@@ -375,7 +375,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     Tag("a",
                         {
                             "class": "pathlink",
-                            "href": f"/project/{project_name}?" + urlencode(query_attrs)
+                            "href": f"/git/{project_name}?" + urlencode(query_attrs)
                         },
                         VH_MID,
                         Tag("span",

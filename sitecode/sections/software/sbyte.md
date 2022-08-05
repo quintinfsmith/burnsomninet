@@ -1,7 +1,7 @@
 # Sbyte
 An in-console byte editor.
 
-[Git Project](/project/sbyte)
+[Git Project](/git/sbyte)
 [Crates.io](https://crates.io/crates/sbyte)
 
 ## Table of Contents
@@ -38,11 +38,6 @@ It's a byte editor. It's console-based. I don't *think* it sucks.
 - Scriptability: Use the functionality of sbyte just by running a script.
 
 <a name="dls"></a>
-## Downloads
-### Packages
-- [Arch](https://github.com/quintinfsmith/sbyte/releases/download/v0.1.0/sbyte-0.1.0.tar.gz)
-- [Debian/Ubuntu](https://github.com/quintinfsmith/sbyte/releases/download/v0.1.0/sbyte-0.1.0.deb)
-
 ### Crates.io:
 ```bash
 cargo install sbyte
