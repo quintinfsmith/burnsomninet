@@ -2,12 +2,11 @@
     --krisholmblue: rgb(6,56,126);
     --krisholmyellow: #ffe100;
     --col_lightb: #6f6f6f;
-    --col_light: #afafaf;
+    --col_light: #424242;
     --col_dark: #2d2d2d;
-    --col_highlight: #3c2b20;
-    --col_hover: #baa163;
-    --col_logo_a: #a9ea00;
-    --col_logo_b: #4e7d25;
+    --col_text: #afafaf;
+    --col_hover: #765bd5;
+    --col_highlight: #967fe9;
     --col_git_red: #f04f33;
     --col_git_white: #FFFFFF;
 }
@@ -124,7 +123,7 @@ body {
     background-color: var(--col_dark);
     margin: 0;
     font-family: primary;
-    color: var(--col_light);
+    color: var(--col_text);
 }
 
 .vh_top,
@@ -154,7 +153,6 @@ body {
 
 
 .sitemap {
-    color: var(--col_dark);
     background-color: var(--col_light);
     > div {
         > .logo {
@@ -189,7 +187,6 @@ body {
                 .hamburger {
                     height: 100%;
                     width: 5em;
-                    background-color: var(--col_light);
                     cursor: pointer;
                     > div {
                         padding: 1.2em;
@@ -225,13 +222,17 @@ body {
 
         .item.active {
             font-weight: bold;
+            background-color: var(--col_highlight);
+            color: var(--col_dark);
         }
-        .item:hover {
+        .item:hover:not(.active) {
+            color: var(--col_dark);
             background-color: var(--col_hover);
             > div {
                 text-decoration: underline;
             }
         }
+
     }
 }
 
@@ -240,8 +241,8 @@ body {
         path.frame,
         path.tire {
             opacity: 1;
-            fill: var(--col_logo_b);
-            stroke: var(--col_logo_a);
+            fill: var(--col_hover);
+            stroke: var(--col_highlight);
             stroke-width: 20;
         }
     }
@@ -252,8 +253,8 @@ body {
         path.frame,
         path.tire {
             opacity: 1;
-            fill: var(--col_logo_a);
-            stroke: var(--col_logo_b);
+            fill: var(--col_highlight);
+            stroke: var(--col_hover);
             stroke-width: 20;
         }
     }
@@ -265,8 +266,8 @@ body {
         path.tire,
         path.frame {
             opacity: 1;
-            fill: var(--col_logo_a);
-            stroke: var(--col_logo_b);
+            fill: var(--col_highlight);
+            stroke: var(--col_hover);
             stroke-width: 20;
         }
     }
@@ -280,7 +281,6 @@ body {
     > div { }
 }
 .content.daisy {
-    color: var(--col_light);
     text-align: center;
     padding: 1em;
     width: calc(100% - 2em);
@@ -310,7 +310,6 @@ body {
 }
 
 .index.content {
-    color: var(--col_light);
     text-align: center;
     padding: 2em;
     > div {
@@ -368,7 +367,6 @@ body {
     cursor: pointer;
     width: calc(100% - 2em - 2px);
     padding: 1em;
-    color: var(--col_light);
     border: 1px solid var(--col_light);
     box-shadow: .5em .5em 0 0 black;
     > div {
@@ -385,7 +383,6 @@ body {
         height: 2em;
         > .label {
             background-color: var(--col_light);
-            color: var(--col_dark);
         }
     }
 }
@@ -431,7 +428,6 @@ body {
                 cursor: pointer;
                 height: 2em;
                 padding: 0 1.5em;
-                color: var(--col_dark);
                 background-color: var(--col_light);
             }
             .close_button:hover {
@@ -459,7 +455,6 @@ body {
                 flex: 0 1 auto;
                 height: 3em;
                 > div {
-                    color: var(--col_light);
                     border-top: solid 1px var(--col_light);
                 }
             }
@@ -524,7 +519,6 @@ body {
 
 .markdown-wrapper {
     > .markdown {
-        color: var(--col_light);
 
         > * {
             max-width: 100%;
@@ -562,7 +556,6 @@ body {
         > h1 + p + p {
             text-align: center;
             > * {
-                color: var(--col_dark);
                 background-color: var(--col_light);
                 padding: .5em 1em;
                 box-shadow: .5em .5em 0 0 #000;
@@ -579,7 +572,6 @@ body {
         }
         > h1 + p + p ~ * {
             a:hover {
-                color: var(--col_hover);
             }
         }
 
@@ -613,7 +605,6 @@ body {
 }
 
 .git-overview {
-    color: var(--col_light);
     > div.markdown-wrapper {
         border: 1px solid var(--col_light);
         padding: 1em;
@@ -632,7 +623,6 @@ body {
                 cursor: pointer;
                 text-align: center;
                 user-select: none;
-                color: var(--col_dark);
                 background-color: var(--col_light);
                 border: 1px solid var(--col_light);
                 width: calc(7.5em - 1em - 2px);
@@ -653,7 +643,6 @@ body {
     .files-wrapper {
         width: 100%;
         > .files-table {
-            color: var(--col_light);
             width: 100%;
             border-collapse: collapse;
 
@@ -672,7 +661,6 @@ body {
                     > th {
                         padding:0;
                         background-color: var(--col_light);
-                        color: var(--col_dark);
                         .breadcrumb-nav {
                             a, span {
                                 border-bottom: none;
@@ -722,7 +710,7 @@ body {
             height: 1.6em;
             display: block;
             rect, path {
-                stroke: var(--col_light);
+                stroke: var(--col_text);
             }
         }
     }
@@ -762,15 +750,13 @@ body {
         font-weight: bold;
         a:hover {
             background-color: var(--col_hover);
-            color: var(--col_highlight);
-            border-color: var(--col_highlight);
+            color: var(--col_dark);
         }
         span, a {
             display: inline-block;
             padding: .2em .3em;
         }
         a {
-            color: var(--col_light);
             background-color: var(--col_dark);
             border: solid 1px var(--col_light);
         }
@@ -796,7 +782,6 @@ body {
         display: inline-table;
         border-collapse: collapse;
         th {
-            color: var(--col_light);
             font-weight: normal;
             font-family: monospace;
         }
@@ -805,7 +790,7 @@ body {
                 display: flex;
                 > hr {
                     border: none;
-                    border-top: 1px solid var(--col_lightb);
+                    border-top: 1px solid var(--col_light);
                     flex: 1 1 auto;
                 }
                 > div {
@@ -827,11 +812,8 @@ body {
         }
         td.active {
              > div {
-                background-color: var(--col_logo_a);
+                background-color: var(--col_highlight);
             }
-        }
-        td:not(.active):not(.year-delim):not(.month-label) {
-            opacity: .2;
         }
         td.active.evenmonth {
             > div {
@@ -840,7 +822,8 @@ body {
         }
         td:not(.active).evenmonth {
             > div {
-                background-color: var(--col_lightb);
+                background-color: var(--col_light);
+                opacity: .5;
             }
         }
         td:hover {
@@ -883,7 +866,6 @@ body {
         > .facade {
             display: flex;
             padding: .25em .5em .25em .5em;
-            color: var(--col_dark);
             background-color: var(--col_light);
             > div:first-child {
                 flex: 1 1 auto;
@@ -902,7 +884,6 @@ body {
 .button {
     appearance: none;
     text-align: center;
-    color: var(--col_dark);
     background-color: var(--col_light);
     padding: .5em 1em;
     box-shadow: .5em .5em 0 0 #000;
