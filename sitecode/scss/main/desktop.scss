@@ -143,6 +143,15 @@ body {
         .thumb { }
         .thumb.selected { }
         .thumb video { }
+
+        > div {
+            > .mp_selector {
+                .thumb {
+                    min-width: 20%;
+                }
+            }
+        }
+
     }
 }
 

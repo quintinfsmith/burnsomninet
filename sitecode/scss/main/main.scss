@@ -345,7 +345,6 @@ body {
     }
 }
 
-
 .media {
     display: flex;
     flex-wrap: wrap;
@@ -410,6 +409,9 @@ body {
     width: 100vw;
     background-color: rgba(0, 0, 0, .7);
     text-align:center;
+    > div {
+        height: 100%;
+    }
 }
 
 .media_player {
@@ -485,7 +487,6 @@ body {
                 cursor: pointer;
                 height: calc(100% - 2px);
                 display: inline-block;
-                min-width: 33%;
                 filter: grayscale(100%);
                 > div {
                     transition-duration: .2s;
