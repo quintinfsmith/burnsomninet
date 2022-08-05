@@ -125,6 +125,14 @@ body {
     background-color: var(--col_dark);
     border: solid 1px  var(--col_light);
 
+    > div {
+        > .mp_selector {
+            .thumb {
+                min-width: 33%;
+            }
+        }
+    }
+
 }
 
 
