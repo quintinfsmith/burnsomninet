@@ -36,7 +36,7 @@ def build_head(**kwargs):
         Tag("link", {
             "rel": "stylesheet",
             "type": "text/css",
-            "href": "/style/prismschema.css?commit={COMMIT_ID}"
+            "href": f"/style/prismschema.css?commit={COMMIT_ID}"
         }),
         Tag("script", {
             "src": "/content/javascript/crel.js",
