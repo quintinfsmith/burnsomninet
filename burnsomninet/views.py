@@ -6,6 +6,7 @@ import zlib
 import re
 from django.http import HttpResponse, Http404
 from django.conf import settings
+from django.shortcuts import redirect
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject
@@ -13,6 +14,7 @@ from burnsomninet import wrappers
 from sitecode.py import api
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
+from urllib.parse import urlencode, quote_plus
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -349,13 +351,16 @@ def api_controller(request, section_path):
     content = json.dumps(content)
     return HttpResponse(content, content_type="application/json")
 
-
 def git_controller(request, project, *project_path):
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
     if request.headers['User-Agent'][0:3] == 'git':
-        return GitDumbServer.main(request, project, *project_path)
+        path = "/".join(project_path)
+        getstring = urlencode(request.GET, quote_via=quote_plus)
+        if getstring:
+            getstring = "?" + getstring
+        return redirect(f"/gitserve/{project}/{path}{getstring}")
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
