@@ -657,6 +657,11 @@ body {
                         }
                     }
                 }
+                > tr:nth-child(2n+1) {
+                    > td {
+                        background-color: rgba(0,0,0,.1);
+                    }
+                }
                 > tr:first-child {
                     > th {
                         padding:0;
