@@ -354,6 +354,8 @@ def api_controller(request, section_path):
 def git_controller(request, project, *project_path):
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
+    if not os.path.isfile(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
+        raise Http404()
 
     if request.headers['User-Agent'][0:3] == 'git':
         path = "/".join(project_path)
@@ -369,7 +371,6 @@ def git_controller(request, project, *project_path):
     raw = request.GET.get("raw", 0)
 
     is_directory = (path == '' or path[-1] == '/')
-
     content = None
     if view == "files" and not is_directory and raw:
         mimetype = "text/plain"
