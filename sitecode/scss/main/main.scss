@@ -204,7 +204,11 @@ body {
                         }
                     }
                 }
-                .hamburger.active {
+            }
+        }
+        > .slug-HamburgerMenu.active {
+            .hamburger-wrapper {
+                .hamburger {
                     > div {
                         > div:nth-child(odd) {
                             background-color: var(--col_highlight);
