@@ -325,6 +325,5 @@ class HamburgerMenu extends SlugWidget {
                 )
             )
         ));
-
     }
 }
