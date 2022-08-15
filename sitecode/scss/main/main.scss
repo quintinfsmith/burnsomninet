@@ -741,6 +741,13 @@ body {
 }
 .git-overview,
 .git-fileoverview {
+    .navigation-row {
+        > div:last-child {
+            > a {
+                margin-right: -.5em;
+            }
+        }
+    }
 
     .title-row {
         text-align: center;
