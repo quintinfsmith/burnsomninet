@@ -232,7 +232,7 @@ class Commit:
 
         time_offset = timedelta(
             hours=int(utc_offset[0:2]) * modifier,
-            minutes=int(utc_offset[2:-1]) * modifier
+            minutes=int(utc_offset[2:]) * modifier
         )
 
         date = datetime(
