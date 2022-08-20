@@ -1,8 +1,8 @@
 # Wrecked
 A library for terminal-based interfaces.
 
-[GitHub - Main Project](/git/wrecked)
-[GitHub - Bindings](/git/wrecked_bindings)
+[Git - Main Project](/git/wrecked)
+[Git - Bindings](/git/wrecked_bindings)
 [Rust Documentation](https://docs.rs/wrecked/)
 [Crates.io](https://crates.io/crates/wrecked/)
 [Pypi.org](https://pypi.org/project/wrecked)
