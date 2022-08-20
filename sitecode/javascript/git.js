@@ -288,6 +288,7 @@ class GitActivityWidget extends SlugWidget {
     update_commits(new_commits) {
         /* Add a list of new commits to the widget. Update the table cells accordingly */
         for (let i = 0; i < new_commits.length; i++) {
+
             let commit = new_commits[i];
             let date = new Date(commit.date * 1000);
             let working_year = date.getFullYear();
