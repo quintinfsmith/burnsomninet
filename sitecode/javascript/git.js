@@ -109,7 +109,7 @@ class GitActivityWidget extends SlugWidget {
             }
 
             let date_string = build_simple_date_string(working_date);
-            let doy = working_date.getTime() - (new Date(working_date.getFullYear(), 0, 0));
+            let doy = working_date.getTime() - (new Date(working_date.getFullYear(), 0, 1));
             doy = parseInt(doy / (1000 * 60 * 60 * 24));
 
             let td = crel('td',
@@ -288,16 +288,20 @@ class GitActivityWidget extends SlugWidget {
     update_commits(new_commits) {
         /* Add a list of new commits to the widget. Update the table cells accordingly */
         for (let i = 0; i < new_commits.length; i++) {
-
             let commit = new_commits[i];
             let date = new Date(commit.date * 1000);
+            let date_day_start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
             let working_year = date.getFullYear();
 
             let day_one = new Date(working_year, 0, 1);
-            let one_day = 1000 * 60 * 60 * 24
-            let doy = (date.getTime() - day_one.getTime()) / one_day;
-            let key = Math.floor((366 * working_year) + doy);
+            let one_day = 1000 * 60 * 60 * 24;
+
+            let doy = Math.floor((date_day_start.getTime() - day_one.getTime()) / one_day);
+            let key = (366 * working_year) + doy;
+
             let element_td = this.commit_block_elements[key];
+
             // TODO: figure out why element_td doesn't exist on jul31
             if (! element_td) {
                 continue;
@@ -309,6 +313,7 @@ class GitActivityWidget extends SlugWidget {
             } else {
                 commit_counts = {};
             }
+
             let commit_group_name = commit['group'];
             if (!commit_group_name) {
                 commit_group_name = "";
