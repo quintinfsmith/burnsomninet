@@ -272,7 +272,9 @@ def index(request):
         all_commits.extend(working_commits)
 
     top = Tag("html",
-        wrappers.build_head(title="Quintin Smith - Developer, Unicyclist"),
+        wrappers.build_head(
+            title="Quintin Smith - Developer, Unicyclist",
+        ),
         Tag("body",
             wrappers.build_sitemap(*active_path),
             Tag("div",
@@ -285,7 +287,7 @@ def index(request):
                             Tag("div",
                                 { "class": "img_wrapper" },
                                 Tag("img", {
-                                    "src": "https://avatars.githubusercontent.com/u/72575658?v=4"
+                                    "src": "/content/profile.png"
                                 })
                             ),
                             Tag("div",
@@ -342,7 +344,6 @@ def api_controller(request, section_path):
     for key in request.GET:
         kwargs[key] = request.GET.get(key, None)
 
-    response = {}
     try:
         content = api.handle(*section_split, **kwargs)
     except ModuleNotFoundError:
