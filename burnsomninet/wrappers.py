@@ -47,6 +47,10 @@ def build_head(**kwargs):
             "type": "text/javascript"
         }),
         Tag("meta", {
+            "name": "description",
+            "content": kwargs.get('description', '')
+        }),
+        Tag("meta", {
             "name": "viewport",
             "content": "initial-scale=1.0"
         }),
