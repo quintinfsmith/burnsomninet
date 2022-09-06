@@ -2,7 +2,6 @@
 A Rust MIDI library
 
 [Git Project - Main Project](/git/apres)
-[Git Project - Bindings](/git/apres_bindings)
 [Rust Documentation](https://docs.rs/apres/)
 [Crates.io](https://crates.io/crates/apres/)
 [Pypi.org](https://pypi.org/project/apres)
