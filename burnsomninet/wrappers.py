@@ -22,9 +22,7 @@ VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
 
 def build_head(**kwargs):
-    title = ""
-    if "title" in kwargs:
-        title = kwargs["title"]
+    title = kwargs.get("title", '')
 
     return Tag("head",
         Tag("title", title),
