@@ -176,7 +176,11 @@ def section_json(request):
 def section_controller(request, section, subsection_path):
     subsections = subsection_path.split("/")
 
-    if section == "git" or section == "project":
+    # redirect apres_bindings/wrecked_bindings to merged projects
+    if subsections[0] in ("apres_bindings", "wrecked_bindings"):
+        subsections[0] = subsections[0][0:subsections[0].rfind("_")]
+
+    if section in ("git", "project"):
         return git_controller(request, subsections[0], *subsections[1:])
 
     subsection = subsections[0]
