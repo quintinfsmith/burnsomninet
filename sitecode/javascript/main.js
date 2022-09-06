@@ -287,6 +287,7 @@ class HamburgerMenu extends SlugWidget {
         super(element, options);
 
         let opt_groups = [];
+        let is_option_selected = false;
         for (let i = 0; i < options.sitemap.length; i++) {
             let section = options.sitemap[i];
             let opt_group = crel('optgroup', { label: section.name });
@@ -297,6 +298,7 @@ class HamburgerMenu extends SlugWidget {
                 };
                 if (subsection[0]){
                     opt_args['selected'] = true;
+                    is_option_selected = true;
                 }
                 opt_group.appendChild(
                     crel('option',
@@ -307,6 +309,14 @@ class HamburgerMenu extends SlugWidget {
             }
             opt_groups.push(opt_group);
         }
+
+        opt_groups.unshift(
+            crel('option',
+                { label: 'Home' },
+                '/'
+            )
+        );
+
         this.select = new CustomSelect(opt_groups, function(href) {
             location.href = href;
         });
