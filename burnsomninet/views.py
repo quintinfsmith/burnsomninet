@@ -299,7 +299,7 @@ def index(request):
                             Tag("div",
                                 { "class": "img_wrapper" },
                                 Tag("img", {
-                                    "src": "/content/profile.png"
+                                    "src": "/content/profile.png?v=2"
                                 })
                             ),
                             Tag("div",
