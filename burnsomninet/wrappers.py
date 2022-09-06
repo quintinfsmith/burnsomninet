@@ -480,7 +480,6 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 )
             )
         )
-    body_content.append(Tag("div", path))
 
     return body_content
 
