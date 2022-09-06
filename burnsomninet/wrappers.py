@@ -468,20 +468,19 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     )
 
 
-
-    if show_extra:
-        readme_content = branch.get_file_content("README.md", active_commit)
-        if readme_content:
-            readme_markdown = marko.convert(readme_content)
-            body_content.append(
+    readme_content = branch.get_file_content(f"{path}README.md", active_commit)
+    if readme_content:
+        readme_markdown = marko.convert(readme_content)
+        body_content.append(
+            Tag('div',
+                { 'class': 'markdown-wrapper' },
                 Tag('div',
-                    { 'class': 'markdown-wrapper' },
-                    Tag('div',
-                        { "class": "markdown readme" },
-                        RawHTML(readme_markdown)
-                    )
+                    { "class": "markdown readme" },
+                    RawHTML(readme_markdown)
                 )
             )
+        )
+    body_content.append(Tag("div", path))
 
     return body_content
 
