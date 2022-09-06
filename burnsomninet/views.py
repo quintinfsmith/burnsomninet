@@ -185,6 +185,8 @@ def section_controller(request, section, subsection_path):
     kwargs = {}
     directory_path = f"{sectionsdir}/{section}/"
     files = os.listdir(directory_path)
+    description = ""
+    title = "test"
     for file_name in files:
         ext = file_name[file_name.rfind(".") + 1:].lower()
         name = file_name[0:file_name.rfind(".")]
@@ -197,25 +199,35 @@ def section_controller(request, section, subsection_path):
             content = {}
             with open(file_path, "r") as file_pipe:
                 content = json.loads(file_pipe.read())
+            description = content.get('description', '')
+            title = content.get('title', '')
 
         elif ext == "md":
-            content = ""
+            raw_content = ""
             with open(file_path, "r") as file_pipe:
-                content = marko.convert(file_pipe.read())
+                raw_content = file_pipe.read()
+
+            description = raw_content[raw_content.find("## About") + 8:].strip()
+            description = description[0:description.find("\n")]
+
+            title = raw_content[0:raw_content.find("\n\n")].strip()
+            while title[0] == "#":
+                title = title[1:].strip()
+            title = title.replace("\n", " - ")
+
+            content = marko.convert(raw_content)
 
         if content is not None:
             kwargs[ext] = content
 
         break
 
-    head_kwargs = {}
-    #if os.path.isfile(f"{directory_path}/head.json"):
-    #    with open(f"{directory_path}/head.json", 'r') as file_pipe:
-    #        head_kwargs = json.loads(file_pipe.read())
-
     body_content = VIEWMAP[section][subsection](request, **kwargs)
     top = Tag("html",
-        wrappers.build_head(**head_kwargs),
+        wrappers.build_head(**{
+            "description": description,
+            "title": title
+        }),
         Tag("body",
             wrappers.build_sitemap(section, subsection),
             Tag("div",
