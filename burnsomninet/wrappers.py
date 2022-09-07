@@ -109,6 +109,8 @@ def build_sitemap(*active_path):
     headings = os.listdir(sectionsdir)
     headings.sort()
 
+    heading_alias_map = {}
+
     for i, heading in enumerate(headings):
         section_map.append({
             'name': heading.title(),
@@ -124,6 +126,10 @@ def build_sitemap(*active_path):
                 with open(f"{sectionsdir}{heading}/{f}", "r") as fp:
                     prefs = json.loads(fp.read())
                     alias = prefs.get('alias', title)
+            elif f == "alias":
+                with open(f"{sectionsdir}{heading}/{f}", "r") as fp:
+                    heading_alias_map[heading.lower().strip()] = fp.read().strip()
+                continue
 
             section_map[-1]['sections'].append((
                 (heading, title) == active_path,
@@ -157,7 +163,7 @@ def build_sitemap(*active_path):
                 Tag('div',
                     { 'class': 'header' },
                     VH_MID,
-                    Tag('div', heading.title())
+                    Tag('div', heading_alias_map.get(heading.lower().strip(), heading.title()))
                 ),
                 entry
             )
