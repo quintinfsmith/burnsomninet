@@ -74,7 +74,9 @@
     --col_sitemap_hover: var(--col_main_sub);
     --col_sitemap_hover_text: var(--col_back);
 
+
     --shadow: .5em .5em 0 0 var(--col_shadow);
+    --sitemap_shadow: none;
 }
 
 @media (prefers-color-scheme: light) {
@@ -113,11 +115,11 @@
         --col_gitactivity_inactive_a: rgba(0,0,0, .18);
         --col_gitactivity_inactive_b: rgba(0,0,0, .09);
 
-        --col_hamburger: var(--col_text);
+        --col_hamburger: var(--col_sitemap_text);
 
         --col_logo_outer: var(--col_main_sub);
         --col_logo_inner: var(--col_main);
-        --col_logo_off: rgba(255,255,255, .4);
+        --col_logo_off: var(--col_sitemap_text);
 
         --col_mediaplayer: var(--col_back);
         --col_mediaplayer_close: var(--col_fore);
@@ -138,9 +140,8 @@
         --col_polaroid_hover_label: var(--col_main);
         --col_polaroid_hover_label_outline: var(--col_main);
 
-
         --col_sitemap: var(--col_fore);
-        --col_sitemap_text: var(--col_back);
+        --col_sitemap_text: rgba(255,255,255, .4);
         --col_sitemap_highlight: var(--col_main);
         --col_sitemap_highlight_text: var(--col_text);
         --col_sitemap_hover: var(--col_main_sub);
@@ -148,6 +149,8 @@
 
         --col_shadow: rgba(0,0,0,.5);
         --shadow: .1em .1em .2em -1px var(--col_shadow);
+
+        --sitemap_shadow: var(--shadow);
     }
 }
 
@@ -301,6 +304,7 @@ body {
 .sitemap {
     color: var(--col_sitemap_text);
     background-color: var(--col_sitemap);
+    box-shadow: var(--sitemap_shadow);
     > div {
         > .logo {
             > a {
