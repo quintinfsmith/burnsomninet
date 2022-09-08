@@ -115,3 +115,33 @@ code.style .token.string {
 code.language-python .triple-quoted-string.string {
     color: var(--BRIGHTBLUE);
 }
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --FG: #3d3d3d;
+        --BG: #efefef;
+        --BLACK: #1A1A1A;
+        --RED: #F4005F;
+        --GREEN: #58A024;
+        --YELLOW: #FA8419;
+        --BLUE: #9C65FF;
+        --MAGENTA: #b13E88;
+        --CYAN: #1892aA;
+        --WHITE: #C4C5B5;
+        --BRIGHTBLACK: #625E4C;
+        --BRIGHTRED: #B01136;
+        --BRIGHTGREEN: #5D8E0E;
+        --BRIGHTYELLOW: #E0D561;
+        --BRIGHTBLUE: #4C60D7;
+        --BRIGHTMAGENTA: #A92F7E;
+        --BRIGHTCYAN: #2D899D;
+        --BRIGHTWHITE: #FFFFFF;
+    }
+
+    pre, code {
+        .token.punctuation {
+            color: var(--BLACK);
+        }
+    }
+
+}
