@@ -35,7 +35,7 @@ pre {
 pre,
 :not(pre) > code {
     border-radius: .5em;
-    box-shadow: .5em .5em 0 0 #000;
+    box-shadow: var(--shadow);
     padding: 1em;
 }
 
