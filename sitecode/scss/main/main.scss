@@ -32,7 +32,8 @@
     --col_files_hover: var(--col_main_sub);
     --col_files_hover_text: var(--col_back);
     --col_files_line: var(--col_mid);
-    --col_files_head: var(--col_mid);
+    --col_files_head: var(--col_back);
+    --col_files_head_text: var(--col_text);
 
     --gitactivity_boxshadow: none;
     --col_gitactivity_text: var(--col_text);
@@ -74,8 +75,8 @@
     --col_sitemap_hover: var(--col_main_sub);
     --col_sitemap_hover_text: var(--col_back);
 
-
-    --shadow: .5em .5em 0 0 var(--col_shadow);
+    --shadow_size: .5em;
+    --shadow: var(--shadow_size) var(--shadow_size) 0 0 var(--col_shadow);
     --sitemap_shadow: none;
 }
 
@@ -86,9 +87,9 @@
         --col_mid: #888;
         --col_fore: #30260e;
 
-        --col_breadcrumb_link: var(--col_fore);
-        --col_breadcrumb_link_outline: var(--col_text);
-        --col_breadcrumb_link_text: var(--col_back);
+        --col_breadcrumb_link: var(--col_button);
+        --col_breadcrumb_link_outline: var(--col_fore);
+        --col_breadcrumb_link_text: var(--col_text);
         --col_breadcrumb_link_hover: var(--col_main);
         --col_breadcrumb_link_hover_text: var(--col_breadcrumb_link_text);
         --col_breadcrumb_link_hover_outline: var(--col_breadcrumb_link_outline);
@@ -106,7 +107,8 @@
         --col_files_hover: var(--col_main_sub);
         --col_files_hover_text: var(--col_files_text);
         --col_files_line: var(--col_mid);
-        --col_files_head: var(--col_mid);
+        --col_files_head: var(--col_fore);
+        --col_files_head_text: var(--col_back);
 
         --gitactivity_boxshadow: .05em .05em .1em -1px #2d2d2d;
         --col_gitactivity_text: var(--col_text);
@@ -148,7 +150,8 @@
         --col_sitemap_hover_text: var(--col_text);
 
         --col_shadow: rgba(0,0,0,.5);
-        --shadow: .1em .1em .2em -1px var(--col_shadow);
+        --shadow_size: .1em;
+        --shadow: var(--shadow_size) var(--shadow_size) .2em -1px var(--col_shadow);
 
         --sitemap_shadow: var(--shadow);
     }
@@ -823,7 +826,7 @@ body {
                         }
                     }
                 }
-                > tr:nth-child(2n + 1):not(:hover) {
+                > tr:nth-child(2n):not(:hover) {
                     > td {
                         background-color: rgba(0,0,0,.1);
                     }
@@ -832,6 +835,7 @@ body {
                     > th {
                         padding:0;
                         background-color: var(--col_files_head);
+                        color: var(--col_files_head_text);
                     }
                     > th:first-child {
                         text-align: left;
@@ -847,7 +851,7 @@ body {
                         border-top: none;
                     }
                 }
-                > tr:not(:nth-child(2)):not(:first-child) {
+                > tr:not(:first-child):not(:nth-child(2)) {
                     > td {
                         border-top: solid 1px var(--col_files_line);
                     }
@@ -926,8 +930,9 @@ body {
             }
         }
     }
+
     .breadcrumb-nav {
-        font-weight: bold;
+        font-weight: normal;
         a:hover {
             background-color: var(--col_breadcrumb_link_hover);
             color: var(--col_breadcrumb_link_hover_text);
