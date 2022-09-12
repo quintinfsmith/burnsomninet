@@ -383,10 +383,16 @@ def api_controller(request, section_path):
     content = json.dumps(content)
     return HttpResponse(content, content_type="application/json")
 
+def get_botlist():
+    bots = []
+    with open(f"{SITECODE}/robot_useragents", "r") as fp:
+        bots = fp.read().split("\n")
+    return bots
+
 def git_controller(request, project, *project_path):
     uagent = request.META.get("HTTP_USER_AGENT", "")
     #TEMPORARY: Block bot that is traversing git commits
-    if uagent == "Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)":
+    if uagent in get_botlist() and len(request.GET.keys()) > 0:
         raise Http404()
 
     accesslogmanager.log_access(request)
