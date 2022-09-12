@@ -384,6 +384,11 @@ def api_controller(request, section_path):
     return HttpResponse(content, content_type="application/json")
 
 def git_controller(request, project, *project_path):
+    uagent = request.META.get("HTTP_USER_AGENT", "")
+    #TEMPORARY: Block bot that is traversing git commits
+    if uagent == "Mozilla/5.0 (compatible; SemrushBot/7~bl; +http://www.semrush.com/bot.html)":
+        raise Http404()
+
     accesslogmanager.log_access(request)
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
