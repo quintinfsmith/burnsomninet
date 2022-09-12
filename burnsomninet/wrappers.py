@@ -289,7 +289,10 @@ def build_git_path_navigator(branch_name: str, active_commit: Optional[str], pat
     tag_nav_path = Tag("div",
         { "class": "breadcrumb-nav" },
         Tag("a",
-            { "href": "?" + urlencode(query_attrs) },
+            {
+                "rel": "nofollow",
+                "href": "?" + urlencode(query_attrs)
+            },
             "root"
         )
     )
@@ -306,7 +309,10 @@ def build_git_path_navigator(branch_name: str, active_commit: Optional[str], pat
         )
         tag_nav_path.append(
             Tag("a",
-                { "href": "?" + urlencode(query_attrs) },
+                {
+                    "rel": "nofollow",
+                    "href": "?" + urlencode(query_attrs)
+                },
                 f"{chunk}"
             )
         )
@@ -383,6 +389,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     Tag("a",
                         {
                             "class": "pathlink",
+                            "rel": "nofollow",
                             "href": f"/git/{project_name}?" + urlencode(query_attrs)
                         },
                         VH_MID,
@@ -399,7 +406,10 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 ),
                 Tag("td",
                     Tag("a",
-                        { "href": f"?" + urlencode(commit_query_attrs) },
+                        {
+                            "rel": "nofollow",
+                            "href": f"?" + urlencode(commit_query_attrs)
+                        },
                         slug_tag(
                             'main',
                             'RelativeVagueDate',
