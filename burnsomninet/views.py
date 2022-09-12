@@ -103,6 +103,13 @@ def projects_hook(request, **kwargs):
         )
     )
 
+def robots(request):
+    accesslogmanager.log_access(request)
+    content = ''
+    with open(f"{SITECODE}/robots.txt", "r") as file_pipe:
+        content = file_pipe.read()
+    return HttpResponse(content, "text/plain")
+
 def keybase(request):
     accesslogmanager.log_access(request)
     content = ''
