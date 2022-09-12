@@ -28,6 +28,7 @@ urlpatterns = [
     path("javascript/<path:file_path>", views.javascript_controller),
     path("style/<str:style_name>.css", views.style, name="style"),
     path("keybase.txt", views.keybase, name="keybase"),
+    path("robots.txt", views.robots, name="robots"),
     path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
