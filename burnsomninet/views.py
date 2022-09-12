@@ -11,10 +11,11 @@ from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject
 from burnsomninet import wrappers
-from sitecode.py import api
+from sitecode.py import api, accesslogmanager
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from urllib.parse import urlencode, quote_plus
+import mimetypes
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -103,6 +104,7 @@ def projects_hook(request, **kwargs):
     )
 
 def keybase(request):
+    accesslogmanager.log_access(request)
     content = ''
     with open(f"{SITECODE}/keybasejson", "r") as file_pipe:
         content = file_pipe.read()
@@ -115,6 +117,7 @@ def favicon(request):
     return HttpResponse(content)
 
 def style(request, style_name):
+    accesslogmanager.log_access(request)
     style_directory = f"{SCSS_PATH}/{style_name}"
     if not os.path.isdir(style_directory):
         return handler404(request, None)
@@ -146,6 +149,7 @@ def style(request, style_name):
     return HttpResponse(content, mimetype)
 
 def javascript_controller(request, file_path):
+    accesslogmanager.log_access(request)
     active_path = file_path.split("/")
     while "" in active_path:
         active_path.remove("")
@@ -182,6 +186,8 @@ def section_controller(request, section, subsection_path):
 
     if section in ("git", "project"):
         return git_controller(request, subsections[0], *subsections[1:])
+
+    accesslogmanager.log_access(request)
 
     subsection = subsections[0]
 
@@ -244,6 +250,7 @@ def section_controller(request, section, subsection_path):
     return HttpResponse(repr(top))
 
 def index(request):
+    accesslogmanager.log_access(request)
     active_path = request.get_full_path().split("/")
 
     while "" in active_path:
@@ -352,6 +359,7 @@ def index(request):
     return HttpResponse(repr(top))
 
 def api_controller(request, section_path):
+    accesslogmanager.log_access(request)
     section_split = section_path.split("/")
     while "" in section_split:
         section_split.remove("")
@@ -369,6 +377,7 @@ def api_controller(request, section_path):
     return HttpResponse(content, content_type="application/json")
 
 def git_controller(request, project, *project_path):
+    accesslogmanager.log_access(request)
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
     if not os.path.isfile(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
@@ -484,6 +493,39 @@ class GitDumbServer:
             raise Http404()
 
         return HttpResponse(output, mimetype, status=status)
+
+def content_controller(request, content_path):
+    status = 200
+
+    accesslogmanager.log_access(request)
+
+    abs_content_path = os.path.abspath(f"{STATIC_PATH}/{content_path}")
+
+    # TODO: Change the 404 message to a 'cheekier' response
+    # when the request is clearly trying to access files outside
+    # of the content folder
+    if len(abs_content_path) < len(STATIC_PATH):
+        raise Http404()
+
+    if abs_content_path[0:len(STATIC_PATH)] != STATIC_PATH:
+        raise Http404()
+
+    if not os.path.exists(abs_content_path):
+        raise Http404()
+
+    point = abs_content_path.rfind(".")
+    if point != -1:
+        ext = abs_content_path[point:]
+        mimetypes.init()
+        mimetype = mimetypes.types_map.get(ext, 'application/octet-stream')
+    else:
+        mimetype = 'text/plain'
+
+    response_content = b''
+    with open(abs_content_path, 'rb') as fp:
+        response_content = fp.read()
+
+    return HttpResponse(response_content, mimetype, status=status)
 
 
 

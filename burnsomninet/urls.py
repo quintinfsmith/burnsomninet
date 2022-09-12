@@ -31,10 +31,12 @@ urlpatterns = [
     path("favicon.ico", views.favicon, name="favicon"),
     #path("ntest/",  include('ntest.urls')),
     path('admin/', admin.site.urls),
+    path("content/<path:content_path>", views.content_controller),
     path('api/<path:section_path>', views.api_controller),
     path("<str:section>/<path:subsection_path>", views.section_controller),
     path("<str:section>/<str:subsection>.json", views.section_json),
 ]
+
 
 handler404 = views.handler404
 #handler404 = 'views.handle404'
