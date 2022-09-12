@@ -24,9 +24,10 @@ def get_client_ip(request):
 def log_access(request):
     connection = connect_to_mariadb()
     cursor = connection.cursor()
-    query = f"INSERT INTO accesslog (`ip`, `path`) VALUE (?, ?);"
+    query = f"INSERT INTO accesslog (`ip`, `path`, `uagent`) VALUE (?, ?, ?);"
     ip = get_client_ip(request)
-    cursor.execute(query, (ip, request.get_full_path()))
+    uagent = request.META.get('HTTP_USER_AGENT', '')
+    cursor.execute(query, (ip, request.get_full_path(), uagent))
     connection.commit()
     connection.close()
 
