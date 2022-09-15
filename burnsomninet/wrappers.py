@@ -102,6 +102,23 @@ def build_sitemap(*active_path):
             repo
         ))
 
+    #------------------------------------------#
+    manualsdir = f"{SITECODE}/manuals/"
+
+    section_map.append({
+        'name': 'manuals',
+        'sections': []
+    })
+
+    for folder in os.listdir(manualsdir):
+        if not os.path.isdir(f"{manualsdir}{folder}"):
+            continue
+
+        section_map[-1]['sections'].append((
+            ('manual', folder) == active_path,
+            f"/manual/{folder}",
+            folder.title()
+        ))
 
     #------------------------------------------#
     sectionsdir = f"{SITECODE}/sections/"

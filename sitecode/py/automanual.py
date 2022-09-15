@@ -11,76 +11,85 @@ import re
 CONTENT_PATT = re.compile("^@\\$(?P<cname>.*?)$", re.M)
 TITLE_PATT = re.compile("^# (?P<title>.*?)$", re.M)
 SUBTITLE_PATT = re.compile("^## (?P<title>.*?)$", re.M)
-
-def build_toc(content_order, subdir_dict):
-    output_lines = ["## Table of Contents"]
-    stack = [("", content_order, subdir_dict, 0)]
-    while stack:
-        title, cord, cmap, depth = stack.pop(0)
-        if depth > 0:
-            gap = " " * (4 * (depth - 1))
-            output_lines.append(f"{gap}- [{title}]")
-
-        for key in cord:
-            subtitle, subcontent, submap, suborder = cmap[key]
-            stack.append((subtitle, suborder, submap, depth + 1))
-            if not suborder: # If a suborder isn't given, check the subcontent for subsections
-                suborder = []
-                for hit in SUBTITLE_PATT.finditer(subcontent):
-                    suborder.append((hit.span()[0], hit.group('title')))
-                suborder.sort()
-                for i, (_, key) in enumerate(suborder):
-                    stack.append((key, [], {}, depth + 2))
-
-    return "\n".join(output_lines)
-
-
-def populate_page(directory, depth=0):
-    subdir_dict = {}
+def get_all_paths(directory):
+    output = []
     for sublevel in os.listdir(directory):
         if os.path.isdir(f"{directory}/{sublevel}"):
-            subdir_dict[sublevel] = populate_page(f"{directory}/{sublevel}", depth+1)
+            if os.path.isfile(f"{directory}/{sublevel}/mod.md"):
+                output.append([sublevel])
+
+            for subpath in get_all_paths(f"{directory}/{sublevel}"):
+                subpath.insert(0, sublevel)
+                output.append(subpath)
+
         elif os.path.isfile(f"{directory}/{sublevel}") and sublevel != 'mod.md':
-            with open(f"{directory}/{sublevel}", 'r') as fp:
-                subcontent = fp.read()
+            output.append([sublevel[0:sublevel.rfind(".")]])
 
-            title = ''
-            for hit in TITLE_PATT.finditer(subcontent):
-                title = hit.group('title')
-                break
+    return output
 
-            subdir_dict[sublevel[0:sublevel.rfind(".")]] = (title, subcontent, {}, [])
+
+def populate_page(directory):
+    section_paths = get_all_paths(directory)
 
     content = ''
-    with open(f"{directory}/mod.md", "r") as fp:
+    with open(directory + '/mod.md', 'r') as fp:
         content = fp.read()
 
-    subcontent_order = []
+    path_info = []
+    for path in section_paths:
+        subpath = "/".join(path)
+        wpath = f"{directory}/{subpath}"
+        node = path[-1]
+        reptag = f"@${node}"
+        if reptag in content:
+            subcontent = None
+            if os.path.isfile(wpath + '/mod.md'):
+                with open(wpath + '/mod.md', 'r') as fp:
+                    subcontent = fp.read()
+            elif os.path.isfile(wpath + '.md'):
+                with open(wpath + '.md', 'r') as fp:
+                    subcontent = fp.read()
 
-    for hit in CONTENT_PATT.finditer(content):
-        cname = hit.group('cname')
-        subcontent_order.append((hit.span()[0], cname))
-        subcontent = subdir_dict[cname][1].replace("\n#", "\n##")
-        if subcontent[0] == "#":
-            subcontent = f"#{subcontent}"
+            if subcontent is None:
+                continue
 
-        content = content.replace(f"@${cname}", subcontent.strip())
+            subcontent_title = ""
+            for hit in TITLE_PATT.finditer(subcontent):
+                subcontent_title = hit.group("title")
+                break
 
-    subcontent_order.sort()
-    for i, (_, key) in enumerate(subcontent_order):
-        subcontent_order[i] = key
+            # Adjust octothorp tags to reflect depth of content
+            subtitle_tagger = "#" * (len(path) + 1)
+            subcontent = ("\n" + subcontent).replace("\n#", f"\n{subtitle_tagger}").strip()
 
-    if "\n@@TOC\n" in content:
-        toc = build_toc(subcontent_order, subdir_dict)
-        content = content.replace("@@TOC", toc)
+            # Find and replace the @$ tag
+            pivot = content.find(reptag)
+            sb_len = len(subcontent)
+            # Adjust the already recorded insertion points of other subcontent
+            for i, (index, key, title) in enumerate(path_info):
+                if index > pivot:
+                    path_info[i] = (index + sb_len - len(reptag), key, title)
+
+            path_info.append((pivot, subpath, subcontent_title))
+            content = content[0:pivot] + subcontent + content[pivot + len(reptag):]
+
+    if "@@TOC" in content:
+        toc_lines = ["## Table of Contents"]
+        path_info.sort()
+        for insert_point, subpath, title in path_info:
+            depth = subpath.count('/')
+            key = subpath.replace("/", "_")
+            depth_buffer = " " * (depth * 4)
+            toc_lines.append(f"{depth_buffer}- [{title}](#{key})")
+
+        for insert_point, subpath, _title in path_info[::-1]:
+            key = subpath.replace("/", "_")
+            content = content[0:insert_point] + f"<a name=\"{key}\"></a>\n" + content[insert_point:]
+
+        content = content.replace("@@TOC", "\n".join(toc_lines))
 
 
-    title = ''
-    for hit in TITLE_PATT.finditer(content):
-        title = hit.group('title')
-        break
-
-    return (title, content, subdir_dict, subcontent_order)
+    return content
 
 BR_PATT = re.compile("(?P<c>[^\n])\n(?P<c2>[^\n])", re.M)
 def extra_markdown(content):
@@ -101,6 +110,10 @@ def extra_markdown(content):
 
     for (a, b), c, d in spans[::-1]:
         incode = False
+        if d == "[":
+            continue
+        if c == ">":
+            continue
         for codechunk in codespans:
             if (a >= codechunk[0] and a < codechunk[1]) or (b >= codechunk[0] and b < codechunk[1]):
                 incode = True

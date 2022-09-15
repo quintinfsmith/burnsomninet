@@ -34,6 +34,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path("content/<path:content_path>", views.content_controller),
     path('api/<path:section_path>', views.api_controller),
+    path("manual/<str:manual>", views.manual_controller),
     path("<str:section>/<path:subsection_path>", views.section_controller),
     path("<str:section>/<str:subsection>.json", views.section_json),
 ]
