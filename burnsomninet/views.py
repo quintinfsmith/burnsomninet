@@ -224,7 +224,7 @@ def section_controller(request, section, subsection_path):
     if subsections[0] in ("apres_bindings", "wrecked_bindings"):
         subsections[0] = subsections[0][0:subsections[0].rfind("_")]
 
-    if section in ("git", "project"):
+    if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
         return git_controller(request, subsections[0], *subsections[1:])
     elif section == "software":
         return manual_controller(request, subsections[0])
