@@ -188,7 +188,7 @@ def manual_controller(request, manual):
     accesslogmanager.log_access(request)
     manualsdir = f"{SITECODE}/manuals/"
     directory_path = f"{manualsdir}/{manual}/"
-    title = manual
+    title = f"{manual.title()} User Manual"
     raw_content = automanual.populate_page(directory_path)
     description = raw_content[raw_content.find("## About") + 8:].strip()
     description = description[0:description.find("\n")]
