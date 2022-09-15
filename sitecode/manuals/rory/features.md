@@ -20,8 +20,8 @@ Boundaries can be set to practice a single section of a piece.  As the player po
 
 ## Ignoring channels
 You can ignore a channel in order to focus on one hand
-`i` will set ignore the channel set in the register
-`u` will stop ignoring all ignored channels
+- `i` will set ignore the channel set in the register
+- `u` will stop ignoring all ignored channels
 
 ## Quitting
 - `q` to quit
