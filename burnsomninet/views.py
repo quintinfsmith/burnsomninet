@@ -16,6 +16,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from urllib.parse import urlencode, quote_plus
 import mimetypes
+from sitecode.py import automanual
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -183,6 +184,38 @@ def section_json(request):
 
     return HttpResponse(content, content_type="application/json")
 
+def manual_controller(request, manual):
+    accesslogmanager.log_access(request)
+    manualsdir = f"{SITECODE}/manuals/"
+    directory_path = f"{manualsdir}/{manual}/"
+    title = manual
+    raw_content = automanual.populate_page(directory_path)
+    description = raw_content[raw_content.find("## About") + 8:].strip()
+    description = description[0:description.find("\n")]
+
+    raw_content = automanual.extra_markdown(raw_content)
+    top = Tag("html",
+        wrappers.build_head(**{
+            "description": description,
+            "title": title
+        }),
+        Tag("body",
+            wrappers.build_sitemap('manual', manual),
+            Tag("div",
+                { "class": "content" },
+                Tag("div",
+                    { "class": "markdown-wrapper" },
+                    Tag("div",
+                        { "class": "markdown" },
+                        RawHTML(marko.convert(raw_content))
+                    )
+                )
+            )
+        )
+    )
+
+    return HttpResponse(repr(top))
+
 
 def section_controller(request, section, subsection_path):
     subsections = subsection_path.split("/")
@@ -193,6 +226,8 @@ def section_controller(request, section, subsection_path):
 
     if section in ("git", "project"):
         return git_controller(request, subsections[0], *subsections[1:])
+    elif section == "software":
+        return manual_controller(request, subsections[0])
 
     accesslogmanager.log_access(request)
 
