@@ -234,6 +234,8 @@ def media_content(mediamap):
                     for y in range(image.size[1]):
                         for x in range(image.size[0]):
                             new_image.putpixel((x, y_offset + y), image.getpixel((x, y)))
+                else:
+                    new_image = image
 
                 nw = 500
                 nh = int(nw * (9 / 16))
