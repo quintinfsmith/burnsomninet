@@ -213,9 +213,10 @@ def media_content(mediamap):
             ext = filename[filename.rfind(".") + 1:]
             if ext in ("jpg", "png"):
                 continue
-            if not os.path.isfile(f"{section_path}{filename}.png"):
-                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.jpg\"")
-                image = Image.open(f"{section_path}{filename}.jpg")
+            vidpath = f"{section_path}{filename}".replace("//", "/")
+            if not os.path.isfile(f"{vidpath}.png"):
+                os.system(f"ffmpeg -i \"{vidpath}\" -ss 00:00:00 -vframes 1 \"{vidpath}.jpg\"")
+                image = Image.open(f"{vidpath}.jpg")
                 if (image.size[0] / image.size[1]) < (16 / 9):
                     nh = image.size[1]
                     nw = int(nh * (16 / 9))
@@ -224,7 +225,7 @@ def media_content(mediamap):
                     for y in range(image.size[1]):
                         for x in range(image.size[0]):
                             new_image.putpixel((x_offset + x, y), image.getpixel((x, y)))
-                    new_image.save(f"{section_path}{filename}.png")
+                    new_image.save(f"{vidpath}.png")
                 elif image.size[0] / image.size[1] > (16 / 9):
                     nw = image.size[0]
                     nh = int(nw / (16 / 9))
@@ -233,7 +234,7 @@ def media_content(mediamap):
                     for y in range(image.size[1]):
                         for x in range(image.size[0]):
                             new_image.putpixel((x, y_offset + y), image.getpixel((x, y)))
-                    new_image.save(f"{section_path}{filename}.png")
+                    new_image.save(f"{vidpath}.png")
 
 
             sources.append(f"/content/{src}/{directory}/{filename}")
