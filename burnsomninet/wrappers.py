@@ -6,6 +6,8 @@ from urllib.parse import urlencode
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
+from PIL import Image
+
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
@@ -209,10 +211,31 @@ def media_content(mediamap):
         sources = []
         for filename in os.listdir(section_path):
             ext = filename[filename.rfind(".") + 1:]
-            if ext == "jpg":
+            if ext in ("jpg", "png"):
                 continue
-            if not os.path.isfile(f"{section_path}{filename}.jpg"):
-                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.jpg\"")
+            if not os.path.isfile(f"{section_path}{filename}.png"):
+                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.png\"")
+                image = Image.open(f"{section_path}{filename}.png")
+                if (image.size[0] / image.size[1]) < (16 / 9):
+                    nh = image.size[1]
+                    nw = int(nh * (16 / 9))
+                    new_image = Image.new("RGBA", (nw, nh), (0,0,0,0))
+                    x_offset = (nw - image.size[0]) // 2
+                    for y in range(image.size[1]):
+                        for x in range(image.size[0]):
+                            new_image.putpixel((x_offset + x, y), image.getpixel((x, y)))
+                    new_image.save(f"{section_path}{filename}.png")
+                elif image.size[0] / image.size[1] > (16 / 9):
+                    nw = image.size[0]
+                    nh = int(nw / (16 / 9))
+                    new_image = Image.new("RGBA", (nw, nh), (0,0,0,0))
+                    y_offset = (nh - image.size[1]) // 2
+                    for y in range(image.size[1]):
+                        for x in range(image.size[0]):
+                            new_image.putpixel((x, y_offset + y), image.getpixel((x, y)))
+                    new_image.save(f"{section_path}{filename}.png")
+
+
             sources.append(f"/content/{src}/{directory}/{filename}")
         # Create screenshots
         title = directory.capitalize()
@@ -229,7 +252,7 @@ def media_content(mediamap):
                         },
                         Tag("div",
                             Tag("img", {
-                                "src": sources[0] + ".jpg",
+                                "src": sources[0] + ".png",
                             })
                         ),
                         Tag("div",
