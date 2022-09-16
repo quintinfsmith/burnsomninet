@@ -215,8 +215,8 @@ def media_content(mediamap):
                 continue
             vidpath = f"{section_path}{filename}".replace("//", "/")
             if not os.path.isfile(f"{vidpath}.png"):
-                os.system(f"ffmpeg -i \"{vidpath}\" -ss 00:00:00 -vframes 1 \"{vidpath}.jpg\"")
-                image = Image.open(f"{vidpath}.jpg")
+                os.system(f"ffmpeg -i \"{vidpath}\" -ss 00:00:00 -vframes 1 \"{vidpath}.png\"")
+                image = Image.open(f"{vidpath}.png")
                 if (image.size[0] / image.size[1]) < (16 / 9):
                     nh = image.size[1]
                     nw = int(nh * (16 / 9))
