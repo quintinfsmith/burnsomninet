@@ -53,7 +53,7 @@
     --col_mediaplayer_close_hover: var(--col_main_sub);
     --col_mediaplayer_outline: var(--col_text);
     --col_mediaplayer_divide: var(--col_fore);
-    --col_mediaplayer_thumb: var(--col_back);
+    --col_mediaplayer_thumb: rgba(0,0,0,.2);
 
     --col_polaroid: var(--col_back);
     --col_polaroid_outline: var(--col_fore);
@@ -129,7 +129,7 @@
         --col_mediaplayer_close_hover: var(--col_main_sub);
         --col_mediaplayer_outline: var(--col_text);
         --col_mediaplayer_divide: var(--col_fore);
-        --col_mediaplayer_thumb: var(--col_back);
+        --col_mediaplayer_thumb: var(--col_fore);
 
         --col_polaroid: #FFF;
         --col_polaroid_outline: var(--col_fore);
@@ -529,11 +529,13 @@ body {
     box-shadow: var(--shadow);
     > div {
         > img {
+            width: 100%;
             max-height: 16em;
             max-width: 16em;
             display: inline-block;
             text-align: center;
             border: 1px solid var(--col_polaroid_outline);
+            background-color: rgba(0,0,0, .2);
         }
     }
     > div.label-wrapper {
@@ -605,8 +607,6 @@ body {
 
         > div:nth-child(2) {
             flex: 1 1 auto;
-            display: flex;
-            flex-direction: column;
             .mp_video_wrapper {
                 flex: 1 1 auto;
                 > * {
@@ -625,12 +625,6 @@ body {
                     border-top: solid 1px var(--col_mediaplayer_divide);
                 }
             }
-            .mp_video_wrapper:last-child {
-                height: 100%;
-            }
-            .mp_video_wrapper:not(:last-child) {
-                height: calc(100% - 3em);
-            }
         }
         > div:nth-child(2):last-child {
             height: calc(100% - 2em);
@@ -639,19 +633,13 @@ body {
             height: calc(75% - 3em);
         }
 
-        > .mp_selector {
-            flex: 0 1 auto;
-            display: flex;
-            height: calc(25% - 3em);
-            padding-bottom: 1em;
-            overflow-x: auto;
+        .mp_selector {
             .thumb:first-child:last-child {
                 display: none;
             }
+
             .thumb {
-                flex: 1 1 auto;
                 cursor: pointer;
-                height: calc(100% - 2px);
                 display: inline-block;
                 filter: grayscale(100%);
                 > div {

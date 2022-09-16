@@ -14,7 +14,11 @@ class MediaPlayer {
 
         this.element_video = crel('video', {
             controls: true,
-            loop: true
+            loop: true,
+            style: "opacity: 0"
+        });
+        event_listen(this.element_video, 'loadeddata', function(event) {
+            this.style.opacity = 1;
         });
 
         this.element_selector = null;
@@ -25,7 +29,7 @@ class MediaPlayer {
 
             for (var vid in this.options.srcs) {
                 var vidobj = crel('img', {
-                    src: this.options.srcs[vid] + '.jpg',
+                    src: this.options.srcs[vid] + '.png',
                 });
 
                 var div = crel('div',
@@ -37,7 +41,7 @@ class MediaPlayer {
                         }
                     },
                     crel('div', {
-                        'style': 'background-image: url("' + this.options.srcs[vid] + '.jpg");'
+                        'style': 'background-image: url("' + this.options.srcs[vid] + '.png");'
                     })
                 );
 
@@ -89,9 +93,11 @@ class MediaPlayer {
                         crel('div', { class: "vh_mid" }),
                         this.element_video
                     ),
-                    title_element
-                ),
-                this.element_selector
+                    crel('div',
+                     //   title_element,
+                        this.element_selector
+                    )
+                )
             )
         );
 
@@ -144,6 +150,7 @@ class MediaPlayer {
 
     set_video(index) {
         var src = this.options.srcs[index % this.options.srcs.length];
+        this.element_video.style.opacity = 0;
         this.element_video.setAttribute('src', src);
 
         if (this.element_selector) {
@@ -151,6 +158,7 @@ class MediaPlayer {
             var current_thumb = this.element_selector.childNodes[index];
             removeClass(prev_thumb, 'selected');
             addClass(current_thumb, 'selected');
+            current_thumb.scrollIntoView();
         }
 
         this.active_index = index;
