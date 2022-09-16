@@ -214,8 +214,8 @@ def media_content(mediamap):
             if ext in ("jpg", "png"):
                 continue
             if not os.path.isfile(f"{section_path}{filename}.png"):
-                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.png\"")
-                image = Image.open(f"{section_path}{filename}.png")
+                os.system(f"ffmpeg -i \"{section_path}{filename}\" -ss 00:00:00 -vframes 1 \"{section_path}{filename}.jpg\"")
+                image = Image.open(f"{section_path}{filename}.jpg")
                 if (image.size[0] / image.size[1]) < (16 / 9):
                     nh = image.size[1]
                     nw = int(nh * (16 / 9))
