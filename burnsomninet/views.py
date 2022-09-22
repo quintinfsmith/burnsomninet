@@ -236,6 +236,10 @@ def section_controller(request, section, subsection_path):
     sectionsdir = f"{SITECODE}/sections/"
     kwargs = {}
     directory_path = f"{sectionsdir}/{section}/"
+
+    if not os.path.isdir(directory_path):
+        raise Http404()
+
     files = os.listdir(directory_path)
     description = ""
     title = "test"
