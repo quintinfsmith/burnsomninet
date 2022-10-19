@@ -740,22 +740,21 @@ body {
 
         }
 
-        > ol,
         > ul {
             margin: 1em 0 0 0;
             padding-left: 0em;
             ol, ul {
                 padding-left: 1em;
             }
-        }
-
-        li {
-            list-style: none;
-            line-height: 1.7em;
-            > p {
-                margin: 0;
+            li {
+                list-style: none;
+                line-height: 1.7em;
+                > p {
+                    margin: 0;
+                }
             }
         }
+
 
     }
 }
