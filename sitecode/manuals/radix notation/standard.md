@@ -6,21 +6,22 @@ This is why I call it radix notation. Notes are just being express as n-base num
 ** Note how the values seem to be off by one, if that doesn't make sense to you consider this: the *first* 10 numbers don't have a*1* before them.
 
 Here's a quick reference to convert western notes:
-|Western Note |Radix |
-|-------------|------|
-|A1           |00    |
-|A#1          |01    |
-|B1           |02    |
-|C1           |03    |
-|C#1          |04    |
-|D1           |05    |
-|D#1          |06    |
-|E1           |07    |
-|F1           |08    |
-|F#1          |09    |
-|G1           |0A    |
-|G#1          |0B    |
-|A2           |10    |
+<table style="text-align: center;">
+<tr><th>Western Note </th><th>Radix </th></tr>
+<tr><td>A1           </td><td>00    </td></tr>
+<tr><td>A#1          </td><td>01    </td></tr>
+<tr><td>B1           </td><td>02    </td></tr>
+<tr><td>C1           </td><td>03    </td></tr>
+<tr><td>C#1          </td><td>04    </td></tr>
+<tr><td>D1           </td><td>05    </td></tr>
+<tr><td>D#1          </td><td>06    </td></tr>
+<tr><td>E1           </td><td>07    </td></tr>
+<tr><td>F1           </td><td>08    </td></tr>
+<tr><td>F#1          </td><td>09    </td></tr>
+<tr><td>G1           </td><td>0A    </td></tr>
+<tr><td>G#1          </td><td>0B    </td></tr>
+<tr><td>A2           </td><td>10    </td></tr>
+</table>
 
 Keep in mind that I'm just using 12 as an example. **Any** number of tones can be expressed if you have the instrument to play it or the software supports it (its in the works).
 
