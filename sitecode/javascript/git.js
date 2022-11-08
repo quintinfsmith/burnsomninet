@@ -19,7 +19,6 @@ class GitActivityWidget extends SlugWidget {
         super(element, options);
         this.commits = [];
         this.commit_block_elements = {};
-
         let day_one;
         if (options.datefrom) {
             day_one = new Date(options.datefrom);
@@ -297,7 +296,8 @@ class GitActivityWidget extends SlugWidget {
             let day_one = new Date(working_year, 0, 1);
             let one_day = 1000 * 60 * 60 * 24;
 
-            let doy = Math.floor((date_day_start.getTime() - day_one.getTime()) / one_day);
+            // Add a half day to the calculate because DST Fucks things up at hour 0
+            let doy = Math.floor((date_day_start.getTime() - day_one.getTime() + (one_day / 2)) / one_day);
             let key = (366 * working_year) + doy;
 
             let element_td = this.commit_block_elements[key];
