@@ -95,7 +95,7 @@ class ProjectBranch:
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.get_path()}")
-        whatchanged_dump = get_cmd_output(f"git whatchanged {branch} --date=iso")
+        whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
         os.chdir(cwd)
 
         if whatchanged_dump:
@@ -218,9 +218,32 @@ class Commit:
             lines.pop()
         if not lines: return None
         id = lines[0]
-
         date_line = lines[2]
-        date = datetime.fromisoformat(date_line[5:date_line.rfind("-")].strip())
+        date_line = date_line[5:].strip()
+        date_line = date_line[date_line.find(" "):].strip()
+        date_chunks = date_line.split(" ")
+        time_chunks = date_chunks[2].split(":")
+
+        utc_offset = date_chunks[-1]
+        modifier = 1
+        if utc_offset[0] == '-':
+            modifier = -1
+            utc_offset = utc_offset[1:]
+
+        time_offset = timedelta(
+            hours=int(utc_offset[0:2]) * modifier,
+            minutes=int(utc_offset[2:]) * modifier
+        )
+
+        date = datetime(
+            year=int(date_chunks[3]),
+            month=MONTHMAP[date_chunks[0]],
+            day=int(date_chunks[1]),
+            hour=int(time_chunks[0]),
+            minute=int(time_chunks[1]),
+            second=int(time_chunks[2]),
+            tzinfo=timezone(time_offset)
+        )
 
         timestamp = date.timestamp()
         date = datetime.fromtimestamp(timestamp)
