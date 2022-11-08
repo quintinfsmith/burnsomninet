@@ -220,7 +220,7 @@ class Commit:
         id = lines[0]
 
         date_line = lines[2]
-        date = datetime.datetime.fromisoformat(date_line[5:date_line.rfind("-")].strip())
+        date = datetime.fromisoformat(date_line[5:date_line.rfind("-")].strip())
 
         timestamp = date.timestamp()
         date = datetime.fromtimestamp(timestamp)
