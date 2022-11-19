@@ -482,7 +482,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         now = datetime.now()
         first_commit_date = branch.get_first_commit_date()
         from_date = now - relativedelta(years=1, hours=now.hour, minutes=now.minute)
-        from_date = max(first_commit_date, from_date)
+        #from_date = max(first_commit_date, from_date)
 
         body_content.append(
             slug_tag(
