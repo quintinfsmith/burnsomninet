@@ -20,7 +20,7 @@ class GitActivityWidget extends SlugWidget {
         this.commits = [];
         this.commit_block_elements = {};
         let day_one;
-        if (options.datefrom) {
+        if (options.datefrom) { // Range to show
             day_one = new Date(options.datefrom);
             day_one = new Date(day_one.getFullYear(), day_one.getMonth(), day_one.getDate());
         } else {
@@ -29,7 +29,7 @@ class GitActivityWidget extends SlugWidget {
         }
 
         let first_date;
-        if (options.datefirst) {
+        if (options.datefirst) { // Date of first commit
             first_date = new Date(options.datefirst);
         } else {
             first_date = null;
@@ -84,6 +84,13 @@ class GitActivityWidget extends SlugWidget {
     build_week_data(from_date, first_date) {
         let now = new Date();
         let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Use the first date if its more recent than the given date range
+        if (first_date.getTime() > from_date.getTime()) {
+            from_date = first_date
+        }
+        // Make sure the from_date is the start of the day
+        from_date = new Date(from_date.getFullYear(), from_date.getMonth(), from_date.getDate())
+
         let day_count = parseInt((today - from_date) / (24 * 60 * 60 * 1000)) + 1;
         let day_offset = from_date.getDay();
         let from_date_ts = from_date.getTime();
