@@ -31,6 +31,7 @@ class GitActivityWidget extends SlugWidget {
         let first_date;
         if (options.datefirst) { // Date of first commit
             first_date = new Date(options.datefirst);
+            first_date = new Date(first_date.getFullYear(), first_date.getMonth(), first_date.getDate())
         } else {
             first_date = null;
         }
@@ -84,14 +85,12 @@ class GitActivityWidget extends SlugWidget {
     build_week_data(from_date, first_date) {
         let now = new Date();
         let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
         // Use the first date if its more recent than the given date range
-        if (first_date.getTime() > from_date.getTime()) {
+        if (first_date != null && first_date.getTime() > from_date.getTime()) {
             from_date = first_date
         }
-        // Make sure the from_date is the start of the day
-        from_date = new Date(from_date.getFullYear(), from_date.getMonth(), from_date.getDate())
 
-        let day_count = parseInt((today - from_date) / (24 * 60 * 60 * 1000)) + 1;
         let day_offset = from_date.getDay();
         let from_date_ts = from_date.getTime();
 
@@ -101,10 +100,18 @@ class GitActivityWidget extends SlugWidget {
         }
 
         let week_properties = [];
-        for (let i = 0; i < day_count; i++) {
+        let i = 0
+        while (true) {
             let week_index = Math.floor((i + day_offset - this.WEEKDAY_OFFSET) / 7) + index_bump;
             let timestamp = from_date_ts + (i * (24 * 60 * 60 * 1000));
-            let working_date = new Date(timestamp);
+            let working_date = new Date(from_date.getFullYear(), from_date.getMonth(), from_date.getDate() + i);
+
+            if (working_date > new Date()) {
+                break
+            } else {
+                i += 1;
+            }
+
 
             while (week_index >= week_properties.length) {
                 week_properties.push({
@@ -128,7 +135,9 @@ class GitActivityWidget extends SlugWidget {
 
             this.commit_block_elements[(working_date.getFullYear() * 366) + doy] = td;
             week_properties[week_index].days.push(td);
+
         }
+
         return week_properties;
     }
 
