@@ -30,7 +30,7 @@ Keep in mind that I'm just using 12 as an example. **Any** number of tones can b
 ### No Time signature, no measures. Only beats.
 Every `|` delimits a beat.
 
-``` [ 43 | 43 | 43 | 43 ] ```
+``` { 43 | 43 | 43 | 43 } ```
 
 is the equivalent of this:
 
@@ -38,12 +38,13 @@ is the equivalent of this:
 <hr>
 
 ### Subdivisions
+Every piece starts and ends with `{` & `}`
 
-Every `[` and `]` delimit a subdivison (or the beginning and end of the piece)
+Every `[` and `]` delimit a subdivison
 
 Every beat or subdivision is split by commas
 
-``` [ 43 | 43, [53,4B] | 43, 43, 43  | .. ] ```
+``` { 43 | 43, [53,4B] | 43, 43, 43  | .. } ```
 
 is the equivalent of this:
 
@@ -57,9 +58,9 @@ is the equivalent of this:
 More than one line can exist, but only one note can be placed simultaneously per line
 
 ```
-    [50 |50 |50 |50 ]
-    [53 |54 |53 |.. ]
-    [57 |57 |.. |60 ]
+    {50 |50 |50 |50 }
+    {53 |54 |53 |.. }
+    {57 |57 |.. |60 }
 ```
 
 is the equivalent of this:
@@ -79,7 +80,7 @@ is the equivalent of this:
 
 `vN` means that this note is **N** octaves **down** from previous
 
-``` [ 43 | ^1, v1 | +4, +3 | -4, -3 ] ```
+``` { 43 | ^1, v1 | +4, +3 | -4, -3 } ```
 
 is the equivalent of:
 
