@@ -572,6 +572,8 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
         language = "toml"
     elif ext == "md":
         language = "markdown"
+    elif ext == "kt":
+        language = "kotlin"
     else:
         language = "none"
 
