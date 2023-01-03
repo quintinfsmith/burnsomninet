@@ -183,7 +183,8 @@ class GitActivityWidget extends SlugWidget {
                         this.MONTHS[week_properties[i + 1].month_at_start]
                     );
                 } else {
-                    buffer = crel('td');
+                    buffer = null;
+                    //buffer = crel('td');
                 }
                 flag_month_labelled = true;
                 flag_month_changed = false;
