@@ -166,8 +166,6 @@ class GitActivityWidget extends SlugWidget {
             year_table.firstChild.appendChild(crel('th', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
         }
 
-        let flag_month_labelled = true;
-        let flag_month_changed = false;
         for (let i = 0; i < week_properties.length; i++) {
             let current_week = week_properties[i];
             let row_element = crel('tr');
