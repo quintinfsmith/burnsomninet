@@ -156,7 +156,12 @@ class GitActivityWidget extends SlugWidget {
             },
             this.MONTHS[week_properties[0].month_at_start]
         );
-        year_table.insertBefore(crel('tr', first_month_label), year_table.firstChild);
+
+        // Collect row indices and labels and insert them into the
+        var new_month_indices = [0];
+        var month_label_order = [this.MONTHS[week_properties[0].month_at_start]]
+
+        year_table.insertBefore(crel('tr'), year_table.firstChild);
         for (let i = 0; i < 7; i++) {
             year_table.firstChild.appendChild(crel('th', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
         }
@@ -168,32 +173,9 @@ class GitActivityWidget extends SlugWidget {
             let row_element = crel('tr');
             let buffer = null;
 
-            let is_december_next = i < week_properties.length - 1 && week_properties[i + 1].month_at_start == 11;
-            let different_month_next = i < week_properties.length -1 && current_week.month_at_start != week_properties[i + 1].month_at_start;
-            if (flag_month_labelled) {
-                flag_month_changed = different_month_next;
-                flag_month_labelled = false;
-            } else if (flag_month_changed || different_month_next) {
-                if (! is_december_next) {
-                    buffer = crel('td',
-                        {
-                            "class": "month-label",
-                            "rowspan": 2
-                        },
-                        this.MONTHS[week_properties[i + 1].month_at_start]
-                    );
-                    flag_month_labelled = true;
-                    flag_month_changed = false;
-                } else {
-                    flag_month_labelled = false;
-                    flag_month_changed = false;
-                }
-            } else {
-                buffer = crel('td');
-            }
-
-            if (buffer) {
-                row_element.appendChild(buffer);
+             if (i < week_properties.length -1 && current_week.month_at_start != week_properties[i + 1].month_at_start) {
+                new_month_indices.push(i + 1)
+                month_label_order.push(this.MONTHS[week_properties[i + 1].month_at_start])
             }
 
             if (i > 0) {
@@ -211,13 +193,6 @@ class GitActivityWidget extends SlugWidget {
                     crel('tr',
                         crel('td',
                             {
-                                "class": "month-label",
-                                "rowspan": 2
-                            },
-                            this.MONTHS[11]
-                        ),
-                        crel('td',
-                            {
                                 'colspan': 7,
                                 'class': 'year-delim'
                             },
@@ -233,6 +208,14 @@ class GitActivityWidget extends SlugWidget {
                 )
             }
             year_table.appendChild(row_element);
+        }
+
+        new_month_indices.push(year_table.children.length)
+        for (var i = 0; i < new_month_indices.length - 1; i++) {
+            var index = new_month_indices[i]
+            var span_size = new_month_indices[i + 1] - index
+            var row = year_table.children[index]
+            row.insertBefore(crel('td', { 'rowspan': span_size }, month_label_order[i]), row.firstChild)
         }
 
         return year_table;
