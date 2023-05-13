@@ -103,7 +103,6 @@ class GitActivityWidget extends SlugWidget {
         let i = 0
         while (true) {
             let week_index = Math.floor((i + day_offset - this.WEEKDAY_OFFSET) / 7) + index_bump;
-            let timestamp = from_date_ts + (i * (24 * 60 * 60 * 1000));
             let working_date = new Date(from_date.getFullYear(), from_date.getMonth(), from_date.getDate() + i);
 
             if (working_date > new Date()) {
@@ -111,7 +110,6 @@ class GitActivityWidget extends SlugWidget {
             } else {
                 i += 1;
             }
-
 
             while (week_index >= week_properties.length) {
                 week_properties.push({
@@ -123,7 +121,10 @@ class GitActivityWidget extends SlugWidget {
 
             let date_string = build_simple_date_string(working_date);
             let doy = working_date.getTime() - (new Date(working_date.getFullYear(), 0, 1));
-            doy = parseInt(doy / (1000 * 60 * 60 * 24));
+            if (this.is_dst(working_date)) {
+                doy += 1000 * 3600;
+            }
+            doy = parseInt(doy / (1000 * 3600 * 24));
 
             let td = crel('td',
                 {
@@ -282,6 +283,12 @@ class GitActivityWidget extends SlugWidget {
         return year_table;
     }
 
+    is_dst(test_date) {
+        let jan = new Date(test_date.getFullYear(), 0, 1);
+        let jul = new Date(test_date.getFullYear(), 0, 6);
+        return test_date.getTimezoneOffset() <  Math.max(jan.getTimezoneOffset(), jul.getTimezoneOffset());
+    }
+
     update_commits(new_commits) {
         /* Add a list of new commits to the widget. Update the table cells accordingly */
         for (let i = 0; i < new_commits.length; i++) {
@@ -292,10 +299,15 @@ class GitActivityWidget extends SlugWidget {
             let working_year = date.getFullYear();
 
             let day_one = new Date(working_year, 0, 1);
-            let one_day = 1000 * 60 * 60 * 24;
+            let one_day = 1000 * 3600 * 24;
 
             // Add a half day to the calculate because DST Fucks things up at hour 0
-            let doy = Math.floor((date_day_start.getTime() - day_one.getTime() + (one_day / 2)) / one_day);
+            //let doy = Math.floor((date_day_start.getTime() - day_one.getTime() + (one_day / 2)) / one_day);
+            let doy = (date_day_start.getTime() - day_one.getTime());
+            if (this.is_dst(date)) {
+                doy += 1000 * 3600;
+            }
+            doy = Math.floor(doy / one_day)
             let key = (366 * working_year) + doy;
 
             let element_td = this.commit_block_elements[key];
