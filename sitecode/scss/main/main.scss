@@ -757,6 +757,19 @@ body {
 
 
     }
+
+    .inline-svg {
+        display: inline-block;
+        vertical-align: bottom;
+        margin-top: 0 !important;
+        height: 2em;
+        width: 2em;
+        svg {
+            path {
+                fill: var(--col_text);
+            }
+        }
+    }
 }
 
 .git-overview {
