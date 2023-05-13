@@ -2,7 +2,6 @@ import os
 import json
 import time
 import marko
-import markdown
 import zlib
 import re
 from django.http import HttpResponse, Http404
@@ -209,8 +208,8 @@ def manual_controller(request, manual):
                     { "class": "markdown-wrapper" },
                     Tag("div",
                         { "class": "markdown" },
-                        #RawHTML(marko.convert(raw_content))
-                        RawHTML(markdown.markdown(raw_content))
+                        RawHTML(marko.convert(raw_content))
+                        #RawHTML(markdown.markdown(raw_content))
                     )
                 )
             )
