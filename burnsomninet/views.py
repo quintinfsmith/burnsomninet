@@ -2,6 +2,7 @@ import os
 import json
 import time
 import marko
+import markdown
 import zlib
 import re
 from django.http import HttpResponse, Http404
@@ -193,6 +194,7 @@ def manual_controller(request, manual):
     description = raw_content[raw_content.find("## About") + 8:].strip()
     description = description[0:description.find("\n")]
 
+    raw_content = automanual.replace_svg(raw_content, STATIC_PATH)
     raw_content = automanual.extra_markdown(raw_content)
     top = Tag("html",
         wrappers.build_head(**{
@@ -207,7 +209,8 @@ def manual_controller(request, manual):
                     { "class": "markdown-wrapper" },
                     Tag("div",
                         { "class": "markdown" },
-                        RawHTML(marko.convert(raw_content))
+                        #RawHTML(marko.convert(raw_content))
+                        RawHTML(markdown.markdown(raw_content))
                     )
                 )
             )

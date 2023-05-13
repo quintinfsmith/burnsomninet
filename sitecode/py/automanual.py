@@ -8,6 +8,7 @@
 import os
 import re
 
+SVG_PATT = re.compile("!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
 CONTENT_PATT = re.compile("^@\\$(?P<cname>.*?)$", re.M)
 TITLE_PATT = re.compile("^# (?P<title>.*?)$", re.M)
 SUBTITLE_PATT = re.compile("^## (?P<title>.*?)$", re.M)
@@ -122,4 +123,24 @@ def extra_markdown(content):
             continue
 
         content = f"{content[0:a]}{c}<br/>\n{d}{content[b:]}"
+
     return content
+
+def replace_svg(content, root_path):
+    ordered_matches = []
+    for hit in SVG_PATT.finditer(content):
+        ordered_matches.append((hit.span(), hit.group('desc'), hit.group('path')))
+    ordered_matches.sort()
+
+    for (a, b), desc, path in ordered_matches[::-1]:
+        svg_path = f"{root_path}{path}"
+        if not os.path.isfile(svg_path):
+            continue
+
+        svg_content = ""
+        with open(svg_path) as fp:
+            svg_content = fp.read().replace("\n", "")
+
+        content = f"{content[0:a]}<span class=\"inline-svg\">{svg_content}</span>{content[b:]}"
+    return content
+
