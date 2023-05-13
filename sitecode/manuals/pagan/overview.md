@@ -12,7 +12,7 @@ Hold it to specify how many rests you want to insert.
 
 ## Remove a rest/note
 Tap the position you want to remove.
-Then tap the remove (![](/manuals/pagan/svgs/remove.svg)) button.
+Then tap the remove (![](/manuals/pagan/svgs/delete.svg)) button.
 Hold it to remove all immediate siblings and as well.
 
 ## Unset a note
