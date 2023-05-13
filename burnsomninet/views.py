@@ -225,6 +225,8 @@ def section_controller(request, section, subsection_path):
     # redirect apres_bindings/wrecked_bindings to merged projects
     if subsections[0] in ("apres_bindings", "wrecked_bindings"):
         subsections[0] = subsections[0][0:subsections[0].rfind("_")]
+    elif subsections[0] == "radixulous":
+        subsections[0] = "pagan"
 
     if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
         return git_controller(request, subsections[0], *subsections[1:])
