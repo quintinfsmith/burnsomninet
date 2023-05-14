@@ -82,6 +82,18 @@ class GitActivityWidget extends SlugWidget {
 
     }
 
+    get_doy(date) {
+        let output = 0;
+        while (true) {
+            let working_date = new Date(date.getFullYear(), 0, output + 1)
+            if (date.getMonth() == working_date.getMonth() && date.getDate() == working_date.getDate()) {
+                break;
+            }
+            output += 1
+        }
+        return output
+    }
+
     build_week_data(from_date, first_date) {
         let now = new Date();
         let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -120,11 +132,8 @@ class GitActivityWidget extends SlugWidget {
             }
 
             let date_string = build_simple_date_string(working_date);
-            let doy = working_date.getTime() - (new Date(working_date.getFullYear(), 0, 1));
-            if (this.is_dst(working_date)) {
-                doy += 1000 * 3600;
-            }
-            doy = parseInt(doy / (1000 * 3600 * 24));
+            let doy = this.get_doy(working_date)
+
 
             let td = crel('td',
                 {
@@ -136,9 +145,8 @@ class GitActivityWidget extends SlugWidget {
 
             this.commit_block_elements[(working_date.getFullYear() * 366) + doy] = td;
             week_properties[week_index].days.push(td);
-
+            //console.log(doy, working_date, td)
         }
-
         return week_properties;
     }
 
@@ -291,6 +299,9 @@ class GitActivityWidget extends SlugWidget {
 
     update_commits(new_commits) {
         /* Add a list of new commits to the widget. Update the table cells accordingly */
+        new_commits.sort(function(a, b) {
+            return a.date - b.date
+        })
         for (let i = 0; i < new_commits.length; i++) {
             let commit = new_commits[i];
             let date = new Date(commit.date * 1000);
@@ -301,13 +312,7 @@ class GitActivityWidget extends SlugWidget {
             let day_one = new Date(working_year, 0, 1);
             let one_day = 1000 * 3600 * 24;
 
-            // Add a half day to the calculate because DST Fucks things up at hour 0
-            //let doy = Math.floor((date_day_start.getTime() - day_one.getTime() + (one_day / 2)) / one_day);
-            let doy = (date_day_start.getTime() - day_one.getTime());
-            if (this.is_dst(date)) {
-                doy += 1000 * 3600;
-            }
-            doy = Math.floor(doy / one_day)
+            let doy = this.get_doy(date);
             let key = (366 * working_year) + doy;
 
             let element_td = this.commit_block_elements[key];
