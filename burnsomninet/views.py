@@ -344,10 +344,6 @@ def index(request):
 
         all_commits.extend(working_commits)
 
-    bmac_content = ""
-    with open(f"{STATIC_PATH}/bmac.svg", "r") as fp:
-        bmac_content = fp.read()
-
     top = Tag("html",
         wrappers.build_head(
             title="Quintin Smith - Developer, Unicyclist",
@@ -395,18 +391,6 @@ def index(request):
                                         Tag("div", { "class": "vh_mid" }),
                                         "GitHub"
                                     ),
-                                ),
-                                Tag("div",
-                                    { "class": "externals" },
-                                    Tag("a",
-                                        {
-                                            "href": "https://buymeacoffee.com/qfsmith",
-                                            "class": "bmac"
-                                        },
-                                        Tag("div", { "class": "vh_mid" }),
-                                        Tag("span", RawHTML(bmac_content)),
-                                        "Buy Me A Coffee"
-                                    )
                                 )
                             )
                         )
