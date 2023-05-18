@@ -228,6 +228,9 @@ def section_controller(request, section, subsection_path):
     elif subsections[0] == "radixulous":
         subsections[0] = "pagan"
 
+    if section in ("git", "project") and subsections[0].lower().endswith(".git"):
+        subsections[0] = subsections[0][0:subsections[0].rfind(".")]
+
     if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
         return git_controller(request, subsections[0], *subsections[1:])
     elif section == "software":
@@ -344,6 +347,10 @@ def index(request):
 
         all_commits.extend(working_commits)
 
+    bmac_content = ""
+    with open(f"{STATIC_PATH}/bmac.svg", "r") as fp:
+        bmac_content = fp.read()
+
     top = Tag("html",
         wrappers.build_head(
             title="Quintin Smith - Developer, Unicyclist",
@@ -391,6 +398,18 @@ def index(request):
                                         Tag("div", { "class": "vh_mid" }),
                                         "GitHub"
                                     ),
+                                ),
+                                Tag("div",
+                                    { "class": "externals" },
+                                    Tag("a",
+                                        {
+                                            "href": "https://buymeacoffee.com/qfsmith",
+                                            "class": "bmac"
+                                        },
+                                        Tag("div", { "class": "vh_mid" }),
+                                        Tag("span", RawHTML(bmac_content)),
+                                        "Buy Me A Coffee"
+                                    )
                                 )
                             )
                         )
