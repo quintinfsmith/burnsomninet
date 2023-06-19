@@ -475,8 +475,15 @@ def git_controller(request, project, *project_path):
     path = request.GET.get('path', '')
     raw = request.GET.get("raw", 0)
 
+    if project_path and project_path[0] == "blob":
+        raw = 1
+        commit = project_path[1]
+        path = "/".join(project_path[2:])
+        branch = "master"
+
     is_directory = (path == '' or path[-1] == '/')
     content = None
+
     if view == "files" and not is_directory and raw:
         mimetype = "text/plain"
         content = wrappers.get_raw_file_content(project, branch, commit, path)
