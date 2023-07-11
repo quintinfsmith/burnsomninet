@@ -233,7 +233,7 @@ def section_controller(request, section, subsection_path):
 
     if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
         return git_controller(request, subsections[0], *subsections[1:])
-    elif section == "software":
+    elif section == "software" or section == "manuals":
         return manual_controller(request, subsections[0])
 
     accesslogmanager.log_access(request)
