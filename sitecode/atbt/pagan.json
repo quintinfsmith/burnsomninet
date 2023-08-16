@@ -1,0 +1,134 @@
+{
+    "issues": [
+        {
+            "uuid": 0,
+            "notes": [],
+            "dependencies": [
+                1
+            ],
+            "title": "Minor",
+            "timestamp": 1692156628.9190986,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 1,
+            "notes": [],
+            "dependencies": [
+                3
+            ],
+            "title": "Colorize Channels",
+            "timestamp": 1692156758.742161,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 3,
+            "notes": [],
+            "dependencies": [],
+            "title": "Improve line labels",
+            "timestamp": 1692156795.5415316,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 4,
+            "notes": [],
+            "dependencies": [
+                5,
+                6,
+                7,
+                9,
+                11,
+                12
+            ],
+            "title": "Planned",
+            "timestamp": 1692156824.1520412,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 5,
+            "notes": [],
+            "dependencies": [],
+            "title": "Per-note Dynamics",
+            "timestamp": 1692156842.6559765,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 6,
+            "notes": [],
+            "dependencies": [],
+            "title": "Midi Event Broadcasting",
+            "timestamp": 1692156850.9337325,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 7,
+            "notes": [],
+            "dependencies": [
+                8
+            ],
+            "title": "Midi 2.0 support",
+            "timestamp": 1692156858.9003797,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 8,
+            "notes": [],
+            "dependencies": [],
+            "title": "Variable Radix Support",
+            "timestamp": 1692156874.3864868,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 9,
+            "notes": [],
+            "dependencies": [],
+            "title": "MSCZ support",
+            "timestamp": 1692156890.1665382,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 10,
+            "notes": [],
+            "dependencies": [
+                11
+            ],
+            "title": "High Contrast Mode",
+            "timestamp": 1692156902.388882,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 11,
+            "notes": [],
+            "dependencies": [],
+            "title": "Custom Color Palettes",
+            "timestamp": 1692156914.4677167,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 12,
+            "notes": [],
+            "dependencies": [],
+            "title": "Text Events",
+            "timestamp": 1692156922.860549,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 13,
+            "notes": [],
+            "dependencies": [
+                14
+            ],
+            "title": "v1.1.1",
+            "timestamp": 1692157241.5423467,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 14,
+            "notes": [],
+            "dependencies": [],
+            "title": "sdk 28 Support",
+            "timestamp": 1692157272.4225235,
+            "state": "OPEN"
+        }
+    ],
+    "issue_id_gen": 15
+}
