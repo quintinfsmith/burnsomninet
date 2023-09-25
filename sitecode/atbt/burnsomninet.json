@@ -1,0 +1,21 @@
+{
+    "issues": [
+        {
+            "uuid": 0,
+            "notes": [],
+            "dependencies": [],
+            "title": "Widgets",
+            "timestamp": 1692160676.0260832,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 1,
+            "notes": [],
+            "dependencies": [],
+            "title": "Issue tracking interface",
+            "timestamp": 1692160754.080353,
+            "state": "OPEN"
+        }
+    ],
+    "issue_id_gen": 2
+}

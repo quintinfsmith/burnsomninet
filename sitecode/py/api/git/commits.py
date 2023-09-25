@@ -15,27 +15,33 @@ def process_request(**kwargs):
     fields = set(fields.split(","))
     # -------------------------------------------- #
     project = Project(f"/srv/git/{project_name}")
-    branch  = project.get_branch(project_branch)
-    commits = branch.get_commits()
+    if project_branch == "*":
+        project_branches = project.get_branch_names()
+    else:
+        project_branches = [project_branch]
 
     output = []
-    for commit in commits:
-        timestamp = commit.get_timestamp()
-        if timestamp < date_from or timestamp >= date_to:
-            continue
+    for branch_name in project_branches:
+        branch  = project.get_branch(branch_name)
+        commits = branch.get_commits()
 
-        simple_commit = {}
-        if "date" in fields:
-            simple_commit['date'] = timestamp
-        if "description" in fields:
-            simple_commit['description'] = commit.get_description()
-        if "id" in fields:
-            simple_commit['id'] = commit.get_id()
+        for commit in commits:
+            timestamp = commit.get_timestamp()
+            if timestamp < date_from or timestamp >= date_to:
+                continue
 
-        if "author" in fields:
-            simple_commit['author'] = commit.get_author_email()
+            simple_commit = {}
+            if "date" in fields:
+                simple_commit['date'] = timestamp
+            if "description" in fields:
+                simple_commit['description'] = commit.get_description()
+            if "id" in fields:
+                simple_commit['id'] = commit.get_id()
 
-        output.append(simple_commit)
+            if "author" in fields:
+                simple_commit['author'] = commit.get_author_email()
+
+            output.append(simple_commit)
     # -------------------------------------------- #
 
     return output

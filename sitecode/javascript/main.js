@@ -296,10 +296,12 @@ class HamburgerMenu extends SlugWidget {
                 let opt_args = {
                     value: subsection[1]
                 };
+
                 if (subsection[0]){
                     opt_args['selected'] = true;
                     is_option_selected = true;
                 }
+
                 opt_group.appendChild(
                     crel('option',
                         opt_args,

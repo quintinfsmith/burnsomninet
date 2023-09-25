@@ -2,23 +2,37 @@
     "issues": [
         {
             "uuid": 0,
-            "notes": [],
+            "notes": [
+                [
+                    [
+                        1692334716.772456,
+                        "RESOLVED: all dependencies resolved"
+                    ]
+                ]
+            ],
             "dependencies": [
                 1
             ],
             "title": "Minor",
             "timestamp": 1692156628.9190986,
-            "state": "OPEN"
+            "state": "RESOLVED"
         },
         {
             "uuid": 1,
-            "notes": [],
+            "notes": [
+                [
+                    [
+                        1692334716.7724516,
+                        "RESOLVED: "
+                    ]
+                ]
+            ],
             "dependencies": [
                 3
             ],
             "title": "Colorize Channels",
             "timestamp": 1692156758.742161,
-            "state": "OPEN"
+            "state": "RESOLVED"
         },
         {
             "uuid": 3,
@@ -113,13 +127,18 @@
         },
         {
             "uuid": 13,
-            "notes": [],
-            "dependencies": [
-                14
+            "notes": [
+                [
+                    [
+                        1692853547.972653,
+                        "RESOLVED: Didn't want to release but I accidentally flagged v1.1.0 in a bad state, so I had to fix known bugs and get it out the door"
+                    ]
+                ]
             ],
+            "dependencies": [],
             "title": "v1.1.1",
             "timestamp": 1692157241.5423467,
-            "state": "OPEN"
+            "state": "RESOLVED"
         },
         {
             "uuid": 14,
@@ -128,7 +147,229 @@
             "title": "sdk 28 Support",
             "timestamp": 1692157272.4225235,
             "state": "OPEN"
+        },
+        {
+            "uuid": 15,
+            "notes": [],
+            "dependencies": [
+                14,
+                17,
+                18,
+                19,
+                20,
+                21
+            ],
+            "title": "v1.1.2",
+            "timestamp": 1692851854.1586518,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 16,
+            "notes": [],
+            "dependencies": [
+                17,
+                18,
+                19,
+                21,
+                22,
+                23
+            ],
+            "title": "Known Bugs",
+            "timestamp": 1692851887.456172,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 17,
+            "notes": [
+                [
+                    [
+                        1693102628.568694,
+                        "RESOLVED: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "failure to launch after old session",
+            "timestamp": 1692851918.6742744,
+            "state": "RESOLVED"
+        },
+        {
+            "uuid": 18,
+            "notes": [],
+            "dependencies": [],
+            "title": "Percussion still defaulting to piano on sf change",
+            "timestamp": 1692851944.3349307,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 19,
+            "notes": [
+                [
+                    [
+                        1692910626.6541784,
+                        "RESOLVED: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Crash when trying to import non-sf2 as sf2",
+            "timestamp": 1692852741.0743,
+            "state": "RESOLVED"
+        },
+        {
+            "uuid": 20,
+            "notes": [
+                [
+                    [
+                        1692853436.5348597,
+                        "I'm thinking a nice centered popup menu"
+                    ]
+                ],
+                [
+                    [
+                        1694015994.974096,
+                        "RESOLVED: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Change drop-down select menus to something more elegant",
+            "timestamp": 1692853084.5869315,
+            "state": "RESOLVED"
+        },
+        {
+            "uuid": 21,
+            "notes": [
+                [
+                    [
+                        1692853407.2862437,
+                        "*At least* needs loading reticule. Should also check why the slow ones are slow"
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Some midis take a long damn time to import",
+            "timestamp": 1692853315.3946857,
+            "state": "OPEN"
+        },
+        {
+            "uuid": 22,
+            "notes": [
+                [
+                    [
+                        1692912075.6465156,
+                        "RESOLVED: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "When removing a tree, if the next tree is deeper, the cursor doesn't dive",
+            "timestamp": 1692911428.6273851,
+            "state": "RESOLVED"
+        },
+        {
+            "uuid": 23,
+            "notes": [
+                [
+                    [
+                        1693158872.4001908,
+                        "Need to log when a column attempts to render when it's not attached"
+                    ]
+                ],
+                [
+                    [
+                        1693686180.1402924,
+                        "RESOLVED: removed hackey behaviour where the initial index was being futzed with and moved the conform_scroll call to onLayout instead of on attach"
+                    ]
+                ]
+            ],
+            "dependencies": [
+                24
+            ],
+            "title": "Some Cells rendering empty & Some Columns losing alignment",
+            "timestamp": 1693158755.9575057,
+            "state": "RESOLVED"
+        },
+        {
+            "uuid": 24,
+            "notes": [
+                [
+                    [
+                        1693685835.9762743,
+                        "GAVE UP: Can't set drag momentum ona  custom-built recycler. so fuck that i guess"
+                    ]
+                ]
+            ],
+            "dependencies": [
+                25,
+                26,
+                27,
+                28
+            ],
+            "title": "Rebuild grid AGAIN",
+            "timestamp": 1693241567.8516428,
+            "state": "GAVE_UP"
+        },
+        {
+            "uuid": 25,
+            "notes": [
+                [
+                    [
+                        1693685893.7885923,
+                        "GAVE UP: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Make a grid that holds the entire OpusManager at once",
+            "timestamp": 1693241616.2202623,
+            "state": "GAVE_UP"
+        },
+        {
+            "uuid": 26,
+            "notes": [
+                [
+                    [
+                        1693685890.1957738,
+                        "GAVE UP: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "make the grid scrollable, but still have the entire OpusManager",
+            "timestamp": 1693241677.6722498,
+            "state": "GAVE_UP"
+        },
+        {
+            "uuid": 27,
+            "notes": [
+                [
+                    [
+                        1693685886.088153,
+                        "GAVE UP: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Make the grid Detach and reattach columns relative to scrolling",
+            "timestamp": 1693241751.3690567,
+            "state": "GAVE_UP"
+        },
+        {
+            "uuid": 28,
+            "notes": [
+                [
+                    [
+                        1693685884.4217412,
+                        "GAVE UP: "
+                    ]
+                ]
+            ],
+            "dependencies": [],
+            "title": "Make the grid Detach and reattach rows relative to scrolling",
+            "timestamp": 1693241760.1037984,
+            "state": "GAVE_UP"
         }
     ],
-    "issue_id_gen": 15
+    "issue_id_gen": 29
 }
