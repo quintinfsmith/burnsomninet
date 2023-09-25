@@ -334,7 +334,8 @@ def index(request):
             working_commits = api.handle(
                 'git', 'commits',
                 project=project,
-                datefrom=from_date.timestamp()
+                datefrom=from_date.timestamp(),
+                branch="*"
             )
             if project in private_projects:
                 project_alias = "a private project";
