@@ -471,7 +471,7 @@ def git_controller(request, project, *project_path):
         return redirect(f"/gitserve/{project}/{path}{getstring}")
 
     view = request.GET.get('view', 'files')
-    branch = request.GET.get('branch', '*')
+    branch = request.GET.get('branch', 'master')
     commit = request.GET.get('commit', None)
     path = request.GET.get('path', '')
     raw = request.GET.get("raw", 0)
