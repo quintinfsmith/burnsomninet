@@ -15,8 +15,12 @@ def process_request(**kwargs):
     fields = set(fields.split(","))
     # -------------------------------------------- #
     project = Project(f"/srv/git/{project_name}")
+    all_project_branches = project.get_branch_names()
+    if project_branch not in all_project_branches:
+        project_branch = "master"
+
     if project_branch == "*":
-        project_branches = project.get_branch_names()
+        project_branches = all_project_branches
     else:
         project_branches = [project_branch]
 

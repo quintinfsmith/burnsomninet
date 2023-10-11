@@ -2,6 +2,14 @@ import os, sys
 import re, time
 from datetime import datetime, timedelta, timezone
 
+class InvalidBranch(Exception):
+    """Invalid Branch"""
+class FileNotFound(Exception):
+    """File Not Found"""
+class InvalidCommit(Exception):
+    def __init__(self, commit_id):
+        super.__init__("Invalid Commit: " + commit_id)
+
 class Author:
     def __init__(self, alias, email):
         self.alias = alias
@@ -22,6 +30,7 @@ class Project:
 
     def get_branch_names(self):
         return os.listdir(f"{self.path}/refs/heads/")
+
     def get_path(self):
         return self.path
 
@@ -77,6 +86,8 @@ class Project:
         return output
 
     def get_blob(self, commit_id, obj_type='blob'):
+        if not self.is_valid_commit_id(commit_id):
+            return InvalidCommit(commit_id)
         cwd = os.getcwd()
         os.chdir(f"{self.path}")
 
@@ -86,9 +97,19 @@ class Project:
 
         return output
 
+    @staticmethod
+    def is_valid_commit(commit_id):
+        for c in commit_id:
+            if c.lower() not in "1234567890abcdefghijklmnopqrstuvwxyz":
+                return False
+        return True
+
 
 class ProjectBranch:
-    def __init__(self, project, branch=""):
+    def __init__(self, project, branch="master"):
+        if branch not in project.get_branch_names():
+            raise InvalidBranch()
+
         self.project = project
         self.commits = {}
         self.branch = branch
@@ -176,6 +197,16 @@ class ProjectBranch:
         return adj_files
 
     def get_file_content(self, filepath, commit_id=None):
+        filelist = self.get_filelist("", commit_id)
+        file_exists = False
+        for (name, _) in filelist:
+            if name == filepath:
+                file_exists = True
+                break
+
+        if not file_exists:
+            raise FileNotFound()
+
         if not commit_id:
             cmd = f"git show {self.branch}:\"{filepath}\""
         else:
@@ -189,6 +220,15 @@ class ProjectBranch:
         return content
 
     def get_blame(self, filepath, commit_id=None):
+        filelist = self.get_filelist("", commit_id)
+        file_exists = False
+        for (name, _) in filelist:
+            if name == filepath:
+                file_exists = True
+                break
+
+        if not file_exists:
+            raise FileNotFound()
         if not commit_id:
             commit_chunk = ""
         else:

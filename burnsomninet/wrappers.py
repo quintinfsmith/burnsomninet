@@ -9,7 +9,7 @@ from dateutil.relativedelta import relativedelta
 from PIL import Image
 
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
-from sitecode.py.gitmanip import Project as GitProject
+from sitecode.py.gitmanip import Project as GitProject, FileNotFound
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py import api
 
@@ -286,12 +286,13 @@ def media_content(mediamap):
     return output
 
 def build_git_branch_select(project_name, active_branch_name: Optional[str]=None) -> Tag:
-    if active_branch_name is None:
-        active_branch_name = 'master'
-
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
+
     branch_names = git_project.get_branch_names()
     branch_names = sorted(branch_names, key=lambda x: int(x != "master"))
+
+    if active_branch_name not in branch_names:
+        active_branch_name = "master"
 
     if len(branch_names) > 1:
         output = slug_tag(
@@ -531,25 +532,30 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         )
     )
 
-
-    readme_content = branch.get_file_content(f"{path}README.md", active_commit)
-    if readme_content:
-        readme_markdown = marko.convert(readme_content)
-        body_content.append(
-            Tag('div',
-                { 'class': 'markdown-wrapper' },
+    try:
+        readme_content = branch.get_file_content(f"{path}README.md", active_commit)
+        if readme_content:
+            readme_markdown = marko.convert(readme_content)
+            body_content.append(
                 Tag('div',
-                    { "class": "markdown readme" },
-                    RawHTML(readme_markdown)
+                    { 'class': 'markdown-wrapper' },
+                    Tag('div',
+                        { "class": "markdown readme" },
+                        RawHTML(readme_markdown)
+                    )
                 )
             )
-        )
+    except FileNotFound as e:
+        pass
 
     return body_content
 
 def get_raw_file_content(project_name, branch_name, commit_id, path):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
-    branch = git_project.get_branch(branch_name)
+    if branch_name not in git_project.get_branch_names():
+        branch = git_project.get_branch(branch_name)
+    else:
+        branch = git_project.get_branch("master")
     body_content = branch.get_file_content(path, commit_id)
     return body_content
 
