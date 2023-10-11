@@ -11,7 +11,7 @@ import re
 SVG_PATT = re.compile("!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
 CONTENT_PATT = re.compile("^@\\$(?P<cname>.*?)$", re.M)
 TITLE_PATT = re.compile("^# (?P<title>.*?)$", re.M)
-SUBTITLE_PATT = re.compile("^## (?P<title>.*?)$", re.M)
+SUBTITLE_PATT = re.compile("^### (?P<title>.*?)$", re.M)
 def get_all_paths(directory):
     output = []
     for sublevel in os.listdir(directory):
@@ -59,6 +59,8 @@ def populate_page(directory):
                 subcontent_title = hit.group("title")
                 break
 
+
+
             # Adjust octothorp tags to reflect depth of content
             subtitle_tagger = "#" * (len(path) + 1)
             subcontent = ("\n" + subcontent).replace("\n#", f"\n{subtitle_tagger}").strip()
@@ -72,6 +74,16 @@ def populate_page(directory):
                     path_info[i] = (index + sb_len - len(reptag), key, title)
 
             path_info.append((pivot, subpath, subcontent_title))
+
+
+            for hit in SUBTITLE_PATT.finditer(subcontent):
+                subsection_title = hit.group("title")
+                subpivot = pivot + hit.span()[0]
+                subsubpath = path.copy()
+                subsubpath.append(subsection_title.replace(" ", "-").lower())
+                path_info.append((subpivot, "/".join(subsubpath), subsection_title))
+
+
             content = content[0:pivot] + subcontent + content[pivot + len(reptag):]
 
     if "@@TOC" in content:
