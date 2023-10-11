@@ -8,9 +8,9 @@
 
 @@TOC
 
-@$intro
-@$basics
 @$overview
+
 @$settings
+
 @$planned
 
