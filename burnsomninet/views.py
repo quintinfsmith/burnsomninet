@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject
+from sitecode.py.gitmanip import FileNotFound, InvalidBranch
 from burnsomninet import wrappers
 from sitecode.py import api, accesslogmanager
 from datetime import datetime
@@ -485,29 +486,34 @@ def git_controller(request, project, *project_path):
     is_directory = (path == '' or path[-1] == '/')
     content = None
 
-    if view == "files" and not is_directory and raw:
-        mimetype = "text/plain"
-        content = wrappers.get_raw_file_content(project, branch, commit, path)
-    else:
-        mimetype = "text/html"
-        if view == 'files':
-            if is_directory:
-                body = wrappers.build_git_overview(request, project, branch, commit, path)
-            else:
-                body = wrappers.build_git_file_view(project, branch, commit, path)
-        elif view == "commit":
-            body = wrappers.build_git_commit_view(project, branch, commit)
+    try:
+        if view == "files" and not is_directory and raw:
+            mimetype = "text/plain"
+            content = wrappers.get_raw_file_content(project, branch, commit, path)
+        else:
+            mimetype = "text/html"
+            if view == 'files':
+                if is_directory:
+                    body = wrappers.build_git_overview(request, project, branch, commit, path)
+                else:
+                    body = wrappers.build_git_file_view(project, branch, commit, path)
+            elif view == "commit":
+                body = wrappers.build_git_commit_view(project, branch, commit)
 
-        content = Tag("html",
-            wrappers.build_head(title=f"{project.capitalize()} overview"),
-            Tag("body",
-                wrappers.build_sitemap('git', project),
-                Tag("div",
-                    { "class": "content" },
-                    body
+            content = Tag("html",
+                wrappers.build_head(title=f"{project.capitalize()} overview"),
+                Tag("body",
+                    wrappers.build_sitemap('git', project),
+                    Tag("div",
+                        { "class": "content" },
+                        body
+                    )
                 )
             )
-        )
+    except FileNotFound as e:
+        raise Http404()
+    except InvalidBranch as e:
+        raise Http404()
 
     return HttpResponse(content, mimetype)
 

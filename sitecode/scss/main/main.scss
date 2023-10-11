@@ -1097,3 +1097,26 @@ body {
     background-color: var(--col_button_hover);
     color: var(--col_button_hover_text);
 }
+
+
+.numbered-diagram {
+    border-collapse: collapse;
+    td {
+        border: 1px solid var(--col_fore);
+    }
+    td:nth-last-child(2) {
+        text-align: center;
+        font-weight: bold;
+    }
+    td:last-child,
+    td:nth-last-child(2) {
+        padding: .25em .5em;
+    }
+    td:nth-last-child(3) {
+        height: 500px;
+        img {
+            height: 100%;
+            display: block;
+        }
+    }
+}
