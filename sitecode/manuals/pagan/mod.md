@@ -1,4 +1,4 @@
-# Pagan Opus Editor
+# Pagan Music Sequencer
 
 <div style="height: 4em; display: block; text-align: center;">
 <a href="https://f-droid.org/en/packages/com.qfs.pagan/">
