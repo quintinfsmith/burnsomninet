@@ -44,6 +44,10 @@
         <td>Set the song's name</td>
     </tr>
     <tr>
+        <td>02</td>
+        <td>Set the Radix. This allows for deviation from the western standard 12-tone equal temper tuning... Or set it to 24 for micro tones.</td>
+    </tr>
+    <tr>
         <td>03</td>
         <td>Transpose the song</td>
     </tr>
@@ -72,7 +76,7 @@
         <td>Toggle Drum visibility</td>
     </tr>
     <tr>
-        <td>010</td>
+        <td>10</td>
         <td>Save the current project. Long press to 'save as'</td>
     </tr>
     <tr>
