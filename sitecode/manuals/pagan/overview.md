@@ -41,47 +41,51 @@
             <img src="/content/manuals/pagan/imgs/configlayout.png"/>
         </td>
         <td>01</td>
-        <td>Set the opus's name</td>
-    </tr>
-    <tr>
-        <td>02</td>
-        <td>Transpose the Opus</td>
+        <td>Set the song's name</td>
     </tr>
     <tr>
         <td>03</td>
-        <td>Set the Opus's Tempo</td>
+        <td>Transpose the song</td>
     </tr>
     <tr>
         <td>04</td>
-        <td>Add New Channels (Instruments) to the Opus</td>
+        <td>Set the Tempo</td>
     </tr>
     <tr>
         <td>05</td>
-        <td>Change Channel Instrument</td>
+        <td>Add New Channels (Instruments) to the Song</td>
     </tr>
     <tr>
         <td>06</td>
-        <td>Remove Channel</td>
+        <td>Change Channel Instrument</td>
     </tr>
     <tr>
         <td>07</td>
-        <td>Set Drum</td>
+        <td>Remove Channel</td>
     </tr>
     <tr>
         <td>08</td>
-        <td>Save the Opus</td>
+        <td>Set Drum</td>
     </tr>
     <tr>
         <td>09</td>
-        <td>Move to a copy of the current opus</td>
+        <td>Toggle Drum visibility</td>
     </tr>
     <tr>
-        <td>10</td>
-        <td>Delete the Opus</td>
+        <td>010</td>
+        <td>Save the current project. Long press to 'save as'</td>
     </tr>
     <tr>
         <td>11</td>
-        <td>Export the Opus to a Midi file</td>
+        <td>Move to a copy of the current project</td>
+    </tr>
+    <tr>
+        <td>12</td>
+        <td>Delete the project</td>
+    </tr>
+    <tr>
+        <td>13</td>
+        <td>Export the project to .wav or .mid. Can only export to midi when Radix is 12.</td>
     </tr>
 </table>
 
@@ -100,7 +104,7 @@
     </tr>
     <tr>
         <td>03</td>
-        <td>Add a line to the channel (to add a channel see the Opus Config Menu)</td>
+        <td>Add a line to the channel (to add a channel see the Config Menu)</td>
     </tr>
     <tr>
         <td>04</td>
@@ -158,7 +162,7 @@
     </tr>
     <tr>
         <td>08</td>
-        <td>Set a note's offset (This is equivalent to abcdefg etc) Note that the options are in radix-12, so A = 10 and B = 11</td>
+        <td>Set a note's offset</td>
     </tr>
 </table>
 
