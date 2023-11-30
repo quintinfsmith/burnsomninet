@@ -37,7 +37,7 @@
 ## The Config Menu
 <table class="numbered-diagram">
     <tr>
-        <td rowspan=11>
+        <td rowspan=13>
             <img src="/content/manuals/pagan/imgs/configlayout.png"/>
         </td>
         <td>01</td>
