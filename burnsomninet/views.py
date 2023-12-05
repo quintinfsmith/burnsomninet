@@ -196,6 +196,7 @@ def manual_controller(request, manual):
 
     raw_content = automanual.replace_svg(raw_content, STATIC_PATH)
     raw_content = automanual.extra_markdown(raw_content)
+    raw_content = automanual.do_slugs(raw_content)
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
