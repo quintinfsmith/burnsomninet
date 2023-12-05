@@ -280,6 +280,7 @@ class RelativeVagueDate extends SlugWidget {
 
 window.onload = function() {
     load_widget_slugs();
+    console.log("Loading widget slugs")
 }
 
 class HamburgerMenu extends SlugWidget {
@@ -337,5 +338,31 @@ class HamburgerMenu extends SlugWidget {
                 )
             )
         ));
+    }
+}
+
+class NumberedDiagram extends SlugWidget {
+    constructor(element, options) {
+        super(element, options);
+        var item_table = crel("table")
+        for (let i = 0; i < options["entries"].length; i++) {
+            item_table.appendChild(
+                crel("tr",
+                    crel("td", i),
+                    crel("td", options["entries"][i])
+                )
+            )
+        }
+
+        this.element.appendChild(
+            crel("div",
+                crel("img", {
+                    "src": options["img"]
+                })
+            )
+        )
+        this.element.appendChild(
+            item_table
+        )
     }
 }

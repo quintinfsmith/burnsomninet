@@ -1,38 +1,6 @@
 # Controls Overview
 ## The App
-<table class="numbered-diagram">
-    <tr>
-        <td rowspan=7>
-            <img src="/content/manuals/pagan/imgs/mainlayout.png"/>
-        </td>
-        <td>01</td>
-        <td>Start Playback. Tap again to stop. Also tap anywhere to stop.</td>
-    </tr>
-    <tr>
-        <td>02</td>
-        <td>Undo last action. (max history size is 100 actions)</td>
-    </tr>
-    <tr>
-        <td>03</td>
-        <td>Quick Navigate. Large projects may take a long time to scroll through. Use this to jump to a beat.</td>
-    </tr>
-    <tr>
-        <td>04</td>
-        <td>Select column and open up column menu</td>
-    </tr>
-    <tr>
-        <td>05</td>
-        <td>Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)</td>
-    </tr>
-    <tr>
-        <td>06</td>
-        <td>Select percussion line. the "!" denotes the line belongs to the percussion channel and the number is the drum assigned to the line.</td>
-    </tr>
-    <tr>
-        <td>07</td>
-        <td>Select a note. Brings up note menu. Tap and hold to link.</td>
-    </tr>
-</table>
+<div data-class="NumberedDiagram" class="widget-slug slug-NumberedDiagram" data-json='{"img": "/content/manuals/pagan/imgs/mainlayout.png", "entries": ["Start Playback. Tap again to stop. Also tap anywhere to stop", "Undo last action. (max history size is 100 actions)", "Quick Navigate", "Select column and open up column menu", "Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)", "Select percussion line. the \"!\" denotes the line belongs to the percussion channel and the number is the drum assigned to the line.", "Select a note. Brings up note menu. Tap and hold to link, copy or move beats."]}' data-remote="main"></div>
 
 ## The Config Menu
 <table class="numbered-diagram">

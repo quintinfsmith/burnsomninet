@@ -213,4 +213,23 @@ body {
 .slug-GitActivityWidget {
 }
 
+div.numbered-diagram {
+    display: flex;
+    flex-direction: column;
+    > div:first-child {
+        text-align: center;
+        > img {
+            display: inline-block
+        }
+    }
+    > div {
+        flex-direction: column;
+        flex-wrap: auto;
+        display: block;
+        > div {
+            display: block;
+        }
+    }
+}
+
 }

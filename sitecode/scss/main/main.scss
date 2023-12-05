@@ -1101,9 +1101,6 @@ body {
 
 .numbered-diagram {
     border-collapse: collapse;
-    td {
-        border: 1px solid var(--col_fore);
-    }
     td:nth-last-child(2) {
         text-align: center;
         font-weight: bold;
@@ -1117,6 +1114,32 @@ body {
         img {
             height: 100%;
             display: block;
+        }
+    }
+}
+
+div.slug-NumberedDiagram {
+    border: 1px solid var(--col_fore);
+    display: flex;
+    > div:first-child {
+        flex: 0 1 auto;
+        height: 500px;
+        img {
+            height: 100%;
+            display: block;
+        }
+    }
+    > div:last-child {
+        flex: 1 1 auto;
+        > table {
+            border-collapse: collapse;
+            td {
+                border-top: 1px solid var(--col_fore);
+                padding: .25em .5em;
+            }
+            td:not(:last-child) {
+                border-right: 1px solid var(--col_fore);
+            }
         }
     }
 }
