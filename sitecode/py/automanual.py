@@ -6,6 +6,7 @@
 '''
 
 import os
+import json
 import re
 
 SVG_PATT = re.compile("!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
@@ -28,6 +29,21 @@ def get_all_paths(directory):
 
     return output
 
+
+SLUG_PATT = re.compile("~SLUG(?<slugjson>{.*}")
+def do_slugs(content):
+    matches = []
+    for hit in SLUG_PATT.finditer(content):
+        matches.append((hit.span(), json.loads(hit.group("slugjson"))))
+    matches.sort()
+    for ((start, end), json_obj) in matches[::-1]:
+        classname = json_obj["class"]
+        slug_name = json_obj["slug"]
+        data_json = json.dumps(json_obj["data-json"])
+        new_string = f"""<div class="slug-widget {classname}" data-class="{slug_name}" data-json="{data_json}" data-remote="main"></div>"""
+        content = content[0:start] + new_string + content[end:0]
+
+    return content
 
 def populate_page(directory):
     section_paths = get_all_paths(directory)
