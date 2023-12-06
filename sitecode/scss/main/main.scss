@@ -78,6 +78,9 @@
     --shadow_size: .5em;
     --shadow: var(--shadow_size) var(--shadow_size) 0 0 var(--col_shadow);
     --sitemap_shadow: none;
+
+    --col_diagrams_highlight: #EEAA00;
+    --col_diagrams_numbers: #EEAA00;
 }
 
 @media (prefers-color-scheme: light) {
@@ -154,6 +157,8 @@
         --shadow: var(--shadow_size) var(--shadow_size) .2em -1px var(--col_shadow);
 
         --sitemap_shadow: var(--shadow);
+
+        --col_diagrams_highlight: var(--col_sitemap_highlight);
     }
 }
 
@@ -1138,7 +1143,7 @@ div.slug-NumberedDiagram {
                     font-size: 1.5em;
                     position: absolute;
                     display: inline-block;
-                    color: #EEaa00;
+                    color: var(--col_diagrams_numbers);
                     text-shadow: 2px 2px 3px #000000;
                     font-weight: bold;
                     user-select: none;
@@ -1162,7 +1167,7 @@ div.slug-NumberedDiagram {
             }
             tr.selected {
                 td {
-                    color: #EEAA00;
+                    color: var(--col_diagrams_highlight);
                 }
             }
         }
