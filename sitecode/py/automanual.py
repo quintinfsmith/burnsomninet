@@ -31,12 +31,35 @@ def get_all_paths(directory):
     return output
 
 
-SLUG_PATT = re.compile("~SLUG(?P<slugjson>{.*})", re.M | re.S)
 def do_slugs(content):
     matches = []
-    for hit in SLUG_PATT.finditer(content):
-        span = hit.span()
-        matches.append((span[1], span[0], json.loads(hit.group("slugjson"))))
+    pivot = 0
+    while True:
+        i = content.find("~SLUG", pivot)
+        if i == -1:
+            break
+
+        pivot = i + 5
+
+        bracket_count = 0
+        escape_flag = False
+        for x, c in enumerate(content[i + 5:]):
+            if c == "\\":
+                escape_flag = True
+                continue
+
+            if c == "{":
+                bracket_count += 1
+            elif c == "}":
+                if not escape_flag:
+                    bracket_count -= 1
+
+            escape_flag = False
+
+            if bracket_count == 0:
+                matches.append((x + 6 + i, i, json.loads(content[i + 5: x + i + 6])))
+                break
+
     matches.sort()
 
     for (end, start, json_obj) in matches[::-1]:

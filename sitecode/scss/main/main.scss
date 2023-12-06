@@ -1119,14 +1119,12 @@ body {
 }
 
 div.slug-NumberedDiagram {
-    border: 1px solid var(--col_fore);
-    display: flex;
     > div:first-child {
-        flex: 0 1 auto;
-        > div {
+        > div:nth-child(2) {
             position: relative;
             height: 500px;
             img {
+                border: 1px solid var(--col_fore);
                 height: 100%;
                 display: block;
             }
@@ -1145,24 +1143,27 @@ div.slug-NumberedDiagram {
                     font-weight: bold;
                     user-select: none;
                 }
-
+                .label:not(.selected) {
+                    opacity: .7;
+                }
+                .label.selected {
+                    opacity: 1;
+                }
             }
         }
     }
-    > table {
-        border-collapse: collapse;
-        tr {
-            td {
-                border-top: 1px solid var(--col_fore);
-                padding: .25em .5em;
+    > div:last-child {
+        > table {
+            border-collapse: collapse;
+            tr {
+                td {
+                    border-bottom: 1px solid var(--col_fore);
+                }
             }
-            td:not(:last-child) {
-                border-right: 1px solid var(--col_fore);
-            }
-        }
-        tr.selected {
-            td {
-                border-color: #EEAA00;
+            tr.selected {
+                td {
+                    color: #EEAA00;
+                }
             }
         }
     }

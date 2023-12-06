@@ -231,5 +231,24 @@ div.numbered-diagram {
         }
     }
 }
+div.slug-NumberedDiagram {
+    > div:first-child {
+        display: flex;
+        > div:nth-child(2) {
+            flex: 0 1 auto;
+        }
+        > .padding {
+            flex: 1 1 auto;
+            display: visible;
+        }
+    }
+    > div:last-child {
+        > table {
+            td {
+                padding: .5em;
+            }
+        }
+    }
+}
 
 }

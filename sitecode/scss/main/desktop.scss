@@ -202,9 +202,27 @@ body {
 .slug-GitActivityWidget {
 }
 
-div.numbered-diagram {
+.slug-NumberedDiagram {
+    display: flex;
+    > div:first-child {
+        > div:nth-child(2) {
+            display: inline-block;
+        }
+        > .padding {
+            display: hidden;
+        }
+    }
     > div:last-child {
-        flex-direction: column;
+        > table {
+            min-height: calc(100% - 2px);
+            border-top: 1px solid var(--col_fore);
+            td:first-child {
+                font-weight: bold;
+            }
+            td {
+                padding: .25em 0 .25em .5em;
+            }
+        }
     }
 }
 

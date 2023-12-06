@@ -371,9 +371,27 @@ class NumberedDiagram extends SlugWidget {
 
             event_listen(label, "mouseout", function() {
                 removeClass(item_table.children[i], "selected")
+                removeClass(label, "selected")
             })
             event_listen(label, "mouseover", function() {
                 addClass(item_table.children[i], "selected")
+                addClass(label, "selected")
+            })
+            event_listen(label, "click", function() {
+                addClass(item_table.children[i], "selected")
+                addClass(label, "selected")
+            })
+            event_listen(item_table.children[i], "mouseout", function() {
+                removeClass(item_table.children[i], "selected")
+                removeClass(label, "selected")
+            })
+            event_listen(item_table.children[i], "mouseover", function() {
+                addClass(item_table.children[i], "selected")
+                addClass(label, "selected")
+            })
+            event_listen(item_table.children[i], "click", function() {
+                addClass(item_table.children[i], "selected")
+                addClass(label, "selected")
             })
 
             label_layer.appendChild(label)
@@ -381,14 +399,16 @@ class NumberedDiagram extends SlugWidget {
 
         this.element.appendChild(
             crel("div",
+                crel("div", { "class": "padding" }),
                 crel("div",
                     crel("img", {
                         "src": options["img"]
                     }),
                     label_layer
-                )
+                ),
+                crel("div", { "class": "padding" })
             )
         )
-        this.element.appendChild(item_table)
+        this.element.appendChild(crel("div", item_table))
     }
 }
