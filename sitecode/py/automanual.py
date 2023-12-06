@@ -8,6 +8,7 @@
 import os
 import json
 import re
+import html
 
 SVG_PATT = re.compile("!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
 CONTENT_PATT = re.compile("^@\\$(?P<cname>.*?)$", re.M)
@@ -30,18 +31,20 @@ def get_all_paths(directory):
     return output
 
 
-SLUG_PATT = re.compile("~SLUG(?<slugjson>{.*}")
+SLUG_PATT = re.compile("~SLUG(?P<slugjson>{.*})", re.M | re.S)
 def do_slugs(content):
     matches = []
     for hit in SLUG_PATT.finditer(content):
-        matches.append((hit.span(), json.loads(hit.group("slugjson"))))
+        span = hit.span()
+        matches.append((span[1], span[0], json.loads(hit.group("slugjson"))))
     matches.sort()
-    for ((start, end), json_obj) in matches[::-1]:
+
+    for (end, start, json_obj) in matches[::-1]:
         classname = json_obj["class"]
         slug_name = json_obj["slug"]
-        data_json = json.dumps(json_obj["data-json"])
-        new_string = f"""<div class="slug-widget {classname}" data-class="{slug_name}" data-json="{data_json}" data-remote="main"></div>"""
-        content = content[0:start] + new_string + content[end:0]
+        data_json = html.escape(json.dumps(json_obj["data-json"]))
+        new_string = f"""<div class="widget-slug {classname}" data-class="{slug_name}" data-json="{data_json}" data-remote="main"></div>"""
+        content = content[0:start] + new_string + content[end:]
 
     return content
 
