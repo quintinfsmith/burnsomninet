@@ -344,25 +344,51 @@ class HamburgerMenu extends SlugWidget {
 class NumberedDiagram extends SlugWidget {
     constructor(element, options) {
         super(element, options);
-        var item_table = crel("table")
+        let item_table = crel("table")
+        let label_layer = crel("div", {
+            "class": "label-layer"
+        })
         for (let i = 0; i < options["entries"].length; i++) {
+            let padded_i = (i + 1).toString()
+            while (padded_i.length < 2) {
+                padded_i = "0" + padded_i
+            }
             item_table.appendChild(
                 crel("tr",
-                    crel("td", i),
-                    crel("td", options["entries"][i])
+                    crel("td", padded_i),
+                    crel("td", options["entries"][i][2])
                 )
             )
+
+            let x = (options["entries"][i][0] * 100).toString() + "%"
+            let y = (options["entries"][i][1] * 100).toString() + "%"
+            let label = crel("span", {
+                    "class": "label",
+                    "style": "position: absolute; left: " + x + "; top: " + y
+                },
+                padded_i
+            )
+
+            event_listen(label, "mouseout", function() {
+                removeClass(item_table.children[i], "selected")
+            })
+            event_listen(label, "mouseover", function() {
+                addClass(item_table.children[i], "selected")
+            })
+
+            label_layer.appendChild(label)
         }
 
         this.element.appendChild(
             crel("div",
-                crel("img", {
-                    "src": options["img"]
-                })
+                crel("div",
+                    crel("img", {
+                        "src": options["img"]
+                    }),
+                    label_layer
+                )
             )
         )
-        this.element.appendChild(
-            item_table
-        )
+        this.element.appendChild(item_table)
     }
 }

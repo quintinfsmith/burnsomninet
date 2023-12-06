@@ -29,10 +29,13 @@ class Project:
         return ProjectBranch(self, branch_name)
 
     def get_branch_names(self):
+        os.chdir(f"{self.path}")
         string = get_cmd_output("git branch | grep \" .*\" -o")
         output = string.split("\n")
         for (i, item) in enumerate(output):
             output[i] = item.strip()
+        while "" in output:
+            output.remove("")
 
         return output
 

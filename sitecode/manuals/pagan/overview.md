@@ -1,18 +1,19 @@
 # Controls Overview
 ## The App
+
 ~SLUG{
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "content/manuals/pagan/imgs/mainlayout.png",
+        "img": "/content/manuals/pagan/imgs/mainlayout.png",
         "entries": [
-            "Start Playback. Tap again to stop. Also tap anywhere to stop",
-            "Undo last action. (max history size is 100 actions)",
-            "Quick Navigate",
-            "Select column and open up column menu",
-            "Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)",
-            "Select percussion line. the \"!\" denotes the line belongs to the percussion channel and the number is the drum assigned to the line.",
-            "Select a note. Brings up note menu. Tap and hold to link, copy or move beats."
+            [0.65, 0.05, "Start Playback. Tap again to stop. Also tap anywhere to stop"],
+            [0.80, 0.05, "Undo last action. (max history size is 100 actions)"],
+            [0.0, 0.06, "Quick Navigate"],
+            [0.15, 0.08, "Select column and open up column menu"],
+            [0.0, 0.20, "Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)"],
+            [0.0, 0.32, "Select percussion line. the \"!\" denotes the line belongs to the percussion channel and the number is the drum assigned to the line."],
+            [0.45, 0.45, "Select a note. Brings up note menu. Tap and hold to link, copy or move beats."]
         ]
     }
 }

@@ -191,12 +191,12 @@ def manual_controller(request, manual):
     directory_path = f"{manualsdir}/{manual}/"
     title = f"{manual.title()} User Manual"
     raw_content = automanual.populate_page(directory_path)
+    raw_content = automanual.do_slugs(raw_content)
     description = raw_content[raw_content.find("## About") + 8:].strip()
     description = description[0:description.find("\n")]
 
     raw_content = automanual.replace_svg(raw_content, STATIC_PATH)
     raw_content = automanual.extra_markdown(raw_content)
-    raw_content = automanual.do_slugs(raw_content)
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
