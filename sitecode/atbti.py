@@ -3,120 +3,82 @@ import mariadb
 import time
 from datetime import datetime, timezone
 
-def connect_to_mariadb():
-    return mariadb.connect(
-        user="http",
-        password="terpankerpanhorseradishblot",
-        host="localhost",
- #       port=3306,
-        database="burnsomninet"
+class MariaObj:
+    connection_count = 0
+    connection = None
 
-    )
-
-
-def new_issue(project, rating = 0):
-    connection = connect_to_mariadb()
-    cursor = connection.cursor()
-
-    query = "INSERT INTO issue (`rating`, `project`) VALUES (?, ?); "
-    cursor.execute(query, (rating, project))
-    issue_id = cursor.lastrowid
-
-    query = "INSERT INTO issue_note (`note`, `author`,  `issue_id`, `state`) VALUES (?, ?, ?, ?);"
-    cursor.execute(query, ("First Note", "smith.quintin@protonmail.com", issue_id, 0))
-
-    connection.commit()
-    connection.close()
-
-    return issue_id
-
-
-def add_note(issue_id, note, state=None):
-    connection = connect_to_mariadb()
-    cursor = connection.cursor()
-    if state is None:
-        query = "INSERT INTO issue_note (`note`, `author`,  `issue_id`) VALUES (?, ?, ?);"
-        cursor.execute(query, (note, "smith.quintin@protonmail.com", issue_id, ))
-    else:
-        query = "INSERT INTO issue_note (`note`, `author`, `issue_id`, `state`) VALUES (?, ?, ?, ?);"
-        cursor.execute(query, (note, "smith.quintin@protonmail.com", issue_id, state))
-
-    connection.commit()
-    connection.close()
-
-def get_notes(issue_id):
-    connection = connect_to_mariadb()
-    cursor = Connection.cursor()
-    query = "SELECT note, ts, author, state FROM issue_note WHERE issue_id = ? ORDER BY issue_note.ts;"
-    cursor.execute(query, (issue_id,))
-
-    notes = []
-    for vals in cursor.fetchall():
-        notes.append()
-
-    connection.close()
-
-class Issue:
-    @staticmethod
-    def new(project, rating=0):
-        new_id = new_issue(project, rating)
-        return Issue.from_id(new_id)
-
-    @staticmethod
-    def from_id(issue_id):
-        connection = connect_to_mariadb()
-        cursor = connection.cursor()
-
-        query = "SELECT rating, ts FROM issue WHERE id = ?;"
-        cursor.execute(query, (issue_id, ))
-        rating = 0
-        ts = 0
-        for vals in cursor.fetchall():
-            rating = vals[0]
-            ts = vals[1]
-            break
-
-        query = "SELECT note, ts, author, state FROM issue_note WHERE issue_id = ? ORDER BY issue_note.ts;"
-        cursor.execute(query, (issue_id,))
-
-        notes = []
-        for vals in cursor.fetchall():
-            notes.append(
-                IssueNote(
-                    note = vals[0],
-                    timestamp = vals[1],
-                    author = vals[2],
-                    state = vals[3]
-                )
+    @classmethod
+    def connect_to_mariadb(cls):
+        cls.connection_count += 1
+        if cls.connection is None:
+            cls.connection = mariadb.connect(
+                user="http",
+                password="terpankerpanhorseradishblot",
+                host="localhost",
+         #       port=3306,
+                database="burnsomninet"
             )
-        dependencies = []
-        query = "SELECT independent FROM issue_dependency WHERE dependent = ?;"
+
+        return cls.connection.cursor()
+
+    @classmethod
+    def close_connection(cls):
+        cls.connection_count -= 1
+        if not (cls.connection is None) and cls.connection_count == 0:
+            cls.connection.commit()
+            cls.connection.close()
+        cls.connection = None
+
+    def connect(self):
+        return MariaObj.connect_to_mariadb()
+
+    def disconnect(self):
+        MariaObj.close_connection()
+
+class Issue(MariaObj):
+    @classmethod
+    def new(cls, project, title, author, rating=0):
+        cursor = cls.connect_to_mariadb()
+
+        query = "INSERT INTO issue (`rating`, `title`, `project`, `author`) VALUES (?, ?, ?, ?); "
+        cursor.execute(query, (rating, title, project, author))
+        issue_id = cursor.lastrowid
+
+        cls.close_connection()
+        return Issue(issue_id)
+
+    def __init__(self, issue_id):
+        self.id = issue_id
+        self.notes = []
+        self.dependents = []
+        self.independents = []
+
+        cursor = self.connect_to_mariadb()
+
+        query = "SELECT rating, ts, author FROM issue WHERE issue.id = ?;"
+        cursor.execute(query, (issue_id,))
+        vals = cursor.fetchall()[0]
+        self.rating = vals[0]
+        self.timestamp = vals[1]
+        self.author = vals[2]
+
+        query = "SELECT `id` FROM issue_note WHERE issue_id = ?;"
         cursor.execute(query, (issue_id,))
         for vals in cursor.fetchall():
-            dependencies.append(vals[0])
+            note = IssueNote(vals[0])
+            self.notes.append(note)
 
-        independencies = []
-        query = "SELECT dependent FROM issue_dependency WHERE independent = ?;"
+        query = "SELECT dependent FROM issue_link WHERE independent = ?;"
         cursor.execute(query, (issue_id,))
         for vals in cursor.fetchall():
-            dependencies.append(vals[0])
+            self.dependents.append(vals[0])
 
-        return Issue(
-            issue_id = issue_id,
-            rating = rating,
-            timestamp = ts,
-            notes = notes,
-            dependencies = dependencies,
-            dependents = independencies
-        )
+        query = "SELECT independent FROM issue_link WHERE dependent = ?;"
+        cursor.execute(query, (issue_id,))
+        for vals in cursor.fetchall():
+            self.independents.append(vals[0])
 
-    def __init__(self, issue_id, rating, notes, dependencies, dependents, timestamp):
-        self.issue_id = issue_id
-        self.notes = notes
-        self.dependencies = dependencies
-        self.dependents = dependents
-        self.timestamp = timestamp
-        self.rating = rating
+        self.close_connection()
 
     def get_state(self):
         output = None
@@ -125,11 +87,54 @@ class Issue:
                 output = note.state
         return output
 
-class IssueNote:
-    def __init__(self, author, state, note, timestamp):
-        self.author = author
-        self.state = state
-        self.note = note
-        self.timestamp = timestamp
+class IssueNote(MariaObj):
+    @classmethod
+    def new(cls, issue_id, author, state = None):
+        cursor = cls.connect_to_mariadb()
+
+        if state is None:
+            query = "INSERT INTO issue_note (`issue_id`, `author`) VALUES (?, ?);"
+            cursor.execute(query, (issue_id, author ))
+        else:
+            query = "INSERT INTO issue_note (`issue_id`, `author`, `state`) VALUES (?, ?, ?);"
+            cursor.execute(query, (issue_id, author, state))
+
+        note_id = cursor.lastrowid
+
+        cls.close_connection()
+
+        return IssueNote(note_id)
+
+    def __init__(self, note_id):
+        self.id = note_id
+
+        cursor = self.connect_to_mariadb()
+
+        query = "SELECT ts, author, state FROM issue_note WHERE `id` = ?;"
+        cursor.execute(query, (note_id,))
+        vals = cursor.fetchall()[0]
+        self.timestamp = vals[0]
+        self.author = vals[1]
+        self.state = vals[2]
+
+        self.revisions = []
+        query = "SELECT ts, note  FROM issue_note_revision WHERE `note_id` = ? ORDER BY issue_note_revision.ts;"
+        cursor.execute(query, (note_id,))
+        for vals in cursor.fetchall():
+            self.revisions.append((vals[0], vals[1]))
+
+        self.close_connection()
+
+    def add_revision(self, note):
+        cursor = self.connect_to_mariadb()
+        query = "INSERT INTO issue_note_revision (`note`, `note_id`) VALUES (?, ?);"
+        cursor.execute(query, (note, self.id))
+        self.close_connection()
+
+if __name__ == "__main__":
+    issue = Issue.new("test", "Test Issue", "smith.quintin@protonmail.com", 0)
+    issue_note = IssueNote.new(issue.id, "smith.quintin@protonmail.com", 0)
+    issue_note.add_revision("Description")
+
 
 
