@@ -622,6 +622,16 @@ def content_controller(request, content_path):
     return HttpResponse(response_content, mimetype, status=status)
 
 
+def issues_controller(request, project):
+    status = 200
+
+    accesslogmanager.log_access(request)
+    if project not in os.listdir(GIT_PATH):
+        raise Http404()
+    response_string = f"{project} Issue Page"
+
+    return HttpResponse(bytes(response_string, "utf-8"), "text/html", status=status)
+
 
 VIEWMAP = {
     "unicycling": {
