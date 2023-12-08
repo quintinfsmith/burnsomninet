@@ -93,6 +93,12 @@ class Issue(MariaObj):
                 output = note.state
         return output
 
+    def require(self, issue_id):
+        cursor = self.connect_to_mariadb()
+        query = "REPLACE INTO issue_link (independent, dependent) VALUES (?, ?);"
+        cursor.execute(query, (issue_id, issue.id))
+        self.close_connection()
+
 class IssueNote(MariaObj):
     UNCONFIRMED = 0
     CONFIRMED = 1
@@ -204,6 +210,7 @@ class Tracker(MariaObj):
         issue = Issue.new(self.project, title, self.email, rating)
         note = IssueNote.new(issue.id, self.email, state)
         note.add_revision(description)
+        return issue
 
 
 if __name__ == "__main__":
@@ -216,9 +223,19 @@ if __name__ == "__main__":
         print("project name needed")
         sys.exit()
 
-    tracker = Tracker(sys.argv[1], "smith.quintin@protonmail.com")
-    args = sys.argv[2:]
-    if args[0].lower() == "list":
+    kwargs = {}
+    args = []
+    for arg in sys.argv[1:]:
+        if arg.startsWith("--"):
+            key = arg[2:arg.find("=")].lower()
+            value = arg[arg.find("=") + 1:]
+            kwargs[key] = value
+        else:
+            args.append(arg)
+
+    tracker = Tracker(args[0], "smith.quintin@protonmail.com")
+    args = args[1:]
+    if not args or args[0].lower() == "list":
         for issue in tracker.get_open():
             if issue.get_state() == IssueNote.CONFIRMED:
                 print(f"{issue.id}: {issue.title}")
@@ -228,14 +245,21 @@ if __name__ == "__main__":
             for note in issue.notes:
                 print(f"\033[03;35m   : {note.get_text()}\033[0m")
 
-            # TODO: DEPENDENTS
+            for dependent_id in issue.independents:
+                dependent = tracker.get_issue(dependent_id)
+                if dependent.get_state() in (IssueNote.IN_PROGRESS, IssueNote.Confirmed):
+                    print(f" -> {dependent.id}: {dependent.title}")
+
     elif args[0].lower() == "new":
-        tracker.new_issue(
+        issue = tracker.new_issue(
             title = args[1],
             rating = ["LOW", "PRESSING","URGENT", "FEATURE"].index(args[2].upper()),
             state = 1,
             description = args[3]
         )
+
+        if "requires" in kwargs:
+            issue.require(int(kwargs["requires"]))
 
     elif args[0].lower() == "rm":
         tracker.delete_issue(int(args[1]))
