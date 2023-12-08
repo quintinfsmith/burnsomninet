@@ -226,7 +226,7 @@ if __name__ == "__main__":
     kwargs = {}
     args = []
     for arg in sys.argv[1:]:
-        if arg.startsWith("--"):
+        if arg.startswith("--"):
             key = arg[2:arg.find("=")].lower()
             value = arg[arg.find("=") + 1:]
             kwargs[key] = value
