@@ -36,6 +36,11 @@ class MariaObj:
         MariaObj.close_connection()
 
 class Issue(MariaObj):
+    LOW = 0 # Will fix eventually
+    PRESSING = 1 # Will be fixed next release
+    URGENT = 2 # Will release fix ASAP
+    FEATURE = 3
+
     @classmethod
     def new(cls, project, title, author, rating=0):
         cursor = cls.connect_to_mariadb()
@@ -55,12 +60,13 @@ class Issue(MariaObj):
 
         cursor = self.connect_to_mariadb()
 
-        query = "SELECT rating, ts, author FROM issue WHERE issue.id = ?;"
+        query = "SELECT rating, ts, author, title FROM issue WHERE issue.id = ?;"
         cursor.execute(query, (issue_id,))
         vals = cursor.fetchall()[0]
         self.rating = vals[0]
         self.timestamp = vals[1]
         self.author = vals[2]
+        self.title = vals[3]
 
         query = "SELECT `id` FROM issue_note WHERE issue_id = ?;"
         cursor.execute(query, (issue_id,))
@@ -88,16 +94,18 @@ class Issue(MariaObj):
         return output
 
 class IssueNote(MariaObj):
+    UNCONFIRMED = 0
+    CONFIRMED = 1
+    IN_PROGRESS = 2
+    CANCELLED = 3
+    RESOLVED = 4
+
     @classmethod
-    def new(cls, issue_id, author, state = None):
+    def new(cls, issue_id, author, state = 0):
         cursor = cls.connect_to_mariadb()
 
-        if state is None:
-            query = "INSERT INTO issue_note (`issue_id`, `author`) VALUES (?, ?);"
-            cursor.execute(query, (issue_id, author ))
-        else:
-            query = "INSERT INTO issue_note (`issue_id`, `author`, `state`) VALUES (?, ?, ?);"
-            cursor.execute(query, (issue_id, author, state))
+        query = "INSERT INTO issue_note (`issue_id`, `author`, `state`) VALUES (?, ?, ?);"
+        cursor.execute(query, (issue_id, author, state))
 
         note_id = cursor.lastrowid
 
@@ -129,12 +137,122 @@ class IssueNote(MariaObj):
         cursor = self.connect_to_mariadb()
         query = "INSERT INTO issue_note_revision (`note`, `note_id`) VALUES (?, ?);"
         cursor.execute(query, (note, self.id))
+
+        row_id = cursor.lastrowid
+
+        self.revisions.append((time.time(), note))
+
         self.close_connection()
 
+    def get_text(self):
+        if not self.revisions:
+            return None
+
+        return self.revisions[len(self.revisions) - 1][1]
+
+class Tracker(MariaObj):
+    def __init__(self, project, email):
+        super().__init__()
+        self.project = project
+        self.email = email
+
+    def get_all(self):
+        cursor = self.connect_to_mariadb()
+        query = "SELECT issue.id FROM issue WHERE issue.project = ?;"
+        cursor.execute(query, (self.project, ))
+
+        output = []
+        for vals in cursor.fetchall():
+            issue_id = vals[0]
+            output.append(Issue(issue_id))
+
+        self.close_connection()
+        return output
+
+    def get_resolved(self):
+        return self.get_by_state(self.RESOLVED)
+
+    def get_open(self):
+        return self.get_by_state(IssueNote.CONFIRMED, IssueNote.IN_PROGRESS)
+
+    def get_by_state(self, *target_states):
+        cursor = self.connect_to_mariadb()
+        query = "SELECT issue_note.issue_id, issue_note.state FROM issue_note LEFT JOIN issue ON issue_note.issue_id = issue.id AND issue.project = ? GROUP BY issue.id ORDER BY issue_note.id;"
+        cursor.execute(query, (self.project, ))
+
+        issue_ids = {}
+        for vals in cursor.fetchall():
+            issue_id = vals[0]
+            state = vals[1]
+            if issue_id not in issue_ids:
+                issue_ids[issue_id] = 0
+
+            if state > 0:
+                issue_ids[issue_id] = state
+
+        self.close_connection()
+
+        output = []
+        for (issue_id, state) in issue_ids.items():
+            if state not in target_states:
+                continue
+            output.append(Issue(issue_id))
+
+        return output
+
+    def new_issue(self, title, rating=0, state=0, description=""):
+        issue = Issue.new(self.project, title, self.email, rating)
+        note = IssueNote.new(issue.id, self.email, state)
+        note.add_revision(description)
+
+
 if __name__ == "__main__":
-    issue = Issue.new("test", "Test Issue", "smith.quintin@protonmail.com", 0)
-    issue_note = IssueNote.new(issue.id, "smith.quintin@protonmail.com", 0)
-    issue_note.add_revision("Description")
+    import sys
+    #issue = Issue.new("test", "Test Issue", "smith.quintin@protonmail.com", 0)
+    #issue_note = IssueNote.new(issue.id, "smith.quintin@protonmail.com", 0)
+    #issue_note.add_revision("Description")
 
+    if len(sys.argv) < 2:
+        print("project name needed")
+        sys.exit()
 
+    tracker = Tracker(sys.argv[1], "smith.quintin@protonmail.com")
+    args = sys.argv[2:]
+    if args[0].lower() == "list":
+        for issue in tracker.get_open():
+            if issue.get_state() == IssueNote.CONFIRMED:
+                print(f"{issue.id}: {issue.title}")
+            elif issue.state == Issue.IN_PROGRESS:
+                print(f"\033[03;32m{issue.id}: {issue.title}\033[0m")
+
+            for note in issue.notes:
+                print(f"\033[03;35m   : {note.get_text()}\033[0m")
+
+            # TODO: DEPENDENTS
+    elif args[0].lower() == "new":
+        tracker.new_issue(
+            title = args[1],
+            rating = ["LOW", "PRESSING","URGENT", "FEATURE"].index(args[2].upper()),
+            state = 1,
+            description = args[3]
+        )
+
+    elif args[0].lower() == "rm":
+        tracker.delete_issue(int(args[1]))
+
+    elif args[0].lower() == "note":
+        tracker.add_issue_note(int(args[1]), args[2])
+
+    elif args[0].lower() == "resolve":
+        issue = tracker.get(int(args[1]))
+        if len(args) < 3:
+            issue.add_note(int(args[1]), "resolved", IssueNote.RESOLVED)
+        else:
+            issue.add_note(int(args[1]), args[2], IssueNote.RESOLVED)
+
+    elif args[0].lower() == "start":
+        if len(args) < 3:
+            issue.add_note(int(args[1]), "", IssueNote.IN_PROGRESS)
+        else:
+            issue.add_note(int(args[1]), args[2], IssueNote.IN_PROGRESS)
 
