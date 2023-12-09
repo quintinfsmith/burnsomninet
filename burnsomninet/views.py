@@ -18,6 +18,7 @@ from dateutil.relativedelta import relativedelta
 from urllib.parse import urlencode, quote_plus
 import mimetypes
 from sitecode.py import automanual
+from sitecode.py.atbti import Issue, IssueNote
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -631,6 +632,101 @@ def issues_controller(request, project):
     response_string = f"{project} Issue Page"
 
     return HttpResponse(bytes(response_string, "utf-8"), "text/html", status=status)
+
+def issue_controller(request, issue_id):
+    status = 200
+    accesslogmanager.log_access(request)
+
+    state_labels = ["", "open", "in progress", "cancelled", "resolved"]
+    urgency_labels = ["low", "pressing", "urgent", "feature"]
+
+    issue = Issue(issue_id)
+    notes_table = Tag("div", { "class": "notes-table" })
+
+
+    working_state = 1
+    for note in issue.notes:
+        note_top_line = Tag("div",
+            Tag("div",
+                { "class": "author" },
+                note.author
+            ),
+            Tag("div",
+                { "class": "date" },
+                str(note.timestamp)
+            )
+        )
+
+        if note.state != working_state:
+            note_state_str = state_labels[note.state]
+            note_top_line.append(
+                Tag("div",
+                    { "class": f"status-update status s{note.state}" },
+                    f"Status changed to {note_state_str}"
+                )
+            )
+
+        working_state = note.state
+
+        notes_table.append(
+            Tag("div",
+                { "class": f"note-{note.id}" },
+                note_top_line,
+                Tag("div",
+                    { "class": "note-description" },
+                    note.get_text()
+                )
+             )
+        )
+
+
+    issue_state_label = ""
+    issue_state = issue.get_state()
+    if issue_state is not None:
+        issue_state_label = state_labels[issue_state]
+    else:
+        issue_state = 0
+
+    body_content = Tag("div",
+        { "class": "issue-body" },
+
+        Tag("h1",
+            { "class": "title" },
+            issue.title.title()
+        ),
+
+        Tag("div",
+            { "class": "status-line" },
+            Tag("div",
+                { "class": f"urgency u{issue.rating}" },
+                urgency_labels[issue.rating]
+            ),
+            Tag("div",
+                { "class": f"status s{issue_state}" },
+                issue_state_label
+            )
+        ),
+        notes_table
+    )
+
+    description = f"Issue for {issue.project.title()} - {issue.title}"
+    title = description
+
+    top = Tag("html",
+        wrappers.build_head(**{
+            "description": description,
+            "title": title
+        }),
+        Tag("body",
+            wrappers.build_sitemap("issues", issue.project),
+            Tag("div",
+                { "class": "content" },
+                body_content
+            )
+        )
+    )
+
+    return HttpResponse(repr(top), "text/html", status=status)
 
 
 VIEWMAP = {
