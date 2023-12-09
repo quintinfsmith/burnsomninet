@@ -628,9 +628,47 @@ def issues_controller(request, project):
     accesslogmanager.log_access(request)
     if project not in os.listdir(GIT_PATH):
         raise Http404()
-    response_string = f"{project} Issue Page"
 
-    return HttpResponse(bytes(response_string, "utf-8"), "text/html", status=status)
+    from_date = datetime(year=2022, month=1, day=1)
+
+    issues = api.handle(
+        'atbt', 'issues',
+        project=project,
+        datefrom=from_date.timestamp(),
+    )
+
+    title = f"{project.title()} Issues"
+
+    body_content = Tag("div",
+        Tag("div", f"Issue Tracker: {project.title()}"),
+        Tag("div", {
+            "data-json": json.dumps({
+                "project": project,
+                "issues": issues
+            }),
+            "data-remote": "main",
+            "data-class": "IssuesTable",
+            "class": "widget-slug slug-IssuesTable"
+        })
+    )
+
+
+    top = Tag("html",
+        wrappers.build_head(**{
+            "description": f"Issues logged in {project.title()}",
+            "title": title
+        }),
+        Tag("body",
+            wrappers.build_sitemap("issues", project),
+            Tag("div",
+                { "class": "content" },
+                body_content
+            )
+        )
+    )
+
+
+    return HttpResponse(repr(top), "text/html", status=status)
 
 
 VIEWMAP = {

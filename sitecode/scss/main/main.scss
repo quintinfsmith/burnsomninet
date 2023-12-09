@@ -831,24 +831,10 @@ body {
     }
     .files-wrapper {
         width: 100%;
-        > .files-table {
-            width: 100%;
-            border-collapse: collapse;
-
-            > tbody {
-                > tr:hover {
-                    > td {
-                        background-color: var(--col_files_hover);
-                        color: var(--col_files_hover_text);
-                        > a {
-                            path, rect {
-                                stroke: var(--col_files_hover_text);
-                            }
-                        }
-                    }
-                }
-                > tr:nth-child(2n):not(:hover) {
-                    > td {
+        > .std-table {
+            > thead {
+                > tr:not(:hover) {
+                    > th {
                         background-color: rgba(0,0,0,.1);
                     }
                 }
@@ -867,24 +853,19 @@ body {
                         white-space: nowrap;
                     }
                 }
-                > tr:nth-child(2) {
+            }
+            > tbody {
+                > tr:hover {
                     > td {
-                        border-top: none;
+                        > a {
+                            path, rect {
+                                stroke: var(--col_files_hover_text);
+                            }
+                        }
                     }
                 }
-                > tr:not(:first-child):not(:nth-child(2)) {
-                    > td {
-                        border-top: solid 1px var(--col_files_line);
-                    }
-                }
-                > tr:not(:first-child) {
-                    > td:first-child {
-                        padding: .5rem;
-                    }
-                    > td {
-                        white-space: nowrap;
-                        padding: .5rem 0;
-                    }
+
+                > tr {
                     > td.description {
                         max-width: calc(30vw - 2em);
                         text-overflow: ellipsis;
@@ -1173,3 +1154,72 @@ div.slug-NumberedDiagram {
         }
     }
 }
+
+div.slug-IssuesTable {
+    width: 100%;
+    > .std-table {
+        > thead {
+            > tr {
+                > th:last-child,
+                > th:first-child {
+                    width: 2em;
+                }
+                > th:not(:last-child) {
+                    text-align: left;
+                }
+                > th:last-child {
+                    text-align: right;
+                }
+            }
+        }
+        > tbody {
+            > tr {
+                > td {
+                    padding: .5rem;
+                }
+                > td:last-child {
+                    text-align: right;
+                }
+            }
+        }
+    }
+}
+
+.std-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    > thead {
+        > tr {
+            > th {
+                background-color: rgba(0,0,0,.1);
+                padding: .5rem;
+            }
+        }
+    }
+
+    > tbody {
+        > tr:hover {
+            > td {
+                background-color: var(--col_files_hover);
+                color: var(--col_files_hover_text);
+            }
+        }
+        > tr:nth-child(2n):not(:hover) {
+            > td {
+                background-color: rgba(0,0,0,.1);
+            }
+        }
+        > tr {
+            > td:first-child {
+                padding: .5rem;
+            }
+            > td {
+                border-top: solid 1px var(--col_files_line);
+                white-space: nowrap;
+                padding: .5rem 0;
+            }
+        }
+    }
+}
+

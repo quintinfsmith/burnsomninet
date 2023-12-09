@@ -386,14 +386,16 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         query_attrs['commit'] = active_commit
 
     file_table = Tag("table",
-        { "class": "files-table" },
-        Tag("tr",
-            Tag("th",
-                {"colspan": 2},
-                build_git_path_navigator(branch_name, active_commit, path)
-            ),
-            Tag("th",
-                "Last Updated"
+        { "class": "std-table" },
+        Tag("thead",
+            Tag("tr",
+                Tag("th",
+                    {"colspan": 2},
+                    build_git_path_navigator(branch_name, active_commit, path)
+                ),
+                Tag("th",
+                    "Last Updated"
+                )
             )
         )
     )
