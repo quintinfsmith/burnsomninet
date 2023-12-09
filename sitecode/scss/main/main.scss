@@ -1184,6 +1184,41 @@ div.slug-IssuesTable {
         }
     }
 }
+.issue-body {
+    > .status-line {
+        > div {
+            display: inline-block;
+        }
+    }
+
+    .status {
+        padding: .25em .5em;
+    }
+    .status.s0 { }
+    .status.s1 { }
+    .status.s2 { }
+    .status.s3 { }
+    .status.s4 { }
+    .notes-table {
+        margin-top: 1em;
+        > div {
+            > div:first-child {
+                display: flex;
+                > div:not(:last-child) {
+                    flex: 1 1 auto;
+                }
+                > div:last-child {
+                    flex: 0 1 auto;
+                    text-align: right;
+                }
+            }
+            > div:last-child {
+                padding: 1em;
+                font-weight: 100;
+            }
+        }
+    }
+}
 
 .std-table {
     width: 100%;
