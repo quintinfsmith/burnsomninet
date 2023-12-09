@@ -33,6 +33,7 @@ urlpatterns = [
     #path("ntest/",  include('ntest.urls')),
     #path('admin/', admin.site.urls),
     path("issues/<str:project>", views.issues_controller),
+    path("issue/<int:issue_id>", views.issue_controller),
     path("content/<path:content_path>", views.content_controller),
     path('api/<path:section_path>', views.api_controller),
     path("manual/<str:manual>", views.manual_controller),
