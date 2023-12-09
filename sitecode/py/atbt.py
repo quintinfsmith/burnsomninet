@@ -24,7 +24,7 @@ class MariaObj:
     @classmethod
     def close_connection(cls):
         cls.connection_count -= 1
-        if not (cls.connection is None) and cls.connection_count == 0:
+        if not (cls.connection is None) and cls.connection_count == 1:
             cls.connection.commit()
             cls.connection.close()
         cls.connection = None
@@ -100,7 +100,6 @@ class Issue(MariaObj):
         self.close_connection()
 
 class IssueNote(MariaObj):
-    UNCONFIRMED = 0
     CONFIRMED = 1
     IN_PROGRESS = 2
     CANCELLED = 3

@@ -412,3 +412,38 @@ class NumberedDiagram extends SlugWidget {
         this.element.appendChild(crel("div", item_table))
     }
 }
+
+class IssuesTable extends SlugWidget {
+    constructor(element, options) {
+        super(element, options)
+        let table = crel("table",
+            { "class": "std-table" },
+            crel("thead",
+                crel("tr",
+                    crel("th", "#"),
+                    crel("th", "Issue"),
+                    crel("th", "Urgency"),
+                    crel("th", "State")
+                )
+            ),
+            crel("tbody")
+        );
+        for (let i = 0; i < options["issues"].length; i++) {
+            let issue = options["issues"][i];
+            let state = ""
+            if (issue["state"] != null) {
+                state = ["", "open", "in progress", "cancelled", "resolved"][issue["state"]]
+            }
+            let rating = ["low", "pressing", "urgent", "feature"][issue["rating"]]
+            table.lastChild.appendChild(
+                crel("tr",
+                    crel("td", issue["id"]),
+                    crel("td", issue["title"]),
+                    crel("td", rating),
+                    crel("td", state)
+                )
+            );
+        }
+        this.element.appendChild(table)
+    }
+}
