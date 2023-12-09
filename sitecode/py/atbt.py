@@ -60,13 +60,14 @@ class Issue(MariaObj):
 
         cursor = self.connect_to_mariadb()
 
-        query = "SELECT rating, ts, author, title FROM issue WHERE issue.id = ?;"
+        query = "SELECT rating, ts, author, title, project FROM issue WHERE issue.id = ?;"
         cursor.execute(query, (issue_id,))
         vals = cursor.fetchall()[0]
         self.rating = vals[0]
         self.timestamp = vals[1]
         self.author = vals[2]
         self.title = vals[3]
+        self.project = vals[4]
 
         query = "SELECT `id` FROM issue_note WHERE issue_id = ?;"
         cursor.execute(query, (issue_id,))
