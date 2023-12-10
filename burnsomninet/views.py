@@ -18,7 +18,7 @@ from dateutil.relativedelta import relativedelta
 from urllib.parse import urlencode, quote_plus
 import mimetypes
 from sitecode.py import automanual
-from sitecode.py.atbti import Issue, IssueNote
+from sitecode.py.atbt import Issue, IssueNote
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
@@ -685,24 +685,28 @@ def issue_controller(request, issue_id):
     working_state = 1
     for note in issue.notes:
         note_top_line = Tag("div",
+            { "class": "top-line" },
             Tag("div",
                 { "class": "author" },
                 note.author
-            ),
+            )
+        )
+
+        if note.state != working_state and note.state != 0:
+            note_state_str = state_labels[note.state]
+            note_top_line.append(
+                Tag("div",
+                    { "class": f"status-update status s{note.state}" },
+                    f"{note_state_str}"
+                )
+            )
+
+        note_top_line.append(
             Tag("div",
                 { "class": "date" },
                 str(note.timestamp)
             )
         )
-
-        if note.state != working_state:
-            note_state_str = state_labels[note.state]
-            note_top_line.append(
-                Tag("div",
-                    { "class": f"status-update status s{note.state}" },
-                    f"Status changed to {note_state_str}"
-                )
-            )
 
         working_state = note.state
 
@@ -736,7 +740,7 @@ def issue_controller(request, issue_id):
         Tag("div",
             { "class": "status-line" },
             Tag("div",
-                { "class": f"urgency u{issue.rating}" },
+                { "class": f"rating r{issue.rating}" },
                 urgency_labels[issue.rating]
             ),
             Tag("div",

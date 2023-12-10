@@ -428,6 +428,7 @@ class IssuesTable extends SlugWidget {
             ),
             crel("tbody")
         );
+
         for (let i = 0; i < options["issues"].length; i++) {
             let issue = options["issues"][i];
             let state = ""
@@ -435,14 +436,16 @@ class IssuesTable extends SlugWidget {
                 state = ["", "open", "in progress", "cancelled", "resolved"][issue["state"]]
             }
             let rating = ["low", "pressing", "urgent", "feature"][issue["rating"]]
-            table.lastChild.appendChild(
-                crel("tr",
-                    crel("td", issue["id"]),
-                    crel("td", issue["title"]),
-                    crel("td", rating),
-                    crel("td", state)
-                )
+            let row = crel("tr",
+                crel("td", issue["id"]),
+                crel("td", issue["title"]),
+                crel("td", rating),
+                crel("td", state)
             );
+            event_listen(row, "click", function() {
+                window.location.href = "/issue/" + issue["id"]
+            });
+            table.lastChild.appendChild(row);
         }
         this.element.appendChild(table)
     }
