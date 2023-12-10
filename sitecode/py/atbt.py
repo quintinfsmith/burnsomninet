@@ -7,11 +7,11 @@ class MariaObj:
     connection_count = 0
     connection = None
 
-    @classmethod
-    def connect_to_mariadb(cls):
-        cls.connection_count += 1
-        if cls.connection is None:
-            cls.connection = mariadb.connect(
+    @staticmethod
+    def _connect():
+        MariaObj.connection_count += 1
+        if MariaObj.connection is None:
+            MariaObj.connection = mariadb.connect(
                 user="http",
                 password="terpankerpanhorseradishblot",
                 host="localhost",
@@ -19,21 +19,22 @@ class MariaObj:
                 database="burnsomninet"
             )
 
-        return cls.connection.cursor()
+        return MariaObj.connection.cursor()
 
-    @classmethod
-    def close_connection(cls):
-        cls.connection_count -= 1
-        if not (cls.connection is None) and cls.connection_count == 1:
-            cls.connection.commit()
-            cls.connection.close()
-        cls.connection = None
+    @staticmethod
+    def _disconnect():
+        MariaObj.connection_count -= 1
+        if not (MariaObj.connection is None) and MariaObj.connection_count == 0:
+            MariaObj.connection.commit()
+            MariaObj.connection.close()
+
+            MariaObj.connection = None
 
     def connect(self):
-        return MariaObj.connect_to_mariadb()
+        return MariaObj._connect()
 
     def disconnect(self):
-        MariaObj.close_connection()
+        MariaObj._disconnect()
 
 class Issue(MariaObj):
     LOW = 0 # Will fix eventually
@@ -41,15 +42,15 @@ class Issue(MariaObj):
     URGENT = 2 # Will release fix ASAP
     FEATURE = 3
 
-    @classmethod
-    def new(cls, project, title, author, rating=0):
-        cursor = cls.connect_to_mariadb()
+    @staticmethod
+    def new(project, title, author, rating=0):
+        cursor = MariaObj._connect()
 
         query = "INSERT INTO issue (`rating`, `title`, `project`, `author`) VALUES (?, ?, ?, ?); "
         cursor.execute(query, (rating, title, project, author))
         issue_id = cursor.lastrowid
 
-        cls.close_connection()
+        MariaObj._disconnect()
         return Issue(issue_id)
 
     def __init__(self, issue_id):
@@ -58,7 +59,7 @@ class Issue(MariaObj):
         self.dependents = []
         self.independents = []
 
-        cursor = self.connect_to_mariadb()
+        cursor = self.connect()
 
         query = "SELECT rating, ts, author, title, project FROM issue WHERE issue.id = ?;"
         cursor.execute(query, (issue_id,))
@@ -85,7 +86,7 @@ class Issue(MariaObj):
         for vals in cursor.fetchall():
             self.independents.append(vals[0])
 
-        self.close_connection()
+        self.disconnect()
 
     def get_state(self):
         output = None
@@ -95,34 +96,41 @@ class Issue(MariaObj):
         return output
 
     def require(self, issue_id):
-        cursor = self.connect_to_mariadb()
+        cursor = self.connect()
         query = "REPLACE INTO issue_link (independent, dependent) VALUES (?, ?);"
         cursor.execute(query, (issue_id, issue.id))
-        self.close_connection()
+        self.disconnect()
+
+    def add_note(self, author, note, new_state):
+        issue_note = IssueNote.new(self.id, author, new_state)
+        issue_note.add_revision(note)
 
 class IssueNote(MariaObj):
-    CONFIRMED = 1
+    OPEN = 1
     IN_PROGRESS = 2
     CANCELLED = 3
     RESOLVED = 4
 
-    @classmethod
-    def new(cls, issue_id, author, state = 0):
-        cursor = cls.connect_to_mariadb()
+    @staticmethod
+    def new(issue_id, author, state = 0):
+        cursor = MariaObj._connect()
 
-        query = "INSERT INTO issue_note (`issue_id`, `author`, `state`) VALUES (?, ?, ?);"
+        query = "INSERT INTO issue_note (issue_id, author, state) VALUES (?, ?, ?);"
         cursor.execute(query, (issue_id, author, state))
+        MariaObj.connection.commit()
 
         note_id = cursor.lastrowid
 
-        cls.close_connection()
+        output = IssueNote(note_id)
 
-        return IssueNote(note_id)
+        MariaObj._disconnect()
+
+        return output
 
     def __init__(self, note_id):
         self.id = note_id
 
-        cursor = self.connect_to_mariadb()
+        cursor = self.connect()
 
         query = "SELECT ts, author, state FROM issue_note WHERE `id` = ?;"
         cursor.execute(query, (note_id,))
@@ -137,10 +145,10 @@ class IssueNote(MariaObj):
         for vals in cursor.fetchall():
             self.revisions.append((vals[0], vals[1]))
 
-        self.close_connection()
+        self.disconnect()
 
     def add_revision(self, note):
-        cursor = self.connect_to_mariadb()
+        cursor = self.connect()
         query = "INSERT INTO issue_note_revision (`note`, `note_id`) VALUES (?, ?);"
         cursor.execute(query, (note, self.id))
 
@@ -148,7 +156,7 @@ class IssueNote(MariaObj):
 
         self.revisions.append((time.time(), note))
 
-        self.close_connection()
+        self.disconnect()
 
     def get_text(self):
         if not self.revisions:
@@ -163,7 +171,7 @@ class Tracker(MariaObj):
         self.email = email
 
     def get_all(self):
-        cursor = self.connect_to_mariadb()
+        cursor = self.connect()
         query = "SELECT issue.id FROM issue WHERE issue.project = ?;"
         cursor.execute(query, (self.project, ))
 
@@ -172,18 +180,18 @@ class Tracker(MariaObj):
             issue_id = vals[0]
             output.append(Issue(issue_id))
 
-        self.close_connection()
+        self.disconnect()
         return output
 
     def get_resolved(self):
         return self.get_by_state(self.RESOLVED)
 
     def get_open(self):
-        return self.get_by_state(IssueNote.CONFIRMED, IssueNote.IN_PROGRESS)
+        return self.get_by_state(IssueNote.OPEN, IssueNote.IN_PROGRESS)
 
     def get_by_state(self, *target_states):
-        cursor = self.connect_to_mariadb()
-        query = "SELECT issue_note.issue_id, issue_note.state FROM issue_note LEFT JOIN issue ON issue_note.issue_id = issue.id AND issue.project = ? GROUP BY issue.id ORDER BY issue_note.id;"
+        cursor = self.connect()
+        query = "SELECT issue_note.issue_id, issue_note.state FROM issue_note LEFT JOIN issue ON issue_note.issue_id = issue.id WHERE issue.project = ? GROUP BY issue.id ORDER BY issue_note.id;"
         cursor.execute(query, (self.project, ))
 
         issue_ids = {}
@@ -196,7 +204,7 @@ class Tracker(MariaObj):
             if state > 0:
                 issue_ids[issue_id] = state
 
-        self.close_connection()
+        self.disconnect()
 
         output = []
         for (issue_id, state) in issue_ids.items():
@@ -211,6 +219,10 @@ class Tracker(MariaObj):
         note = IssueNote.new(issue.id, self.email, state)
         note.add_revision(description)
         return issue
+
+    def add_issue_note(self, issue_id, note, state=0):
+        issue = Issue(issue_id)
+        issue_note = issue.add_note(self.email, note, state)
 
 
 if __name__ == "__main__":
@@ -237,7 +249,7 @@ if __name__ == "__main__":
     args = args[1:]
     if not args or args[0].lower() == "list":
         for issue in tracker.get_open():
-            if issue.get_state() == IssueNote.CONFIRMED:
+            if issue.get_state() == IssueNote.OPEN:
                 print(f"{issue.id}: {issue.title}")
             elif issue.state == Issue.IN_PROGRESS:
                 print(f"\033[03;32m{issue.id}: {issue.title}\033[0m")
@@ -247,7 +259,7 @@ if __name__ == "__main__":
 
             for dependent_id in issue.independents:
                 dependent = tracker.get_issue(dependent_id)
-                if dependent.get_state() in (IssueNote.IN_PROGRESS, IssueNote.Confirmed):
+                if dependent.get_state() in (IssueNote.IN_PROGRESS, IssueNote.OPEN):
                     print(f" -> {dependent.id}: {dependent.title}")
 
     elif args[0].lower() == "new":
@@ -265,18 +277,20 @@ if __name__ == "__main__":
         tracker.delete_issue(int(args[1]))
 
     elif args[0].lower() == "note":
-        tracker.add_issue_note(int(args[1]), args[2])
+        state = 0
+        if len(args) >= 4:
+            state =  ["", "OPEN", "IN_PROGRESS", "CANCELLED", "RESOLVED"].index(args[3].upper())
+        tracker.add_issue_note(int(args[1]), args[2], state)
 
     elif args[0].lower() == "resolve":
-        issue = tracker.get(int(args[1]))
         if len(args) < 3:
-            issue.add_note(int(args[1]), "resolved", IssueNote.RESOLVED)
+            tracker.add_issue_note(int(args[1]), "resolved", IssueNote.RESOLVED)
         else:
-            issue.add_note(int(args[1]), args[2], IssueNote.RESOLVED)
+            tracker.add_issue_note(int(args[1]), args[2], IssueNote.RESOLVED)
 
     elif args[0].lower() == "start":
         if len(args) < 3:
-            issue.add_note(int(args[1]), "", IssueNote.IN_PROGRESS)
+            tracker.add_issue_note(int(args[1]), "", IssueNote.IN_PROGRESS)
         else:
-            issue.add_note(int(args[1]), args[2], IssueNote.IN_PROGRESS)
+            tracker.add_issue_note(int(args[1]), args[2], IssueNote.IN_PROGRESS)
 

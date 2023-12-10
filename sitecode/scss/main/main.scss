@@ -81,6 +81,26 @@
 
     --col_diagrams_highlight: #EEAA00;
     --col_diagrams_numbers: #EEAA00;
+
+    --col_issue_status1: #000000;
+    --col_issue_status2: #000000;
+    --col_issue_status3: #000000;
+    --col_issue_status4: #000000;
+
+    --col_issue_rating0: #FFFF00;
+    --col_issue_rating1: #AAEE00;
+    --col_issue_rating2: #AA0000;
+    --col_issue_rating3: #00AA00;
+
+    --col_issue_status1_fg: #FFFFFF;
+    --col_issue_status2_fg: #FFFFFF;
+    --col_issue_status3_fg: #FFFFFF;
+    --col_issue_status4_fg: #FFFFFF;
+
+    --col_issue_rating0_fg: #000000;
+    --col_issue_rating1_fg: #000000;
+    --col_issue_rating2_fg: #FFFFFF;
+    --col_issue_rating3_fg: #000000;
 }
 
 @media (prefers-color-scheme: light) {
@@ -1174,6 +1194,7 @@ div.slug-IssuesTable {
         }
         > tbody {
             > tr {
+                cursor: pointer;
                 > td {
                     padding: .5rem;
                 }
@@ -1184,6 +1205,7 @@ div.slug-IssuesTable {
         }
     }
 }
+
 .issue-body {
     > .status-line {
         > div {
@@ -1191,20 +1213,59 @@ div.slug-IssuesTable {
         }
     }
 
-    .status {
+    .status,
+    .rating {
         padding: .25em .5em;
     }
+
     .status.s0 { }
-    .status.s1 { }
-    .status.s2 { }
-    .status.s3 { }
-    .status.s4 { }
+    .status.s1 {
+        color: var(--col_issue_status1_fg);
+        background-color: var(--col_issue_status1);
+    }
+    .status.s2 {
+        color: var(--col_issue_status2_fg);
+        background-color: var(--col_issue_status2);
+    }
+    .status.s3 {
+        color: var(--col_issue_status3_fg);
+        background-color: var(--col_issue_status3);
+    }
+    .status.s4 {
+        color: var(--col_issue_status4_fg);
+        background-color: var(--col_issue_status4);
+    }
+    .rating.r1 {
+        color: var(--col_issue_rating1_fg);
+        background-color: var(--col_issue_rating1);
+    }
+    .rating.r2 {
+        color: var(--col_issue_rating2_fg);
+        background-color: var(--col_issue_rating2);
+    }
+    .rating.r3 {
+        color: var(--col_issue_rating3_fg);
+        background-color: var(--col_issue_rating3);
+    }
+    .rating.r4 {
+        color: var(--col_issue_rating4_fg);
+        background-color: var(--col_issue_rating4);
+    }
+
     .notes-table {
         margin-top: 1em;
+        > div:nth-child(2n + 1) {
+            background-color: rgba(0,0,0,.1);
+        }
         > div {
-            > div:first-child {
+            border-top: 1px solid var(--col_fore);
+            padding: .5em;
+            > .top-line {
                 display: flex;
-                > div:not(:last-child) {
+                > div:nth-last-child(3) {
+                    flex: 0 1 auto;
+                }
+                > div:nth-last-child(2) {
                     flex: 1 1 auto;
                 }
                 > div:last-child {
