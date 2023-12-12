@@ -41,6 +41,8 @@ class Issue(MariaObj):
     PRESSING = 1 # Will be fixed next release
     URGENT = 2 # Will release fix ASAP
     FEATURE = 3
+    class NoSuchIssueException(Exception):
+        """..."""
 
     @staticmethod
     def new(project, title, author, rating=0):
@@ -63,7 +65,10 @@ class Issue(MariaObj):
 
         query = "SELECT rating, ts, author, title, project FROM issue WHERE issue.id = ?;"
         cursor.execute(query, (issue_id,))
-        vals = cursor.fetchall()[0]
+        fetched = cursor.fetchall()
+        if not fetched:
+            raise Issue.NoSuchIssueException()
+        vals = fetched[0]
         self.rating = vals[0]
         self.timestamp = vals[1]
         self.author = vals[2]
@@ -251,7 +256,7 @@ if __name__ == "__main__":
         for issue in tracker.get_open():
             if issue.get_state() == IssueNote.OPEN:
                 print(f"{issue.id}: {issue.title}")
-            elif issue.state == Issue.IN_PROGRESS:
+            elif issue.get_state() == IssueNote.IN_PROGRESS:
                 print(f"\033[03;32m{issue.id}: {issue.title}\033[0m")
 
             for note in issue.notes:

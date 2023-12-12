@@ -331,6 +331,7 @@ def index(request):
             cache_key,
             f"{GIT_PATH}/{project}"
         )
+
         if not needs_update:
             working_commits = json.loads(get_cached(cache_key)[0])
         else:
@@ -340,8 +341,9 @@ def index(request):
                 datefrom=from_date.timestamp(),
                 branch="*"
             )
+
             if project in private_projects:
-                project_alias = "a private project";
+                project_alias = "a private project"
             else:
                 project_alias = project
             for i, _commit in enumerate(working_commits):
@@ -636,6 +638,7 @@ def issues_controller(request, project):
         'atbt', 'issues',
         project=project,
         datefrom=from_date.timestamp(),
+        **request.GET
     )
 
     title = f"{project.title()} Issues"
@@ -678,9 +681,12 @@ def issue_controller(request, issue_id):
     state_labels = ["", "open", "in progress", "cancelled", "resolved"]
     urgency_labels = ["low", "pressing", "urgent", "feature"]
 
-    issue = Issue(issue_id)
-    notes_table = Tag("div", { "class": "notes-table" })
+    try:
+        issue = Issue(issue_id)
+    except Issue.NoSuchIssueException:
+        raise Http404()
 
+    notes_table = Tag("div", { "class": "notes-table" })
 
     working_state = 1
     for note in issue.notes:
@@ -710,16 +716,31 @@ def issue_controller(request, issue_id):
 
         working_state = note.state
 
-        notes_table.append(
+        note_entry = Tag("div",
+            { "class": f"note-{note.id}" },
+            note_top_line,
             Tag("div",
-                { "class": f"note-{note.id}" },
-                note_top_line,
-                Tag("div",
-                    { "class": "note-description" },
-                    note.get_text()
-                )
-             )
+                { "class": "note-description" },
+                note.get_text()
+            )
         )
+
+        note_img_path = f"{STATIC_PATH}/issues/{issue.project}/{note.id}"
+        if os.path.isdir(note_img_path):
+            imgs_line = Tag("div", {
+                "class": "issue_note_imgs"
+            })
+            for f in os.listdir(note_img_path):
+                imgs_line.append(
+                    Tag("div",
+                        Tag("img", {
+                            "src": f"/content/issues/{issue.project}/{note.id}/{f}"
+                        })
+                    )
+                )
+            note_entry.append(imgs_line)
+
+        notes_table.append(note_entry)
 
 
     issue_state_label = ""
