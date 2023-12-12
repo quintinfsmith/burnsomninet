@@ -415,22 +415,92 @@ class NumberedDiagram extends SlugWidget {
 
 class IssuesTable extends SlugWidget {
     constructor(element, options) {
-        super(element, options)
+        super(element, options);
+        this.current_order = [
+            "rating",
+            "id",
+            "state",
+            "title"
+        ];
+
+        this.direction_map = {
+            "rating": -1,
+            "id": 1,
+            "state": 1,
+            "title": 1
+        };
+
+        this.issues = options["issues"];
+        this.resort();
+        this.populate();
+    }
+
+    prioritize_key(key) {
+        let index = this.current_order.indexOf(key)
+        if (index == -1) {
+            return;
+        }
+        if (index == 0) {
+            if (this.direction_map[key] == 1) {
+                this.direction_map[key] = -1;
+            } else {
+                this.direction_map[key] = 1;
+            }
+        } else {
+            this.current_order.splice(index, 1)
+            this.current_order.unshift(key)
+        }
+    }
+
+    resort() {
+        let that = this;
+        this.issues.sort(function(a, b) {
+            for (let i = 0; i < that.current_order.length; i++) {
+                let key = that.current_order[i];
+                if (a[key] > b[key]) {
+                    return that.direction_map[key];
+                } else if (a[key] < b[key]) {
+                    return that.direction_map[key] * -1;
+                }
+            }
+            return 0;
+        });
+    }
+
+    clear() {
+        let child_nodes_count = this.element.childNodes.length;
+        for (let i = 0; i < child_nodes_count; i++) {
+            this.element.childNodes[0].remove();
+        }
+    }
+
+    populate() {
+        let table_header_row = crel("tr",
+            crel("th", { "data-key": "id" }, "#"),
+            crel("th", { "data-key": "title" }, "Issue"),
+            crel("th", { "data-key": "rating" }, "Urgency"),
+            crel("th", { "data-key": "state" }, "state")
+        );
+
+        let that = this;
+        for (let i = 0; i < table_header_row.childNodes.length; i++) {
+            let header = table_header_row.childNodes[i];
+            event_listen(header, "click", function() {
+                that.prioritize_key(header.dataset["key"]);
+                that.resort();
+                that.clear();
+                that.populate();
+            });
+        }
+
         let table = crel("table",
             { "class": "std-table" },
-            crel("thead",
-                crel("tr",
-                    crel("th", "#"),
-                    crel("th", "Issue"),
-                    crel("th", "Urgency"),
-                    crel("th", "State")
-                )
-            ),
+            crel("thead", table_header_row),
             crel("tbody")
         );
 
-        for (let i = 0; i < options["issues"].length; i++) {
-            let issue = options["issues"][i];
+        for (let i = 0; i < this.issues.length; i++) {
+            let issue = this.issues[i];
             let state = ""
             if (issue["state"] != null) {
                 state = ["", "open", "in progress", "cancelled", "resolved"][issue["state"]]
