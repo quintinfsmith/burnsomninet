@@ -663,7 +663,7 @@ def issues_controller(request, project):
             "title": title
         }),
         Tag("body",
-            wrappers.build_sitemap("issues", project),
+            wrappers.build_sitemap("git", project),
             Tag("div",
                 { "class": "content" },
                 body_content
@@ -795,7 +795,7 @@ def issue_controller(request, issue_id):
             "title": title
         }),
         Tag("body",
-            wrappers.build_sitemap("issues", issue.project),
+            wrappers.build_sitemap("git", issue.project),
             Tag("div",
                 { "class": "content" },
                 body_content
