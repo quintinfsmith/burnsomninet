@@ -644,7 +644,7 @@ def issues_controller(request, project):
     title = f"{project.title()} Issues"
 
     body_content = Tag("div",
-        Tag("div", f"Issue Tracker: {project.title()}"),
+        Tag("h2", f"Known Issues in {project.title()}"),
         Tag("div", {
             "data-json": json.dumps({
                 "project": project,
@@ -671,15 +671,15 @@ def issues_controller(request, project):
         )
     )
 
-
     return HttpResponse(repr(top), "text/html", status=status)
+
 
 def issue_controller(request, issue_id):
     status = 200
     accesslogmanager.log_access(request)
 
-    state_labels = ["", "open", "in progress", "cancelled", "resolved"]
-    urgency_labels = ["low", "pressing", "urgent", "feature"]
+    state_labels = ["cancelled", "open", "in progress", "resolved"]
+    urgency_labels = ["feature", "low", "pressing", "urgent"]
 
     try:
         issue = Issue(issue_id)
@@ -693,24 +693,33 @@ def issue_controller(request, issue_id):
         note_top_line = Tag("div",
             { "class": "top-line" },
             Tag("div",
-                { "class": "author" },
-                note.author
+                #Tag("div", { "class": "vh_mid" }),
+                #Tag("div",
+                #    { "class": "author" },
+                #    note.author
+                #)
             )
         )
 
-        if note.state != working_state and note.state != 0:
+        if note.state != working_state and note.state is not None:
             note_state_str = state_labels[note.state]
             note_top_line.append(
                 Tag("div",
-                    { "class": f"status-update status s{note.state}" },
-                    f"{note_state_str}"
+                    Tag("div", { "class": "vh_mid" }),
+                    Tag("div",
+                        { "class": f"status-update status s{note.state}" },
+                        f"{note_state_str}"
+                    )
                 )
             )
 
         note_top_line.append(
             Tag("div",
-                { "class": "date" },
-                str(note.timestamp)
+                Tag("div", { "class": "vh_mid" }),
+                Tag("div",
+                    { "class": "date" },
+                    str(note.timestamp)
+                )
             )
         )
 
@@ -730,30 +739,35 @@ def issue_controller(request, issue_id):
             imgs_line = Tag("div", {
                 "class": "issue_note_imgs"
             })
+
+
             for f in os.listdir(note_img_path):
                 imgs_line.append(
-                    Tag("div",
-                        Tag("img", {
+                    Tag("div", {
+                        "class": "widget-slug slug-ViewableImg",
+                        "data-class": "ViewableImg",
+                        "data-remote": "main",
+                        "data-json": json.dumps({
                             "src": f"/content/issues/{issue.project}/{note.id}/{f}"
                         })
-                    )
+                    })
                 )
+
             note_entry.append(imgs_line)
 
         notes_table.append(note_entry)
-
 
     issue_state_label = ""
     issue_state = issue.get_state()
     if issue_state is not None:
         issue_state_label = state_labels[issue_state]
     else:
-        issue_state = 0
+        issue_state = 1
 
     body_content = Tag("div",
         { "class": "issue-body" },
 
-        Tag("h1",
+        Tag("h2",
             { "class": "title" },
             issue.title.title()
         ),

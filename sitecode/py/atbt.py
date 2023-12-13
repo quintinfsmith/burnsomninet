@@ -37,10 +37,10 @@ class MariaObj:
         MariaObj._disconnect()
 
 class Issue(MariaObj):
-    LOW = 0 # Will fix eventually
-    PRESSING = 1 # Will be fixed next release
-    URGENT = 2 # Will release fix ASAP
-    FEATURE = 3
+    FEATURE = 0
+    LOW = 1 # Will fix eventually
+    PRESSING = 2 # Will be fixed next release
+    URGENT = 3 # Will release fix ASAP
     class NoSuchIssueException(Exception):
         """..."""
 
@@ -96,7 +96,7 @@ class Issue(MariaObj):
     def get_state(self):
         output = None
         for note in self.notes:
-            if note.state != 0:
+            if note.state is not None:
                 output = note.state
         return output
 
@@ -106,22 +106,27 @@ class Issue(MariaObj):
         cursor.execute(query, (issue_id, issue.id))
         self.disconnect()
 
-    def add_note(self, author, note, new_state):
+    def add_note(self, author, note, new_state=None):
         issue_note = IssueNote.new(self.id, author, new_state)
         issue_note.add_revision(note)
 
 class IssueNote(MariaObj):
+    CANCELLED = 0
     OPEN = 1
     IN_PROGRESS = 2
-    CANCELLED = 3
-    RESOLVED = 4
+    RESOLVED = 3
 
     @staticmethod
-    def new(issue_id, author, state = 0):
+    def new(issue_id, author, state = None):
         cursor = MariaObj._connect()
 
-        query = "INSERT INTO issue_note (issue_id, author, state) VALUES (?, ?, ?);"
-        cursor.execute(query, (issue_id, author, state))
+        if state is None:
+            query = "INSERT INTO issue_note (issue_id, author) VALUES (?, ?);"
+            cursor.execute(query, (issue_id, author))
+        else:
+            query = "INSERT INTO issue_note (issue_id, author, state) VALUES (?, ?, ?);"
+            cursor.execute(query, (issue_id, author, state))
+
         MariaObj.connection.commit()
 
         note_id = cursor.lastrowid
@@ -206,7 +211,7 @@ class Tracker(MariaObj):
             if issue_id not in issue_ids:
                 issue_ids[issue_id] = 0
 
-            if state > 0:
+            if state is not None:
                 issue_ids[issue_id] = state
 
         self.disconnect()
@@ -225,7 +230,7 @@ class Tracker(MariaObj):
         note.add_revision(description)
         return issue
 
-    def add_issue_note(self, issue_id, note, state=0):
+    def add_issue_note(self, issue_id, note, state=None):
         issue = Issue(issue_id)
         issue_note = issue.add_note(self.email, note, state)
 
@@ -270,7 +275,7 @@ if __name__ == "__main__":
     elif args[0].lower() == "new":
         issue = tracker.new_issue(
             title = args[1],
-            rating = ["LOW", "PRESSING","URGENT", "FEATURE"].index(args[2].upper()),
+            rating = ["FEATURE", "LOW", "PRESSING","URGENT"].index(args[2].upper()),
             state = 1,
             description = args[3]
         )
@@ -284,8 +289,10 @@ if __name__ == "__main__":
     elif args[0].lower() == "note":
         state = 0
         if len(args) >= 4:
-            state =  ["", "OPEN", "IN_PROGRESS", "CANCELLED", "RESOLVED"].index(args[3].upper())
-        tracker.add_issue_note(int(args[1]), args[2], state)
+            state =  ["CANCELLED", "OPEN", "IN_PROGRESS", "RESOLVED"].index(args[3].upper())
+            tracker.add_issue_note(int(args[1]), args[2], state)
+        else:
+            tracker.add_issue_note(int(args[1]), args[2], state)
 
     elif args[0].lower() == "resolve":
         if len(args) < 3:

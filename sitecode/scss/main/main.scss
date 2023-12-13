@@ -82,25 +82,25 @@
     --col_diagrams_highlight: #EEAA00;
     --col_diagrams_numbers: #EEAA00;
 
-    --col_issue_status1: #000000;
-    --col_issue_status2: #000000;
-    --col_issue_status3: #000000;
-    --col_issue_status4: #000000;
+    --col_issue_status0: #1d1d1d;
+    --col_issue_status1: #081021;
+    --col_issue_status2: #005481;
+    --col_issue_status3: #66aa00;
 
-    --col_issue_rating0: #FFFF00;
+    --col_issue_rating0: #005481;
     --col_issue_rating1: #AAEE00;
-    --col_issue_rating2: #AA0000;
-    --col_issue_rating3: #00AA00;
+    --col_issue_rating2: #ffac00;
+    --col_issue_rating3: #AA0000;
 
-    --col_issue_status1_fg: #FFFFFF;
-    --col_issue_status2_fg: #FFFFFF;
-    --col_issue_status3_fg: #FFFFFF;
-    --col_issue_status4_fg: #FFFFFF;
+    --col_issue_status0_fg: rgba(255,255,255,.7);
+    --col_issue_status1_fg: rgba(255,255,255,.7);
+    --col_issue_status2_fg: rgba(255,255,255,.7);
+    --col_issue_status3_fg: rgba(0,0,0,.7);
 
-    --col_issue_rating0_fg: #000000;
-    --col_issue_rating1_fg: #000000;
-    --col_issue_rating2_fg: #FFFFFF;
-    --col_issue_rating3_fg: #000000;
+    --col_issue_rating0_fg: rgba(255, 255, 255, .7);
+    --col_issue_rating1_fg: rgba(0, 0, 0, .7);
+    --col_issue_rating2_fg: rgba(0, 0, 0, .7);
+    --col_issue_rating3_fg: rgba(255, 255, 255, .7);
 }
 
 @media (prefers-color-scheme: light) {
@@ -886,6 +886,9 @@ body {
                 }
 
                 > tr {
+                    > td {
+                        white-space: nowrap;
+                    }
                     > td.description {
                         max-width: calc(30vw - 2em);
                         text-overflow: ellipsis;
@@ -1177,18 +1180,32 @@ div.slug-NumberedDiagram {
 
 div.slug-IssuesTable {
     width: 100%;
+    .status,
+    .rating {
+        text-align: center;
+        padding: .25em .5em;
+    }
+
     > .std-table {
         > thead {
             > tr {
-                > th:last-child,
-                > th:first-child {
-                    width: 2em;
+                > th {
+                    cursor: pointer;
                 }
+                > th:last-child,
+                > th:first-child,
+                > th:nth-child(3) {
+                    width: 1em;
+                }
+
                 > th:not(:last-child) {
                     text-align: left;
+                    border-right: solid 1px var(--col_fore);
                 }
-                > th:last-child {
-                    text-align: right;
+                > th:first-child,
+                > th:nth-child(3),
+                > th:nth-child(4) {
+                    text-align: center;
                 }
             }
         }
@@ -1198,11 +1215,59 @@ div.slug-IssuesTable {
                 > td {
                     padding: .5rem;
                 }
+                > td:nth-child(2) {
+                    max-width: 0;
+                    > span {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+                }
+                > td:first-child,
+                > td:nth-child(3) {
+                    text-align: center;
+                }
                 > td:last-child {
                     text-align: right;
                 }
             }
         }
+    }
+}
+
+.issue-body,
+.slug-IssuesTable {
+    .status.s0 {
+        color: var(--col_issue_status0_fg);
+        background-color: var(--col_issue_status0);
+    }
+    .status.s1 {
+        color: var(--col_issue_status1_fg);
+        background-color: var(--col_issue_status1);
+    }
+    .status.s2 {
+        color: var(--col_issue_status2_fg);
+        background-color: var(--col_issue_status2);
+    }
+    .status.s3 {
+        color: var(--col_issue_status3_fg);
+        background-color: var(--col_issue_status3);
+    }
+    .rating.r1 {
+        color: var(--col_issue_rating1_fg);
+        background-color: var(--col_issue_rating1);
+    }
+    .rating.r2 {
+        color: var(--col_issue_rating2_fg);
+        background-color: var(--col_issue_rating2);
+    }
+    .rating.r3 {
+        color: var(--col_issue_rating3_fg);
+        background-color: var(--col_issue_rating3);
+    }
+    .rating.r0 {
+        color: var(--col_issue_rating0_fg);
+        background-color: var(--col_issue_rating0);
     }
 }
 
@@ -1218,42 +1283,14 @@ div.slug-IssuesTable {
         padding: .25em .5em;
     }
 
-    .status.s0 { }
-    .status.s1 {
-        color: var(--col_issue_status1_fg);
-        background-color: var(--col_issue_status1);
-    }
-    .status.s2 {
-        color: var(--col_issue_status2_fg);
-        background-color: var(--col_issue_status2);
-    }
-    .status.s3 {
-        color: var(--col_issue_status3_fg);
-        background-color: var(--col_issue_status3);
-    }
-    .status.s4 {
-        color: var(--col_issue_status4_fg);
-        background-color: var(--col_issue_status4);
-    }
-    .rating.r1 {
-        color: var(--col_issue_rating1_fg);
-        background-color: var(--col_issue_rating1);
-    }
-    .rating.r2 {
-        color: var(--col_issue_rating2_fg);
-        background-color: var(--col_issue_rating2);
-    }
-    .rating.r3 {
-        color: var(--col_issue_rating3_fg);
-        background-color: var(--col_issue_rating3);
-    }
-    .rating.r4 {
-        color: var(--col_issue_rating4_fg);
-        background-color: var(--col_issue_rating4);
-    }
-
     .notes-table {
         margin-top: 1em;
+        .status-update {
+            display:inline-block;
+        }
+        .author {
+            padding-right: .5em;
+        }
         > div:nth-child(2n + 1) {
             background-color: rgba(0,0,0,.1);
         }
@@ -1273,9 +1310,30 @@ div.slug-IssuesTable {
                     text-align: right;
                 }
             }
-            > div:last-child {
-                padding: 1em;
-                font-weight: 100;
+            > div.note-description {
+                padding: .5em;
+                font-weight: 300;
+            }
+        }
+    }
+
+    .issue_note_imgs {
+        display: flex;
+        flex-wrap: wrap;
+        padding-top: .5em; 
+        padding-left: .5em; 
+        border-top: 1px solid var(--col_fore);
+        > div {
+            flex: 1 1 auto;
+            height: 8em;
+            padding-bottom: .5em;
+            padding-right: .5em;
+            text-align: center;
+            > img {
+                display: inline-block;
+                border: 1px solid var(--col_fore);
+                max-height: 100%;
+                max-width: 100%;
             }
         }
     }
@@ -1313,9 +1371,24 @@ div.slug-IssuesTable {
             > td {
                 border-top: solid 1px var(--col_files_line);
                 white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
                 padding: .5rem 0;
             }
         }
     }
 }
 
+.img_overlay {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    background-color: rgba(0,0,0,.5);
+    text-align: center;
+    z-index: 2;
+    > img {
+        box-shadow: 1em 1em 0em 0em #000000;
+        max-height: calc(100% - 3em);
+        max-width: calc(100% - 3em);
+    }
+}

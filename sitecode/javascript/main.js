@@ -150,6 +150,7 @@ function widget_slug_callback() {
         let slug = slug_data[i];
         // FIXME: I don't like this, i just don't have a better idea ATM.
         let classref = eval(slug.classname);
+        console.log("!!!!! " + slug.classname)
         let new_obj = new classref(slug.element, slug.kwargs);
     }
 }
@@ -479,7 +480,7 @@ class IssuesTable extends SlugWidget {
             crel("th", { "data-key": "id" }, "#"),
             crel("th", { "data-key": "title" }, "Issue"),
             crel("th", { "data-key": "rating" }, "Urgency"),
-            crel("th", { "data-key": "state" }, "state")
+            crel("th", { "data-key": "state" }, "Status")
         );
 
         let that = this;
@@ -503,14 +504,24 @@ class IssuesTable extends SlugWidget {
             let issue = this.issues[i];
             let state = ""
             if (issue["state"] != null) {
-                state = ["", "open", "in progress", "cancelled", "resolved"][issue["state"]]
+                state = ["cancelled", "open", "in progress", "resolved"][issue["state"]]
             }
-            let rating = ["low", "pressing", "urgent", "feature"][issue["rating"]]
+            let rating = ["feature", "low", "pressing", "urgent"][issue["rating"]]
             let row = crel("tr",
                 crel("td", issue["id"]),
-                crel("td", issue["title"]),
-                crel("td", rating),
-                crel("td", state)
+                crel("td", crel("span", issue["title"])),
+                crel("td",
+                    crel("div",
+                        { "class": "rating r" + issue["rating"] },
+                        rating
+                    )
+                ),
+                crel("td",
+                    crel("div",
+                        { "class": "status s" + issue["state"] },
+                        state
+                    )
+                )
             );
             event_listen(row, "click", function() {
                 window.location.href = "/issue/" + issue["id"]
@@ -518,5 +529,33 @@ class IssuesTable extends SlugWidget {
             table.lastChild.appendChild(row);
         }
         this.element.appendChild(table)
+    }
+}
+
+class ViewableImg extends SlugWidget {
+    constructor(element, options) {
+        super(element, options);
+        this.element_overlay = crel("div",
+            {
+                "class": "img_overlay",
+                "data": { "img": this }
+            },
+            crel("div", { "class": "vh_mid" }),
+            crel("img", { "src": this.options.src })
+        );
+
+
+        this.img = crel("img", { "src": this.options.src })
+        this.element.appendChild(this.img)
+
+
+        let that = this;
+        event_listen(this.img, "click", function() {
+            document.body.appendChild(that.element_overlay);
+        });
+
+        event_listen(this.element_overlay, "click", function() {
+            that.element_overlay.remove();
+        });
     }
 }
