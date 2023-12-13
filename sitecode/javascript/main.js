@@ -150,7 +150,6 @@ function widget_slug_callback() {
         let slug = slug_data[i];
         // FIXME: I don't like this, i just don't have a better idea ATM.
         let classref = eval(slug.classname);
-        console.log("!!!!! " + slug.classname)
         let new_obj = new classref(slug.element, slug.kwargs);
     }
 }
@@ -281,7 +280,6 @@ class RelativeVagueDate extends SlugWidget {
 
 window.onload = function() {
     load_widget_slugs();
-    console.log("Loading widget slugs")
 }
 
 class HamburgerMenu extends SlugWidget {
