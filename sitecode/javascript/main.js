@@ -248,6 +248,7 @@ class RelativeVagueDate extends SlugWidget {
     constructor(element, options) {
         super(element, options);
         this.element.innerText = this.convert_timestamp(options.date);
+        this.element.title = (new Date(options.date)).toISOString()
     }
     convert_timestamp(timestamp) {
         let then = new Date(timestamp);
