@@ -716,10 +716,14 @@ def issue_controller(request, issue_id):
         note_top_line.append(
             Tag("div",
                 Tag("div", { "class": "vh_mid" }),
-                Tag("div",
-                    { "class": "date" },
-                    str(note.timestamp)
-                )
+                Tag("div", {
+                    "data-class": "RelativeVagueDate",
+                    "data-json": json.dumps({
+                        "date": note.timestamp.timestamp() * 1000
+                    }),
+                    "data-remote": "main",
+                    "class": "date widget-slug"
+                })
             )
         )
 
