@@ -248,7 +248,33 @@ class RelativeVagueDate extends SlugWidget {
     constructor(element, options) {
         super(element, options);
         this.element.innerText = this.convert_timestamp(options.date);
-        this.element.title = (new Date(options.date)).toISOString()
+        let date = new Date(options.date);
+
+        let values = [
+            date.getMonth() + 1,
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes()
+        ];
+
+        let val_strings = [];
+        for (let i = 0; i < values.length; i++) {
+            let vstr = values[i].toString();
+
+            if (values[i] < 10) {
+                vstr = "0" + vstr;
+            }
+
+            val_strings.push(vstr);
+        }
+
+
+        let time_string = date.getFullYear() +
+            "-" + val_strings[0] +
+            "-" + val_strings[1] +
+            " " + val_strings[2] +
+            ":" + val_strings[3];
+        this.element.title = time_string
     }
     convert_timestamp(timestamp) {
         let then = new Date(timestamp);
