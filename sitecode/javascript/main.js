@@ -442,10 +442,20 @@ class NumberedDiagram extends SlugWidget {
 class IssuesTable extends SlugWidget {
     constructor(element, options) {
         super(element, options);
+        /*
+            I didn't think enough about the integer of states in the mysql table. So instead of changing the code/data,
+            We'll just specify a new order here since I don't think it matters anywhere else.
+        */
+        this.state_reorder = {
+            0: 3, // Cancelled
+            1: 1, // Open
+            2: 0, // In Progress
+            3: 2  // Resolved
+        }
         this.current_order = [
+            "state",
             "rating",
             "id",
-            "state",
             "title"
         ];
 
@@ -483,10 +493,20 @@ class IssuesTable extends SlugWidget {
         this.issues.sort(function(a, b) {
             for (let i = 0; i < that.current_order.length; i++) {
                 let key = that.current_order[i];
-                if (a[key] > b[key]) {
-                    return that.direction_map[key];
-                } else if (a[key] < b[key]) {
-                    return that.direction_map[key] * -1;
+                if (key != "state") {
+                    if (a[key] > b[key]) {
+                        return that.direction_map[key];
+                    } else if (a[key] < b[key]) {
+                        return that.direction_map[key] * -1;
+                    }
+                } else {
+                    let compare_a = that.state_reorder[a[key]];
+                    let compare_b = that.state_reorder[b[key]];
+                    if (compare_a > compare_b) {
+                        return that.direction_map[key];
+                    } else if (compare_a < compare_b) {
+                        return that.direction_map[key] * -1;
+                    }
                 }
             }
             return 0;
