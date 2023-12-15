@@ -292,7 +292,7 @@ if __name__ == "__main__":
             state =  ["CANCELLED", "OPEN", "IN_PROGRESS", "RESOLVED"].index(args[3].upper())
             tracker.add_issue_note(int(args[1]), args[2], state)
         else:
-            tracker.add_issue_note(int(args[1]), args[2], state)
+            tracker.add_issue_note(int(args[1]), args[2])
 
     elif args[0].lower() == "resolve":
         if len(args) < 3:
