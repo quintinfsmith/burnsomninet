@@ -656,7 +656,6 @@ def issues_controller(request, project):
         })
     )
 
-
     top = Tag("html",
         wrappers.build_head(**{
             "description": f"Issues logged in {project.title()}",

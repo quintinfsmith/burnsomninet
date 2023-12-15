@@ -194,7 +194,7 @@ class Tracker(MariaObj):
         return output
 
     def get_resolved(self):
-        return self.get_by_state(self.RESOLVED)
+        return self.get_by_state(IssueNote.RESOLVED)
 
     def get_open(self):
         return self.get_by_state(IssueNote.OPEN, IssueNote.IN_PROGRESS)
