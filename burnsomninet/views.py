@@ -629,7 +629,7 @@ def issues_controller(request, project):
     status = 200
 
     accesslogmanager.log_access(request)
-    if project not in os.listdir(GIT_PATH):
+    if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
 
     from_date = datetime(year=2022, month=1, day=1)
@@ -684,6 +684,9 @@ def issue_controller(request, issue_id):
     try:
         issue = Issue(issue_id)
     except Issue.NoSuchIssueException:
+        raise Http404()
+    if issue.project not in os.listdir(GIT_PATH) \
+            or not os.path.exists(f"{GIT_PATH}/{issue.project}/git-daemon-export-ok"):
         raise Http404()
 
     notes_table = Tag("div", { "class": "notes-table" })
