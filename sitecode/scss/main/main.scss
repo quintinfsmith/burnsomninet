@@ -334,23 +334,6 @@ body {
     background-color: var(--col_sitemap);
     box-shadow: var(--sitemap_shadow);
     > div {
-        > .logo {
-            > a {
-                height: calc(100% - 2em);
-                text-align: center;
-                svg {
-                    display: block;
-                    width: 100%;
-                    height: 100%;
-                    path {
-                        stroke: none;
-                        fill: var(--col_logo_off);
-                    }
-
-                }
-            }
-        }
-
         > .slug-HamburgerMenu {
             text-align: right;
             .custom-select {
@@ -418,43 +401,20 @@ body {
     }
 }
 
-.git.sitemap > div > .logo {
-    svg {
-        path.frame,
-        path.tire {
-            opacity: 1;
-            fill: var(--col_logo_inner);
-            stroke: var(--col_logo_outer);
-            stroke-width: 20;
-        }
-    }
-
-}
-.software.sitemap > div > .logo {
-    svg {
-        path.frame,
-        path.tire {
-            opacity: 1;
-            fill: var(--col_logo_inner);
-            stroke: var(--col_logo_outer);
-            stroke-width: 20;
-        }
+.sitemap.home > div > .non-logo {
+    a {
+        opacity: 0;
     }
 }
 
-.unicycling.sitemap > div > .logo > a {
+.sitemap:not(.home) > div > .non-logo {
     svg {
-        path.saddle,
-        path.tire,
-        path.frame {
-            opacity: 1;
+        path {
             fill: var(--col_logo_inner);
             stroke: var(--col_logo_outer);
-            stroke-width: 20;
         }
     }
 }
-
 
 .content {
     padding: 1em;

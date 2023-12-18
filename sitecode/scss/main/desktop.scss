@@ -17,20 +17,12 @@ body {
     > div {
         display: flex;
         flex-direction: column;
-        .logo {
-            height: 8em;
-        }
-
-        > div:first-child {
+        .non-logo {
             flex: 0 1 auto;
-            > div {
-                display: none;
+            svg {
+                height: 4em;
+                width: 100%;
             }
-            a {
-                display: block;
-                padding: 1em 30%;
-            }
-
         }
 
         > div:last-child {

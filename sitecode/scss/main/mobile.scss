@@ -13,23 +13,19 @@ body {
         display: flex;
         flex-wrap: wrap;
         border-bottom: 1px solid var(--col_dark);
-        > .logo {
-            display: flex;
-            flex: 0 1 auto;
-            flex-direction: column;
-            > * {
-                flex: 1 1 auto;
-            }
-            > a {
-                width: 4em;
-                max-height: 4em;
+        > .non-logo {
+            height: 4em;
+            flex: 1 1 auto;
+            a {
+                display: none;
+                height: 100%;
             }
         }
         .slug-HamburgerMenu {
             .custom-select {
                 box-shadow: none;
             }
-            flex: 1 1 auto;
+            flex: 0 1 auto;
             .hamburger-wrapper {
                 text-align: right;
                 .hamburger {

@@ -64,22 +64,23 @@ def build_sitemap(*active_path):
     classname = "sitemap"
     if active_path:
         classname += " " + active_path[0]
+    else:
+        classname += " home"
 
     sitemap = Tag("div", { "class": classname })
     sitemap_sub = Tag("div")
     sitemap.append(sitemap_sub)
     svg_content = ""
-    with open(f"{STATIC_PATH}/logo.svg", "r") as fp:
+    with open(f"{STATIC_PATH}/nonlogo.svg", "r") as fp:
         svg_content = fp.read()
+
     sitemap_sub.append(
         Tag("div",
-            { "class": "logo" },
-            Tag("div"),
+            { "class": "non-logo" },
             Tag("a",
                 { "href": "/" },
                 RawHTML(svg_content)
-            ),
-            Tag("div")
+            )
         )
     )
 
