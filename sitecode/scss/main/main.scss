@@ -410,8 +410,8 @@ body {
 .sitemap:not(.home) > div > .non-logo {
     svg {
         path {
-            fill: var(--col_logo_inner);
-            stroke: var(--col_logo_outer);
+            fill: var(--col_sitemap_text);
+            stroke: none;
         }
     }
 }

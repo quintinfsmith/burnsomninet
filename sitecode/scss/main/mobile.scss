@@ -14,11 +14,15 @@ body {
         flex-wrap: wrap;
         border-bottom: 1px solid var(--col_dark);
         > .non-logo {
-            height: 4em;
+            height: 3em;
+            padding: .5em 1em;
             flex: 1 1 auto;
             a {
-                display: none;
-                height: 100%;
+                display:inline-block;
+                svg {
+                    height: 3em;
+                    width: 3em;
+                }
             }
         }
         .slug-HamburgerMenu {
