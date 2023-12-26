@@ -325,7 +325,7 @@ def index(request):
     repositories = working_repositories
 
     all_commits = []
-    from_date = datetime.now() - relativedelta(years=1)
+    from_date = datetime.now() - relativedelta(years=1, days=1)
     for project in repositories:
         cache_key = f"INDEX_GIT_{project}"
         needs_update = check_cache(
