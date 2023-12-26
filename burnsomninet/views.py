@@ -201,7 +201,8 @@ def manual_controller(request, manual):
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
-            "title": title
+            "title": title,
+            "favicon": manual
         }),
         Tag("body",
             wrappers.build_sitemap('manual', manual),
@@ -505,7 +506,10 @@ def git_controller(request, project, *project_path):
                 body = wrappers.build_git_commit_view(project, branch, commit)
 
             content = Tag("html",
-                wrappers.build_head(title=f"{project.capitalize()} overview"),
+                wrappers.build_head(
+                    title=f"{project.capitalize()} overview",
+                    favicon=project
+                ),
                 Tag("body",
                     wrappers.build_sitemap('git', project),
                     Tag("div",
