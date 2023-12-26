@@ -13,8 +13,7 @@ from sitecode.py.gitmanip import Project as GitProject
 from sitecode.py.gitmanip import FileNotFound, InvalidBranch
 from burnsomninet import wrappers
 from sitecode.py import api, accesslogmanager
-from datetime import datetime
-from dateutil.relativedelta import relativedelta
+from datetime import datetime, timedelta
 from urllib.parse import urlencode, quote_plus
 import mimetypes
 from sitecode.py import automanual
@@ -325,7 +324,8 @@ def index(request):
     repositories = working_repositories
 
     all_commits = []
-    from_date = datetime.now() - relativedelta(years=1, days=1)
+    now = datetime.now()
+    from_date = datetime(year=now.year - 1, month=now.month, day=now.day) - timedelta(days=1) 
     for project in repositories:
         cache_key = f"INDEX_GIT_{project}"
         needs_update = check_cache(
