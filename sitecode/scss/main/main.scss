@@ -540,6 +540,13 @@ body {
             }
         }
     }
+
+    .slug-GitActivityWidget:empty {
+        display: inline-block !important;
+        height: 90vh !important;
+        width: 150px !important;
+        background-color: var(--col_mid) !important;
+    }
 }
 
 .media {
@@ -919,7 +926,18 @@ body {
     .readme {
         text-align: left;
     }
+    .slug-GitActivityWidget:empty {
+        height: 9em;
+        background-color: var(--col_mid);
+    }
+    .slug-CloneButtonWidget:empty {
+        height: 1.6em;
+        background-color: var(--col_mid);
+        display:inline-block;
+        width: 16em;
+    }
 }
+
 
 .git-fileoverview {
     display: flex;
