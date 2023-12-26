@@ -506,7 +506,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
     if show_extra:
         now = datetime.now()
         first_commit_date = branch.get_first_commit_date()
-        from_date = now - relativedelta(years=1, hours=now.hour, minutes=now.minute)
+        from_date = datetime(now.year - 1, now.month, now.day)
         #from_date = max(first_commit_date, from_date)
 
         body_content.append(
@@ -521,7 +521,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     'git', 'commits',
                     project=project_name,
                     branch=branch_name,
-                    datefrom=from_date.timestamp()
+                    datefrom=(from_date - timedelta(days=1)).timestamp()
                 )
             )
         )

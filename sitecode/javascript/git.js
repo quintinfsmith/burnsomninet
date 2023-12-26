@@ -22,7 +22,6 @@ class GitActivityWidget extends SlugWidget {
         let day_one;
         if (options.datefrom) { // Range to show
             day_one = new Date(options.datefrom);
-            day_one = new Date(day_one.getFullYear(), day_one.getMonth(), day_one.getDate());
         } else {
             let now = new Date();
             day_one = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
@@ -31,7 +30,6 @@ class GitActivityWidget extends SlugWidget {
         let first_date;
         if (options.datefirst) { // Date of first commit
             first_date = new Date(options.datefirst);
-            first_date = new Date(first_date.getFullYear(), first_date.getMonth(), first_date.getDate())
         } else {
             first_date = null;
         }
@@ -60,7 +58,8 @@ class GitActivityWidget extends SlugWidget {
         } else {
             let now = new Date();
             let today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-            let then_stamp = ((today.getTime() - (1000 * 60 * 60 * 24 * 52 * 7)) / 1000);
+            let then = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+            let then_stamp = then.getTime();
 
             let url = "/api/git/commits" +
                 "?project=" + options.project +
@@ -115,7 +114,11 @@ class GitActivityWidget extends SlugWidget {
         let i = 0
         while (true) {
             let week_index = Math.floor((i + day_offset - this.WEEKDAY_OFFSET) / 7) + index_bump;
-            let working_date = new Date(from_date.getFullYear(), from_date.getMonth(), from_date.getDate() + i);
+            let working_date = new Date(
+                from_date.getFullYear(),
+                from_date.getMonth(),
+                from_date.getDate() + i
+            );
 
             if (working_date > new Date()) {
                 break
@@ -237,7 +240,6 @@ class GitActivityWidget extends SlugWidget {
         let rows = [];
         for (let i = 0; i < 7; i++) {
             let row = crel('tr');
-            //let row = crel('tr', crel('td', this.WEEKDAYS[(i + this.WEEKDAY_OFFSET) % 7]));
             year_table.appendChild(row);
             rows.push(row);
         }
