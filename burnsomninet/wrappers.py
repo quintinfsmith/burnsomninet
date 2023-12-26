@@ -23,6 +23,26 @@ VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
 
+def build_favicon_links(**kwargs):
+    sizes = [16, 32, 48, 167, 180, 192]
+    output = []
+
+    favicon = kwargs.get("favicon", "main")
+    if not os.path.isdir(f"{STATIC_PATH}/favicons/{favicon}"):
+        favicon = "main"
+
+    for size in sizes:
+        output.append(
+            Tag("link", {
+                "rel": "icon",
+                "type": "image/png",
+                "sizes": f"{size}x{size}",
+                "href": f"/content/favicons/{favicon}/favicon-{size}x{size}.png"
+            })
+        )
+
+    return output
+
 def build_head(**kwargs):
     title = kwargs.get("title", '')
 
@@ -42,6 +62,7 @@ def build_head(**kwargs):
             "src": "/content/javascript/crel.js",
             "type": "text/javascript"
         }),
+        *build_favicon_links(**kwargs),
         Tag("script", {
             "src": f"/javascript/main.js?commit={COMMIT_ID}",
             "type": "text/javascript"
@@ -71,12 +92,12 @@ def build_sitemap(*active_path):
     sitemap_sub = Tag("div")
     sitemap.append(sitemap_sub)
     svg_content = ""
-    with open(f"{STATIC_PATH}/nonlogo.svg", "r") as fp:
+    with open(f"{STATIC_PATH}/logo.svg", "r") as fp:
         svg_content = fp.read()
 
     sitemap_sub.append(
         Tag("div",
-            { "class": "non-logo" },
+            { "class": "logo" },
             Tag("a",
                 { "href": "/" },
                 RawHTML(svg_content)

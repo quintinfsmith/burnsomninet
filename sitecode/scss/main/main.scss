@@ -401,17 +401,54 @@ body {
     }
 }
 
-.sitemap.home > div > .non-logo {
-    a {
-        opacity: 0;
+.sitemap.home > div > .logo {
+    svg {
+        path {
+            fill: var(--col_back);
+            stroke: none;
+        }
     }
 }
 
-.sitemap:not(.home) > div > .non-logo {
+.sitemap:not(.home) > div > .logo {
     svg {
         path {
-            fill: var(--col_sitemap_text);
+            fill: var(--col_back);
+            stroke: var(--col_main_sub);
+        }
+    }
+}
+.sitemap.git > div > .logo {
+    svg {
+        path.tire,
+        path.frame {
+            fill: var(--col_main);
+            stroke: var(--col_main_sub);
+        }
+        path {
+            fill: var(--col_back);
             stroke: none;
+        }
+    }
+}
+.sitemap.manual > div > .logo {
+    svg {
+        path.tire,
+        path.frame {
+            fill: var(--col_back);
+            stroke: var(--col_main_sub);
+        }
+        path {
+            fill: var(--col_back);
+            stroke: none;
+        }
+    }
+}
+.sitemap.unicycling > div > .logo {
+    svg {
+        path {
+            fill: var(--col_main);
+            stroke: var(--col_main_sub);
         }
     }
 }

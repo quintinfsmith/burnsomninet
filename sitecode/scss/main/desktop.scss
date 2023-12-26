@@ -17,13 +17,16 @@ body {
     > div {
         display: flex;
         flex-direction: column;
-        .non-logo {
+        .logo {
             flex: 0 1 auto;
             height: 5em;
             padding: 1em;
             svg {
                 height: 100%;
                 width: 100%;
+                path {
+                    stroke-width: 25;
+                }
             }
         }
 
