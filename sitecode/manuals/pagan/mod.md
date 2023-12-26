@@ -19,5 +19,3 @@
 
 @$settings
 
-@$planned
-
