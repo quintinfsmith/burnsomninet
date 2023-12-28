@@ -263,6 +263,8 @@ if __name__ == "__main__":
                 print(f"{issue.id}: {issue.title}")
             elif issue.get_state() == IssueNote.IN_PROGRESS:
                 print(f"\033[03;32m{issue.id}: {issue.title}\033[0m")
+            else:
+                continue
 
             for note in issue.notes:
                 print(f"\033[03;35m   : {note.get_text()}\033[0m")
