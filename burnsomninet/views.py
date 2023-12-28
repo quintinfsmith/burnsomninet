@@ -663,7 +663,8 @@ def issues_controller(request, project):
     top = Tag("html",
         wrappers.build_head(**{
             "description": f"Issues logged in {project.title()}",
-            "title": title
+            "title": title,
+            "favicon": project
         }),
         Tag("body",
             wrappers.build_sitemap("git", project),
@@ -802,7 +803,8 @@ def issue_controller(request, issue_id):
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
-            "title": title
+            "title": title,
+            "favicon": issue.project
         }),
         Tag("body",
             wrappers.build_sitemap("git", issue.project),
