@@ -306,3 +306,9 @@ if __name__ == "__main__":
         else:
             tracker.add_issue_note(int(args[1]), args[2], IssueNote.IN_PROGRESS)
 
+    elif args[0].lower() == "cancel":
+        if len(args) < 3:
+            tracker.add_issue_note(int(args[1]), "", IssueNote.CANCELLED)
+        else:
+            tracker.add_issue_note(int(args[1]), args[2], IssueNote.CANCELLED)
+
