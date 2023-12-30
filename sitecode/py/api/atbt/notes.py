@@ -35,9 +35,9 @@ def process_request(**kwargs):
             "timestamp": note.timestamp,
             "issue_id": note.issue
         })
-        count += 1
-        if count == limit:
+        if limit > 0 and count == limit:
             break
+        count += 1
 
     # -------------------------------------------- #
     return output

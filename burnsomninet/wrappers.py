@@ -681,7 +681,7 @@ def rss_issues(project):
     for result in results:
         issue_id = result["issue_id"]
         timestamp = result["timestamp"]
-        title = str(result["id"]) + ": " + result["issue_title"]
+        title = str(result["issue_id"]) + ": " + result["issue_title"]
         note_id = result["id"]
 
         if result["state_update"] is not None: 
