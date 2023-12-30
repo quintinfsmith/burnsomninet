@@ -664,6 +664,54 @@ def build_git_commit_view(project_name, branch_name, commit_id=None):
     branch.get_commit(commit_id)
     return Tag("div", f"commit/diff overview of {commit_id}")
 
+def datetime_to_rfc822(datetime_obj):
+    # KLUDGE: the serveris PDT, and rss needs the zone info
+    return datetime_obj.strftime("%a, %d %b %Y, %I:%M:%S PDT")
+
+def rss_issues(project):
+    from_date = datetime(year=2023, month=1, day=1)
+    results = api.handle(
+        'atbt', 'notes',
+        project=project,
+        limit=25
+    )
+
+    items = []
+    last_date = None
+    for result in results:
+        issue_id = result["id"]
+        timestamp = result["timestamp"]
+        items.append(
+            Tag("item",
+                Tag("title", result["issue_title"]),
+                Tag("link", f"https://burnsomni.net/issue/{issue_id}"),
+                Tag("description", result["note"]),
+                Tag("pubDate", datetime_to_rfc822(timestamp))
+            )
+        )
+
+        if last_date is None or last_date < result["timestamp"]:
+            last_date = result["timestamp"]
+
+    rss_channel = Tag("channel",
+        Tag("title", f"{project.title()} Issue Tracker"),
+        Tag("link", f"https://burnsomni.net/issues/{project}"),
+        Tag("description", f"{project.title()} Issue Tracker"),
+        Tag("language", "en-us"),
+        Tag("pubDate", datetime_to_rfc822(from_date)),
+        Tag("lastBuildDate", datetime_to_rfc822(last_date)),
+        Tag("generator", "burnsomni.net rss generator"),
+        Tag("webMaster", "smith.quintin@protonmail (Quintin Smith)"),
+        *items
+    )
+
+
+    return Tag("rss",
+        { "version": "2.0" },
+        rss_channel
+    )
+
+
 def log(msg, suffix=""):
     with open("/var/log/httpd/burnsomninet/log", "a") as fp:
         fp.write(msg + "\n")

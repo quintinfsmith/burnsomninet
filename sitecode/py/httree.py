@@ -12,14 +12,16 @@ class Node:
         return ""
 
 class Tag(Node):
-    self_closing = [ "link", "img" ]
+    self_closing = [ "img", "link" ]
     def __init__(self, tagname, *children):
         self.children = []
+        self.contains_text = False
         attributes = {}
         for child in children:
             if isinstance(child, dict):
                 attributes = child
             elif isinstance(child, str):
+                self.contains_text = True
                 self.children.append(Text(child))
             elif child:
                 self.children.append(child)
@@ -57,7 +59,7 @@ class Tag(Node):
             else:
                 output += " %s=\"%s\"" % (key, html.escape(str(value)))
 
-        if not self.name in self.self_closing:
+        if not self.name in self.self_closing or self.contains_text:
             output += ">"
 
             for child in self.children:

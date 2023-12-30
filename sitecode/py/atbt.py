@@ -234,6 +234,27 @@ class Tracker(MariaObj):
         issue = Issue(issue_id)
         issue_note = issue.add_note(self.email, note, state)
 
+    def get_latest_notes(self, limit=0):
+        cursor = MariaObj._connect()
+        if limit:
+            query = "SELECT DISTINCT issue_id, max(issue_note.ts), issue.title, issue_note_revision.note FROM issue_note INNER JOIN issue ON issue.id = issue_id AND issue.project = ? INNER JOIN issue_note_revision ON issue_note_revision.note_id = issue_note.id GROUP BY issue_id LIMIT ?"
+            cursor.execute(query, (self.project, limit))
+        else:
+            query = "SELECT DISTINCT issue_id, max(issue_note.ts), issue.title, issue_note_revision.note FROM issue_note INNER JOIN issue ON issue.id = issue_id AND issue.project = ? INNER JOIN issue_note_revision ON issue_note_revision.note_id = issue_note.id GROUP BY issue_id"
+            cursor.execute(query, (self.project,))
+
+        output = []
+        for vals in cursor.fetchall():
+            output.append({
+                "id": vals[0],
+                "timestamp": vals[1],
+                "issue_title": vals[2],
+                "note": vals[3]
+            })
+
+        MariaObj._disconnect()
+        return output
+
 
 if __name__ == "__main__":
     import sys
