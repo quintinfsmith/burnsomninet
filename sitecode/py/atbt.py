@@ -142,12 +142,13 @@ class IssueNote(MariaObj):
 
         cursor = self.connect()
 
-        query = "SELECT ts, author, state FROM issue_note WHERE `id` = ?;"
+        query = "SELECT ts, author, state, issue_id FROM issue_note WHERE `id` = ?;"
         cursor.execute(query, (note_id,))
         vals = cursor.fetchall()[0]
         self.timestamp = vals[0]
         self.author = vals[1]
         self.state = vals[2]
+        self.issue = vals[3]
 
         self.revisions = []
         query = "SELECT ts, note  FROM issue_note_revision WHERE `note_id` = ? ORDER BY issue_note_revision.ts;"
@@ -248,7 +249,7 @@ class Tracker(MariaObj):
             output.append({
                 "id": vals[0],
                 "timestamp": vals[1],
-                "issue_title": vals[2],
+                "issue_title": vals[3],
                 "note": vals[3]
             })
 
