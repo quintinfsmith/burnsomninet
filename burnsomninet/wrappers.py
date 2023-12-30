@@ -673,20 +673,27 @@ def rss_issues(project):
     results = api.handle(
         'atbt', 'notes',
         project=project,
-        limit=25
+        limit=15
     )
-
     items = []
     last_date = None
+    states = ["Cancelled", "Open", "In Progress", "Resolved"]
     for result in results:
-        issue_id = result["id"]
+        issue_id = result["issue_id"]
         timestamp = result["timestamp"]
+        title = str(result["id"]) + ": " + result["issue_title"]
+        note_id = result["id"]
+
+        if result["state_update"] is not None: 
+            title += " [" + states[result["state_update"]] + "]"
+
         items.append(
             Tag("item",
-                Tag("title", result["issue_title"]),
+                Tag("title", title),
                 Tag("link", f"https://burnsomni.net/issue/{issue_id}"),
                 Tag("description", result["note"]),
-                Tag("pubDate", datetime_to_rfc822(timestamp))
+                Tag("pubDate", datetime_to_rfc822(timestamp)),
+                Tag("guid", f"{note_id:016}")
             )
         )
 
@@ -700,7 +707,7 @@ def rss_issues(project):
         Tag("language", "en-us"),
         Tag("pubDate", datetime_to_rfc822(from_date)),
         Tag("lastBuildDate", datetime_to_rfc822(last_date)),
-        Tag("generator", "burnsomni.net rss generator"),
+        Tag("generator", "burnsomni.net rss"),
         Tag("webMaster", "smith.quintin@protonmail (Quintin Smith)"),
         *items
     )
