@@ -13,8 +13,10 @@ def connect_to_mariadb():
 
     )
 
-# Get Cursor
 
+
+
+# Get Cursor
 def check_cache(cache_key, *file_list):
     """ Is cache out of date? """
     max_date = 0

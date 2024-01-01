@@ -8,7 +8,7 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.shortcuts import redirect
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
-from sitecode.py.cachemanager import check_cache, get_cached, update_cache
+from sitecode.py.cachemanager import check_cache, get_cached, update_cache, connect_to_mariadb
 from sitecode.py.gitmanip import Project as GitProject
 from sitecode.py.gitmanip import FileNotFound, InvalidBranch
 from burnsomninet import wrappers
@@ -635,7 +635,35 @@ def issues_rss_controller(request, project):
     if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
 
-    return HttpResponse(repr(wrappers.rss_issues(project)), "application/rss+xml", status=status)
+    # Cache Control -------------------------
+    connection = connect_to_mariadb()
+    cursor = connection.cursor()
+
+    query = "SELECT MAX(issue_note.ts) FROM issue_note INNER JOIN issue ON issue.id = issue_note.issue_id AND issue.project = ? LIMIT 1;"
+    cursor.execute(query, (project, ))
+    max_ts = None
+    for vals in cursor.fetchall():
+        max_ts = vals[0]
+
+    cache_key = f"rss_issues_{project}"
+    query = "SELECT lastupdate FROM cache WHERE `key` = ? LIMIT 1;"
+    cursor.execute(query, (cache_key, ))
+    last_update = None
+    for vals in cursor.fetchall():
+        last_update = vals[0]
+
+    connection.close()
+
+    # End Cache Control---------------------
+
+    if max_ts is not None and last_update is not None and max_ts <= last_update:
+        output, mimetype = get_cached(cache_key)
+    else:
+        output = repr(wrappers.rss_issues(project))
+        mimetype = "application/rss+xml"
+        update_cache(cache_key, output, mimetype)
+
+    return HttpResponse(output, mimetype, status=status)
 
 
 def issues_controller(request, project):
@@ -644,6 +672,31 @@ def issues_controller(request, project):
     accesslogmanager.log_access(request)
     if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
+
+    # Cache Control -------------------------
+    connection = connect_to_mariadb()
+    cursor = connection.cursor()
+
+    query = "SELECT MAX(issue_note.ts) FROM issue_note INNER JOIN issue ON issue.id = issue_note.issue_id AND issue.project = ? LIMIT 1;"
+    cursor.execute(query, (project, ))
+    max_ts = None
+    for vals in cursor.fetchall():
+        max_ts = vals[0]
+
+    cache_key = f"issues_{project}"
+    query = "SELECT lastupdate FROM cache WHERE `key` = ? LIMIT 1;"
+    cursor.execute(query, (cache_key, ))
+    last_update = None
+    for vals in cursor.fetchall():
+        last_update = vals[0]
+
+    connection.close()
+    # End Cache Control---------------------
+
+    if max_ts is not None and last_update is not None and max_ts <= last_update:
+        output, mimetype = get_cached(cache_key)
+        return HttpResponse(output, mimetype, status=status)
+
 
     from_date = datetime(year=2022, month=1, day=1)
 
@@ -684,7 +737,11 @@ def issues_controller(request, project):
         )
     )
 
-    return HttpResponse(repr(top), "text/html", status=status)
+    content = repr(top)
+    mimetype="text/html"
+    update_cache(cache_key, content, mimetype)
+
+    return HttpResponse(content, mimetype, status=status)
 
 
 def issue_controller(request, issue_id):
