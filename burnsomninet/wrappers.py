@@ -718,6 +718,55 @@ def rss_issues(project):
         rss_channel
     )
 
+def rss_releases(project):
+    from_date = datetime(year=2023, month=1, day=1)
+    results = api.handle(
+        'releases',
+        project=project
+    )
+
+    items = []
+    last_date = from_date
+    for result in results:
+        file_name = result.get("apk", None)
+        if file_name is None:
+            continue
+
+        version_code = result["version_code"]
+        version_name = result["version_name"]
+        timestamp = result["timestamp"]
+        changes = result["changelog"]
+
+
+        items.append(
+            Tag("item",
+                Tag("title", f"{project.title()} Release {version_name}"),
+                Tag("link", f"localhost:8080/{file_name}"),
+                Tag("description", changes),
+                Tag("pubDate", datetime_to_rfc822(timestamp)),
+                Tag("guid", f"{project}-release-{version_code}")
+            )
+        )
+        if last_date is None or last_date < result["timestamp"]:
+            last_date = result["timestamp"]
+
+    rss_channel = Tag("channel",
+        Tag("title", f"{project.title()} Releases"),
+        Tag("link", f"https://burnsomni.net/git/{project}"),
+        Tag("description", f"{project.title()} Release Tracker"),
+        Tag("language", "en-us"),
+        Tag("pubDate", datetime_to_rfc822(from_date)),
+        Tag("lastBuildDate", datetime_to_rfc822(last_date)),
+        Tag("generator", "burnsomni.net rss"),
+        Tag("webMaster", "smith.quintin@protonmail (Quintin Smith)"),
+        *items
+    )
+
+    return Tag("rss",
+        { "version": "2.0" },
+        rss_channel
+    )
+
 
 def log(msg, suffix=""):
     with open("/var/log/httpd/burnsomninet/log", "a") as fp:
