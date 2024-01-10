@@ -628,6 +628,20 @@ def content_controller(request, content_path):
 
     return HttpResponse(response_content, mimetype, status=status)
 
+def releases_rss_controller(request, project):
+    status = 200
+
+    accesslogmanager.log_access(request)
+    if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
+        raise Http404()
+
+    output = repr(wrappers.rss_releases(project))
+    mimetype = "application/rss+xml"
+    #update_cache(cache_key, output, mimetype)
+
+    return HttpResponse(output, mimetype, status=status)
+
+
 def issues_rss_controller(request, project):
     status = 200
 

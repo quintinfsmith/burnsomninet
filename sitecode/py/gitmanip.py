@@ -112,6 +112,26 @@ class Project:
                 return False
         return True
 
+    def get_tags(self):
+        cwd = os.getcwd()
+
+        os.chdir(f"{self.path}")
+
+        output = get_cmd_output("git tag").split("\n")
+        os.chdir(cwd)
+        while "" in output:
+            output.remove("")
+
+        return output
+
+    def get_tag_commit(self, tag):
+        cwd = os.getcwd()
+        os.chdir(f"{self.path}")
+        output = get_cmd_output(f"git show-ref -s \"{tag}\"")
+        os.chdir(cwd)
+
+        return output
+
 
 class ProjectBranch:
     def __init__(self, project, branch="master"):
@@ -137,7 +157,7 @@ class ProjectBranch:
                     self.commits[commit.id] = commit
 
     def get_latest_commit_id(self):
-        return self.get_commits()[0].id
+        return self.get_commits()[1].id
 
     def get_first_commit_date(self):
         return self.get_commits()[-1].date
@@ -216,9 +236,9 @@ class ProjectBranch:
             raise FileNotFound()
 
         if not commit_id:
-            cmd = f"git show {self.branch}:\"{filepath}\""
+            cmd = f"git show \"{self.branch}:{filepath}\""
         else:
-            cmd = f"git show {commit_id}:\"{filepath}\""
+            cmd = f"git show \"{commit_id}:{filepath}\""
 
         cwd = os.getcwd()
         os.chdir(f"{self.project.path}")
