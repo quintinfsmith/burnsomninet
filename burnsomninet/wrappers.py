@@ -740,7 +740,7 @@ def atom_releases(project):
 
         items.append(
             Tag("entry",
-                Tag("id", f"tag:burnsomni.net,0000:Repository/{project_name}/{version_code}"),
+                Tag("id", f"tag:burnsomni.net,0000:Repository/{project}/{version_code}"),
                 Tag("updated", timestamp.isoformat()),
                 Tag("title", f"{version_name}"),
                 Tag("link", {
