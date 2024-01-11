@@ -719,7 +719,7 @@ def rss_issues(project):
     )
 
 
-def rss_releases(project):
+def atom_releases(project):
     from_date = datetime(year=2023, month=1, day=1)
     results = api.handle(
         'releases',
@@ -738,34 +738,44 @@ def rss_releases(project):
         timestamp = result["timestamp"]
         changes = result["changelog"]
 
-
         items.append(
-            Tag("item",
-                Tag("title", f"{project.title()} Release {version_name}"),
+            Tag("entry",
+                Tag("id", f"{project}-release-{version_code}"),
+                Tag("updated", timestamp.isoformat()),
+                Tag("title", f"{version_name}"),
                 Tag("link", f"https://burnsomni.net/{file_name}"),
-                Tag("description", f"{project.title()} Release {version_name}"),
-                Tag("pubDate", datetime_to_rfc822(timestamp)),
-                Tag("guid", f"{project}-release-{version_code}")
+                Tag("author",
+                    Tag("email", "smith.quintin@protonmail.com"),
+                    Tag("name", "Quintin Smith")
+                ),
+                Tag("content",
+                    {"type": "html"},
+                    marko.convert(changes),
+                )
             )
         )
         if last_date is None or last_date < result["timestamp"]:
             last_date = result["timestamp"]
 
-    rss_channel = Tag("channel",
+    return Tag("feed",
+        {
+            "xmlns": "http://www.w3.org/2005/Atom",
+            "xml:lang": "en-US"
+        },
+        Tag("id", f"https://burnsomni.net/releases/{project}/atom"),
+        Tag("link", {
+            "type": "text/html",
+            "rel": "alternate",
+            "href": f"https://burnsomni.net/git/{project}"
+        }),
+        Tag("link", {
+            "type": "application/atom+xml",
+            "rel": "self",
+            "href": f"https://burnsomni.net/releases/{project}/atom"
+        }),
         Tag("title", f"{project.title()} Releases"),
-        Tag("link", f"https://burnsomni.net/git/{project}"),
-        Tag("description", f"{project.title()} Release Tracker"),
-        Tag("language", "en-us"),
-        Tag("pubDate", datetime_to_rfc822(from_date)),
-        Tag("lastBuildDate", datetime_to_rfc822(last_date)),
-        Tag("generator", "burnsomni.net rss"),
-        Tag("webMaster", "smith.quintin@protonmail (Quintin Smith)"),
+        Tag("updated", last_date.isoformat()),
         *items
-    )
-
-    return Tag("rss",
-        { "version": "2.0" },
-        rss_channel
     )
 
 
