@@ -632,14 +632,29 @@ def releases_rss_controller(request, project):
     status = 200
 
     accesslogmanager.log_access(request)
-    if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
+    releases_dir = f"{STATIC_PATH}/release/{project}/"
+    if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok") or not os.path.exists(releases_dir):
         raise Http404()
 
-    output = repr(wrappers.rss_releases(project))
-    mimetype = "application/rss+xml"
-    #update_cache(cache_key, output, mimetype)
+    cache_key = f"rss_releases_{project}"
+    paths = []
+    for filename in os.listdir(releases_dir):
+        if filename.lower().endswith(".apk"):
+            paths.append(f"{releases_dir}{filename}")
 
-    return HttpResponse(output, mimetype, status=status)
+    cache_needs_update = check_cache(
+        cache_key,
+        *paths
+    )
+
+    if cache_needs_update:
+        content = repr(wrappers.rss_releases(project))
+        mimetype = "application/rss+xml"
+        update_cache(cache_key, content, mimetype)
+    else:
+        content, mimetype = get_cached(cache_key)
+
+    return HttpResponse(content, mimetype, status=status)
 
 
 def issues_rss_controller(request, project):

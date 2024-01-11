@@ -718,6 +718,7 @@ def rss_issues(project):
         rss_channel
     )
 
+
 def rss_releases(project):
     from_date = datetime(year=2023, month=1, day=1)
     results = api.handle(
@@ -741,8 +742,8 @@ def rss_releases(project):
         items.append(
             Tag("item",
                 Tag("title", f"{project.title()} Release {version_name}"),
-                Tag("link", f"localhost:8080/{file_name}"),
-                Tag("description", changes),
+                Tag("link", f"https://burnsomni.net/{file_name}"),
+                Tag("description", f"{project.title()} Release {version_name}"),
                 Tag("pubDate", datetime_to_rfc822(timestamp)),
                 Tag("guid", f"{project}-release-{version_code}")
             )
