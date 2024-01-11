@@ -648,13 +648,13 @@ def releases_atom_controller(request, project):
     )
 
     if cache_needs_update:
-        content = repr(wrappers.atom_releases(project))
+        content = '<?xml version="1.0" encoding="UTF-8"?>' + repr(wrappers.atom_releases(project))
         mimetype = "application/atom+xml"
         update_cache(cache_key, content, mimetype)
     else:
         content, mimetype = get_cached(cache_key)
 
-    return HttpResponse(b'<?xml version="1.0" encoding="UTF-8"?>' + content, mimetype, status=status)
+    return HttpResponse(content, mimetype, status=status)
 
 
 def issues_rss_controller(request, project):
