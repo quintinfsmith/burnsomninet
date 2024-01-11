@@ -764,7 +764,6 @@ def atom_releases(project):
         },
         Tag("id", f"https://burnsomni.net/releases/{project}/atom"),
         Tag("author",
-            Tag("email", "smith.quintin@protonmail.com"),
             Tag("name", "Quintin Smith")
         ),
         Tag("link", {
