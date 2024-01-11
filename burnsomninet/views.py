@@ -654,7 +654,7 @@ def releases_atom_controller(request, project):
     else:
         content, mimetype = get_cached(cache_key)
 
-    return HttpResponse(content, mimetype, status=status)
+    return HttpResponse(b'<?xml version="1.0" encoding="UTF-8"?>' + content, mimetype, status=status)
 
 
 def issues_rss_controller(request, project):
