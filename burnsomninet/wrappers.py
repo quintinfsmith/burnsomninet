@@ -740,14 +740,14 @@ def atom_releases(project):
 
         items.append(
             Tag("entry",
-                Tag("id", f"{project}-release-{version_code}"),
+                Tag("id", f"tag:burnsomni.net,0000:Repository/{project_name}/{version_code}"),
                 Tag("updated", timestamp.isoformat()),
                 Tag("title", f"{version_name}"),
-                Tag("link", f"https://burnsomni.net/{file_name}"),
-                Tag("author",
-                    Tag("email", "smith.quintin@protonmail.com"),
-                    Tag("name", "Quintin Smith")
-                ),
+                Tag("link", {
+                    "rel": "alternate",
+                    "type": "text/html",
+                    "href": f"https://burnsomni.net/{file_name}"
+                }),
                 Tag("content",
                     {"type": "html"},
                     marko.convert(changes),
@@ -763,6 +763,10 @@ def atom_releases(project):
             "xml:lang": "en-US"
         },
         Tag("id", f"https://burnsomni.net/releases/{project}/atom"),
+        Tag("author",
+            Tag("email", "smith.quintin@protonmail.com"),
+            Tag("name", "Quintin Smith")
+        ),
         Tag("link", {
             "type": "text/html",
             "rel": "alternate",
