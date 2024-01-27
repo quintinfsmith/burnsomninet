@@ -27,7 +27,7 @@
         "img": "/content/manuals/pagan/imgs/configlayout.png",
         "entries": [
             [0.64, 0.065, "Set the song's name"],
-            [0.11, 0.12, "Open The Tuning Table. This is were you can set the transposition and manually tweak the tuning."],
+            [0.11, 0.12, "Open The Tuning Table. This is where you can set the transposition and manually tweak the tuning."],
             [0.64, 0.12, "Set the Tempo"],
             [0.24, 0.18, "Add New Channels (Instruments) to the Song"],
             [0.11, 0.25, "Change Channel Instrument"],
