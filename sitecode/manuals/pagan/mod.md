@@ -7,7 +7,7 @@
         </a>
     </div>
     <div style="display: inline-block; height: 4em;">
-        <a href='https://bursomni.net/releases/pagan.atom'>
+        <a href='https://burnsomni.net/releases/pagan.atom'>
             <img alt='Get it over RSS' src='/content/get-it-on-rss.png' style="display: inline-block; height: 100%;"/>
         </a>
     </div>
