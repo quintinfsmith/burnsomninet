@@ -340,7 +340,8 @@ def index(request):
                 'git', 'commits',
                 project=project,
                 datefrom=from_date.timestamp(),
-                branch="*"
+                branch="master",
+                all_branches=True
             )
 
             if project in private_projects:
