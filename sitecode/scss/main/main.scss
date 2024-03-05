@@ -39,6 +39,8 @@
     --col_gitactivity_text: var(--col_text);
     --col_gitactivity_active_a: var(--col_main);
     --col_gitactivity_active_b: var(--col_main_sub);
+    --col_gitactivity_active_c: #405693;
+    --col_gitactivity_active_d: #5a6faa;
     --col_gitactivity_inactive_a: rgba(66,66,66,.5);
     --col_gitactivity_inactive_b: rgba(66,66,66,1);
 
@@ -1038,15 +1040,26 @@ body {
                 background-color: var(--col_gitactivity_inactive_a);
             }
         }
-        td.active {
+        td.active:not(.other) {
              > div {
                 background-color: var(--col_gitactivity_active_a);
                 box-shadow: var(--gitactivity_boxshadow);
             }
         }
-        td.active.evenmonth {
+        td.active.evenmonth:not(.other) {
             > div {
                 background-color: var(--col_gitactivity_active_b);
+            }
+        }
+        td.active.other {
+             > div {
+                background-color: var(--col_gitactivity_active_c);
+                box-shadow: var(--gitactivity_boxshadow);
+            }
+        }
+        td.active.evenmonth.other {
+            > div {
+                background-color: var(--col_gitactivity_active_d);
             }
         }
         td:not(.active).evenmonth {

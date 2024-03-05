@@ -508,12 +508,12 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
         first_commit_date = branch.get_first_commit_date()
         from_date = datetime(now.year - 1, now.month, now.day)
         #from_date = max(first_commit_date, from_date)
-
         body_content.append(
             slug_tag(
                 '/javascript/git.js',
                 'GitActivityWidget',
                 project=project_name,
+                branch=branch_name,
                 datefrom=from_date.timestamp() * 1000, # JS timestamp
                 datefirst=first_commit_date.timestamp() * 1000,
                 orientation="horizontal",
@@ -521,7 +521,8 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     'git', 'commits',
                     project=project_name,
                     branch=branch_name,
-                    datefrom=(from_date - timedelta(days=1)).timestamp()
+                    datefrom=(from_date - timedelta(days=1)).timestamp(),
+                    all_branches=(branch_name == "master")
                 )
             )
         )
