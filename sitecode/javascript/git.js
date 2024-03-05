@@ -17,6 +17,7 @@ class GitActivityWidget extends SlugWidget {
     WEEKDAY_OFFSET = 1; // Start at monday
     constructor(element, options) {
         super(element, options);
+        this.branch_name = options.branch
         this.commits = [];
         this.commit_block_elements = {};
         let day_one;
@@ -78,7 +79,6 @@ class GitActivityWidget extends SlugWidget {
                 }
             );
         }
-
     }
 
     get_doy(date) {
@@ -365,6 +365,9 @@ class GitActivityWidget extends SlugWidget {
             }
             element_td.setAttribute('title', title);
             element_td.classList.add('active');
+            if (this.branch_name != null && !commit.branches.includes(this.branch_name)) {
+                element_td.classList.add("other")
+            }
 
             this.commits.push[commit];
         }
