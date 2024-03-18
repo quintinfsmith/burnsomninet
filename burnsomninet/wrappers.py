@@ -741,6 +741,9 @@ def atom_releases(project):
 
         items.append(
             Tag("entry",
+                Tag("author",
+                    Tag("name", "Quintin Smith")
+                ),
                 Tag("id", f"tag:burnsomni.net,0000:Repository/{project}/{version_code}"),
                 Tag("updated", timestamp.isoformat()),
                 Tag("title", f"{version_name}"),
