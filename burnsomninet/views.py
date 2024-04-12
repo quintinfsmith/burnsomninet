@@ -913,6 +913,10 @@ def issue_controller(request, issue_id):
 
     return HttpResponse(repr(top), "text/html", status=status)
 
+def issue_controller(request, issue_id):
+    status = 200
+    accesslogmanager.log_access(request)
+
 
 VIEWMAP = {
     "unicycling": {
