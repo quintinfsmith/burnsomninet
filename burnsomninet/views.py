@@ -73,6 +73,7 @@ def handler404(request, exception):
 
 #NOTE: Do not change the argument names. that fucks django
 def handler500(request):
+    #wrappers.log(str(exception))
     top = Tag("html",
         Tag("head",
             Tag("style", { }),

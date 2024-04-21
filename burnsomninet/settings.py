@@ -119,6 +119,46 @@ USE_L10N = True
 USE_TZ = True
 
 
+LOGGING = {
+    "version": 1,  # the dictConfig format version
+    "disable_existing_loggers": False,  # retain the default loggers
+    #"handlers": {
+    #    "file": {
+    #        "class": "logging.FileHandler",
+    #        "filename": "general.log",
+    #    },
+    #},
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'logging.FileHandler',
+            'filename': "/var/log/httpd/burnsomninet/log",
+        }
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+    'applogfile': {
+        'level':'DEBUG',
+        'class':'logging.handlers.RotatingFileHandler',
+        'filename': "/var/log/httpd/burnsomninet/log",
+        'maxBytes': 1024*1024*15, # 15MB
+        'backupCount': 10,
+    },
+
+}
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
