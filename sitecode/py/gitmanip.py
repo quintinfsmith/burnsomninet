@@ -1,6 +1,7 @@
 import os, sys
 import re, time
 from datetime import datetime, timedelta, timezone
+from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 
 class InvalidBranch(Exception):
     """Invalid Branch"""
@@ -143,12 +144,25 @@ class ProjectBranch:
         self.branch = branch
 
         cwd = os.getcwd()
-        os.chdir(f"{self.project.get_path()}")
-        whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
-        os.chdir(cwd)
+
+        cache_key = f"git_project_branch_{self.project.get_path()}_{branch}"
+
+        is_cached = check_cache(
+            cache_key,
+            f"{self.project.get_path()}/refs/heads/{branch}"
+        )
+
+        if not is_cached:
+            os.chdir(f"{self.project.get_path()}")
+            whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
+            os.chdir(cwd)
+            update_cache(cache_key, whatchanged_dump)
+
+        whatchanged_dump, _ = get_cached(cache_key)
+
 
         if whatchanged_dump:
-            whatchanged_dump = whatchanged_dump[7:]
+            whatchanged_dump = whatchanged_dump.decode()[7:]
             chunks = whatchanged_dump.split("\ncommit ")
 
             for chunk in chunks:

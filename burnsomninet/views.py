@@ -506,6 +506,8 @@ def git_controller(request, project, *project_path):
                     body = wrappers.build_git_file_view(project, branch, commit, path)
             elif view == "commit":
                 body = wrappers.build_git_commit_view(project, branch, commit)
+            else:
+                raise Http404()
 
             content = Tag("html",
                 wrappers.build_head(
@@ -520,9 +522,9 @@ def git_controller(request, project, *project_path):
                     )
                 )
             )
-    except FileNotFound as e:
+    except FileNotFound:
         raise Http404()
-    except InvalidBranch as e:
+    except InvalidBranch:
         raise Http404()
 
     return HttpResponse(content, mimetype)
