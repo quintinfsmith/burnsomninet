@@ -481,6 +481,11 @@ def git_controller(request, project, *project_path):
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
     commit = request.GET.get('commit', None)
+
+    # Disabled commit/branch browsing
+    if branch != 'master' or commit is not None:
+        Http404()
+
     path = request.GET.get('path', '')
     raw = request.GET.get("raw", 0)
 

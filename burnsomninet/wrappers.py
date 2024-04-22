@@ -540,14 +540,15 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                     )
                 ),
                 Tag("div",
-                    Tag("div",
-                        VH_MID,
-                        build_git_branch_select(project_name, branch_name)
-                    ),
-                    Tag("div",
-                        VH_MID,
-                        build_git_commit_select(project_name, branch_name, active_commit, path)
-                    )
+                    # Can't support commit/branch browsing on a small server anymore
+                    #Tag("div",
+                    #    VH_MID,
+                    #    build_git_branch_select(project_name, branch_name)
+                    #),
+                    #Tag("div",
+                    #    VH_MID,
+                    #    build_git_commit_select(project_name, branch_name, active_commit, path)
+                    #)
                 )
             ),
             Tag("div",
