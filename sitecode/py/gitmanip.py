@@ -143,7 +143,6 @@ class ProjectBranch:
         self.commits = {}
         self.branch = branch
 
-        cwd = os.getcwd()
 
         cache_key = f"git_project_branch_{self.project.get_path()}_{branch}"
 
@@ -152,7 +151,8 @@ class ProjectBranch:
             f"{self.project.get_path()}/refs/heads/{branch}"
         )
 
-        if not needs_update:
+        if needs_update:
+            cwd = os.getcwd()
             os.chdir(f"{self.project.get_path()}")
             whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
             os.chdir(cwd)
