@@ -33,6 +33,10 @@ def check_cache(cache_key, *file_list):
 
     return out_of_date
 
+def key_exists(cache_key):
+    last_update = sql_get_simple("cache", "lastupdate", "key", cache_key)
+    return last_update is not None
+
 def get_cached(cache_key):
     content = sql_get_simple("cache", "content", "key", cache_key)
     mimetype = sql_get_simple("cache", "mimetype", "key", cache_key)
