@@ -147,12 +147,12 @@ class ProjectBranch:
 
         cache_key = f"git_project_branch_{self.project.get_path()}_{branch}"
 
-        is_cached = check_cache(
+        needs_update = check_cache(
             cache_key,
             f"{self.project.get_path()}/refs/heads/{branch}"
         )
 
-        if not is_cached:
+        if not needs_update:
             os.chdir(f"{self.project.get_path()}")
             whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
             os.chdir(cwd)
