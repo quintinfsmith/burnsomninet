@@ -1,7 +1,7 @@
 import os, sys
 import re, time
 from datetime import datetime, timedelta, timezone
-from sitecode.py.cachemanager import check_cache, get_cached, update_cache
+from sitecode.py.cachemanager import check_cache, get_cached, key_exists, update_cache
 
 class InvalidBranch(Exception):
     """Invalid Branch"""
@@ -146,10 +146,14 @@ class ProjectBranch:
 
         cache_key = f"git_project_branch_{self.project.get_path()}_{branch}"
 
-        needs_update = check_cache(
-            cache_key,
-            f"{self.project.get_path()}/refs/heads/{branch}"
-        )
+        # NOTE: This breaks branch name reuse
+        try:
+            needs_update = check_cache(
+                cache_key,
+                f"{self.project.get_path()}/refs/heads/{branch}"
+            )
+        except FileNotFoundError:
+            needs_update = not key_exists(cache_key)
 
         if needs_update:
             cwd = os.getcwd()
