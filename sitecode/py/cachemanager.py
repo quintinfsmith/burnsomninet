@@ -21,8 +21,14 @@ def check_cache(cache_key, *file_list):
     """ Is cache out of date? """
     max_date = 0
     for path in file_list:
-        s = os.stat(path)
-        max_date = max(max_date, s.st_mtime, s.st_ctime)
+        if os.path.isdir(path):
+            for main, _, files in os.walk(path):
+                for f in files:
+                    s = os.stat(f"{main}/{f}")
+                    max_date = max(max_date, s.st_mtime, s.st_ctime)
+        else:
+            s = os.stat(path)
+            max_date = max(max_date, s.st_mtime, s.st_ctime)
 
     latest_file_change = datetime.fromtimestamp(max_date)
     lastupdate = sql_get_simple("cache", "lastupdate", "key", cache_key)

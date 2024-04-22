@@ -338,7 +338,8 @@ def index(request):
             working_commits = json.loads(get_cached(cache_key)[0])
         else:
             working_commits = api.handle(
-                'git', 'commits',
+                'git',
+                'commits',
                 project=project,
                 datefrom=from_date.timestamp(),
                 branch="master",
