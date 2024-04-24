@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls import handler404, handler500
 from django.conf import settings
 import os
@@ -40,7 +40,7 @@ urlpatterns = [
     path('api/<path:section_path>', views.api_controller),
     path("manual/<str:manual>", views.manual_controller),
     path("<str:section>/<path:subsection_path>", views.section_controller),
-    path("<str:section>/<str:subsection>.json", views.section_json),
+    path("<str:section>/<str:subsection>.json", views.section_json)
 ]
 
 
