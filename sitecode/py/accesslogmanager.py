@@ -27,7 +27,8 @@ def log_access(request):
     query = f"INSERT INTO accesslog (`ip`, `path`, `uagent`) VALUE (?, ?, ?);"
     ip = get_client_ip(request)
     uagent = request.META.get('HTTP_USER_AGENT', '')
-    cursor.execute(query, (ip, request.get_full_path(), uagent))
-    connection.commit()
+    if len(ip) > 16:
+        cursor.execute(query, (ip, request.get_full_path(), uagent))
+        connection.commit()
     connection.close()
 
