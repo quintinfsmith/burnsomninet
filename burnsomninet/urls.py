@@ -43,7 +43,7 @@ urlpatterns = [
     path("<str:section>/<str:subsection>.json", views.section_json)
 ]
 
-
 handler404 = views.handler404
 #handler404 = 'views.handle404'
 handler500 = views.handler500
+

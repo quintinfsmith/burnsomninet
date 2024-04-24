@@ -45,6 +45,9 @@ def sass_compile(input_scss):
 
 #NOTE: Do not change the argument names. that fucks django
 def handler404(request, exception):
+
+    wrappers.log(f"DEBUG: {request.path}")
+
     daisy = ""
     with open(f"{STATIC_PATH}/oopsie daisy.svg", "r") as file_pipe:
         daisy = file_pipe.read()
