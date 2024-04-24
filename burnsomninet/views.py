@@ -190,6 +190,7 @@ def manual_controller(request, manual):
     accesslogmanager.log_access(request)
     manualsdir = f"{SITECODE}/manuals/"
     directory_path = f"{manualsdir}/{manual}/"
+
     title = f"{manual.title()} User Manual"
     raw_content = automanual.populate_page(directory_path)
     raw_content = automanual.do_slugs(raw_content)
@@ -234,12 +235,6 @@ def section_controller(request, section, subsection_path):
 
     if section in ("git", "project") and subsections[0].lower().endswith(".git"):
         subsections[0] = subsections[0][0:subsections[0].rfind(".")]
-
-    if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
-        return git_controller(request, subsections[0], *subsections[1:])
-    elif section == "software" or section == "manuals":
-        return manual_controller(request, subsections[0])
-
     accesslogmanager.log_access(request)
 
     subsection = subsections[0]
@@ -250,6 +245,12 @@ def section_controller(request, section, subsection_path):
 
     if not os.path.isdir(directory_path):
         raise Http404()
+
+    if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
+        return git_controller(request, subsections[0], *subsections[1:])
+    elif section == "software" or section == "manuals":
+        return manual_controller(request, subsections[0])
+
 
     files = os.listdir(directory_path)
     description = ""
@@ -922,6 +923,10 @@ def issue_controller(request, issue_id):
 
     return HttpResponse(repr(top), "text/html", status=status)
 
+def ban_hammer(request, *args):
+    wrappers.log(request.path)
+    body = Tag("html", Tag("body", "BAN HAMMER!"))
+    return HttpResponse(repr(body), "text/html", status=200)
 
 VIEWMAP = {
     "unicycling": {
