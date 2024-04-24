@@ -191,6 +191,10 @@ def manual_controller(request, manual):
     manualsdir = f"{SITECODE}/manuals/"
     directory_path = f"{manualsdir}/{manual}/"
 
+    if not os.path.isdir(directory_path):
+        raise Http404()
+
+
     title = f"{manual.title()} User Manual"
     raw_content = automanual.populate_page(directory_path)
     raw_content = automanual.do_slugs(raw_content)
@@ -235,7 +239,14 @@ def section_controller(request, section, subsection_path):
 
     if section in ("git", "project") and subsections[0].lower().endswith(".git"):
         subsections[0] = subsections[0][0:subsections[0].rfind(".")]
+
     accesslogmanager.log_access(request)
+
+    if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
+        return git_controller(request, subsections[0], *subsections[1:])
+    elif section == "software" or section == "manuals":
+        return manual_controller(request, subsections[0])
+
 
     subsection = subsections[0]
 
@@ -245,11 +256,6 @@ def section_controller(request, section, subsection_path):
 
     if not os.path.isdir(directory_path):
         raise Http404()
-
-    if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
-        return git_controller(request, subsections[0], *subsections[1:])
-    elif section == "software" or section == "manuals":
-        return manual_controller(request, subsections[0])
 
 
     files = os.listdir(directory_path)
@@ -290,7 +296,13 @@ def section_controller(request, section, subsection_path):
 
         break
 
-    body_content = VIEWMAP[section][subsection](request, **kwargs)
+    try:
+        body_content = VIEWMAP[section][subsection](request, **kwargs)
+    except KeyError:
+        raise Http404()
+    except FileNotFoundError:
+        raise Http404()
+
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
@@ -470,6 +482,7 @@ def git_controller(request, project, *project_path):
     accesslogmanager.log_access(request)
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
+
     if not os.path.isfile(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
 
