@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from PIL import Image
-
+from sitecode.py.quicksql import connect_to_mariadb, sql_get_simple
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject, FileNotFound
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
@@ -759,6 +759,7 @@ def atom_releases(project):
                 )
             )
         )
+
         if last_date is None or last_date < result["timestamp"]:
             last_date = result["timestamp"]
 
@@ -786,6 +787,19 @@ def atom_releases(project):
         *items
     )
 
+def register_banned_ip(ip_address):
+    connection = connect_to_mariadb()
+    cursor = connection.cursor()
+
+    query = f"INSERT INTO banned_ips (`ip`) VALUES (?);"
+    cursor.execute(query, [ip_address])
+    cursor.commit()
+
+    connection.close()
+
+def is_ip_banned(ip_address):
+    result = sql_get_simple("banned_ips", "ip", "ip", ip_address)
+    return result is not None
 
 def log(msg, suffix=""):
     with open("/var/log/httpd/burnsomninet/log", "a") as fp:
