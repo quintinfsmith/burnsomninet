@@ -787,18 +787,30 @@ def atom_releases(project):
         *items
     )
 
+def is_malicious_query(path):
+    result = sql_get_simple(
+        "malicious_query",
+        "query",
+        "query",
+        path
+    )
+    return result is not None
+
 def register_banned_ip(ip_address):
+    if is_ip_banned(ip_address):
+        return
+
     connection = connect_to_mariadb()
     cursor = connection.cursor()
 
-    query = f"INSERT INTO banned_ips (`ip`) VALUES (?);"
+    query = "INSERT INTO banned_ip (`ip`) VALUES (?);"
     cursor.execute(query, [ip_address])
-    cursor.commit()
+    connection.commit()
 
     connection.close()
 
-def is_ip_banned(ip_address):
-    result = sql_get_simple("banned_ips", "ip", "ip", ip_address)
+def is_ip_banned(ip_address: str):
+    result = sql_get_simple("banned_ip", "ip", "ip", ip_address)
     return result is not None
 
 def log(msg, suffix=""):
