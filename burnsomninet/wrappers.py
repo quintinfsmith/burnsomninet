@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
 
 from PIL import Image
-from sitecode.py.quicksql import connect_to_mariadb, sql_get_simple
+from sitecode.py.quicksql import connect_to_mariadb, sql_get_simple, sql_get_inverse_regex
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache
 from sitecode.py.gitmanip import Project as GitProject, FileNotFound
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
@@ -788,12 +788,13 @@ def atom_releases(project):
     )
 
 def is_malicious_query(path):
-    result = sql_get_simple(
+    result = sql_get_inverse_regex(
         "malicious_query",
         "query",
         "query",
         path
     )
+
     return result is not None
 
 def register_banned_ip(ip_address):

@@ -26,12 +26,12 @@ def sql_get_simple(table, column, match_column, match_value):
 
     return output
 
-def sql_get_like(table, column, match_column, match_value):
+def sql_get_inverse_regex(table, column, match_column, match_value):
     connection = connect_to_mariadb()
     cursor = connection.cursor()
 
     output = None
-    query = f"SELECT `{column}` FROM {table} WHERE `{match_column}` like ?;"
+    query = f"SELECT `{column}` FROM {table} WHERE ? REGEXP `{match_column}`;"
 
     cursor.execute(query, [match_value])
     rows = cursor.fetchall()

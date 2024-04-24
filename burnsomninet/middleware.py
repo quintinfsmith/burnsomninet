@@ -1,11 +1,15 @@
 from django.conf import settings
 from django import http
+from burnsomninet import wrappers
+from sitecode.py.accesslogmanager import get_client_ip
 
 class BlockedIpMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        if False: # && request.META['REMOTE_ADDR']:
+        ip = get_client_ip(request)
+        # Checking for malicious queries is done in 404 handler, don't need to check acceptable queries
+        if wrappers.is_ip_banned(ip):
             return http.HttpResponseForbidden('<h1>Forbidden</h1>')
         return self.get_response(request)

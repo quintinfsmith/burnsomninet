@@ -45,8 +45,8 @@ def sass_compile(input_scss):
 
 #NOTE: Do not change the argument names. that fucks django
 def handler404(request, exception):
-    #if wrappers.is_malicious_query(request.path):
-    #    wrappers.register_banned_ip(accesslogmanager.get_client_ip(request))
+    if wrappers.is_malicious_query(request.path):
+        wrappers.register_banned_ip(accesslogmanager.get_client_ip(request))
 
     wrappers.log(f"DEBUG: {request.path}")
 
