@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from django.conf import settings
+from django import http
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -56,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'burnsomninet.middleware.BlockedIpMiddleware'
 ]
 
 ROOT_URLCONF = 'burnsomninet.urls'
@@ -157,6 +161,7 @@ LOGGING = {
     },
 
 }
+
 
 
 # Static files (CSS, JavaScript, Images)

@@ -25,3 +25,20 @@ def sql_get_simple(table, column, match_column, match_value):
     connection.close()
 
     return output
+
+def sql_get_like(table, column, match_column, match_value):
+    connection = connect_to_mariadb()
+    cursor = connection.cursor()
+
+    output = None
+    query = f"SELECT `{column}` FROM {table} WHERE `{match_column}` like ?;"
+
+    cursor.execute(query, [match_value])
+    rows = cursor.fetchall()
+
+    if rows:
+        output = rows[0][0]
+
+    connection.close()
+
+    return output
