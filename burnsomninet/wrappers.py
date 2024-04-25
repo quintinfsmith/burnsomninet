@@ -788,7 +788,40 @@ def atom_releases(project):
     )
 
 def is_malicious_query(path):
-    return False
+    path = path.lower()
+    return path.startswith("/admin/") \
+        or path.startswith("/administrator/") \
+        or path.startswith("/app_dev.php") \
+        or path.startswith("/wp/") \
+        or path.startswith("/db/") \
+        or path.startswith("/wp-includes/") \
+        or path.startswith("/wp-json/") \
+        or path.startswith("/wp-admin/") \
+        or path.startswith("/wp-content/") \
+        or path.startswith("/frontend/") \
+        or path.startswith("/debug/") \
+        or path.startswith("/sapi/") \
+        or path.startswith("/plugins/") \
+        or path.startswith("/config/") \
+        or path.startswith("/_wpeprivate/") \
+        or path.startswith("/graphql/") \
+        or path.startswith("/modules/mod_simplefileuploadv1.3") \
+        or path.startswith("/phpmy-admin/") \
+        or path.startswith("/mysql/") \
+        or path.startswith("/phpmyadmin") \
+        or path.endswith(".env") \
+        or path.endswith("/frontend_dev.php") \
+        or path.endswith("/ofc_upload_imaged.php") \
+        or path.endswith("/ofc_upload_image.php") \
+        or path.endswith("/upload.php") \
+        or path.endswith("/cloud.php") \
+        or path.endswith("/dialog.php") \
+        or path.endswith("/connector.php") \
+        or path.endswith("/updates.php") \
+        or path.endswith("/wallet.dat") \
+        or path.endswith("/udd.php") \
+        or path.endswith("?xdebug_session_start=phpstorm") \
+        or "/jquery-file-upload/" in path
     #result = sql_get_inverse_regex(
     #    "malicious_query",
     #    "query",
@@ -796,11 +829,10 @@ def is_malicious_query(path):
     #    path
     #)
 
-    return result is not None
 
 def register_banned_ip(ip_address):
-    return
-
+    with open(f"{BASE_DIR}/banned_ips", "a") as fp:
+        fp.write(f"{ip_address}\n")
     #if is_ip_banned(ip_address):
     #    return
 
@@ -814,7 +846,9 @@ def register_banned_ip(ip_address):
     #connection.close()
 
 def is_ip_banned(ip_address: str):
-    return False
+    with open(f"{BASE_DIR}/banned_ips", "r") as fp:
+        return f"{ip_address}\n" in fp.read()
+
     # result = sql_get_simple("banned_ip", "ip", "ip", ip_address)
     # return result is not None
 
