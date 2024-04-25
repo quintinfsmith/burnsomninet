@@ -788,31 +788,35 @@ def atom_releases(project):
     )
 
 def is_malicious_query(path):
-    result = sql_get_inverse_regex(
-        "malicious_query",
-        "query",
-        "query",
-        path
-    )
+    return False
+    #result = sql_get_inverse_regex(
+    #    "malicious_query",
+    #    "query",
+    #    "query",
+    #    path
+    #)
 
     return result is not None
 
 def register_banned_ip(ip_address):
-    if is_ip_banned(ip_address):
-        return
+    return
 
-    connection = connect_to_mariadb()
-    cursor = connection.cursor()
+    #if is_ip_banned(ip_address):
+    #    return
 
-    query = "INSERT INTO banned_ip (`ip`) VALUES (?);"
-    cursor.execute(query, [ip_address])
-    connection.commit()
+    #connection = connect_to_mariadb()
+    #cursor = connection.cursor()
 
-    connection.close()
+    #query = "INSERT INTO banned_ip (`ip`) VALUES (?);"
+    #cursor.execute(query, [ip_address])
+    #connection.commit()
+
+    #connection.close()
 
 def is_ip_banned(ip_address: str):
-    result = sql_get_simple("banned_ip", "ip", "ip", ip_address)
-    return result is not None
+    return False
+    # result = sql_get_simple("banned_ip", "ip", "ip", ip_address)
+    # return result is not None
 
 def log(msg, suffix=""):
     with open("/var/log/httpd/burnsomninet/log", "a") as fp:
