@@ -133,6 +133,10 @@ class Project:
 
         return output
 
+    def get_name(self):
+        path = self.get_path()
+        return path[path.rfind("/") + 1:]
+
 
 class ProjectBranch:
     def __init__(self, project, branch="master"):
@@ -143,8 +147,7 @@ class ProjectBranch:
         self.commits = {}
         self.branch = branch
 
-
-        cache_key = f"git_project_branch_{self.project.get_path()}_{branch}"
+        cache_key = f"git_project_branch_{self.project.get_name()}_{branch}"
 
         # NOTE: This breaks branch name reuse
         try:
@@ -163,8 +166,6 @@ class ProjectBranch:
             update_cache(cache_key, whatchanged_dump)
         else:
             whatchanged_dump, _ = get_cached(cache_key)
-            whatchanged_dump = whatchanged_dump.decode()
-
 
         if whatchanged_dump:
             whatchanged_dump = whatchanged_dump[7:]
