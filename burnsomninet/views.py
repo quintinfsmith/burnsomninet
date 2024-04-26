@@ -112,14 +112,12 @@ def projects_hook(request, **kwargs):
     )
 
 def robots(request):
-    accesslogmanager.log_access(request)
     content = ''
     with open(f"{SITECODE}/robots.txt", "r") as file_pipe:
         content = file_pipe.read()
     return HttpResponse(content, "text/plain")
 
 def keybase(request):
-    accesslogmanager.log_access(request)
     content = ''
     with open(f"{SITECODE}/keybasejson", "r") as file_pipe:
         content = file_pipe.read()
@@ -132,7 +130,6 @@ def favicon(request):
     return HttpResponse(content)
 
 def style(request, style_name):
-    accesslogmanager.log_access(request)
     style_directory = f"{SCSS_PATH}/{style_name}"
     if not os.path.isdir(style_directory):
         return handler404(request, None)
@@ -164,7 +161,6 @@ def style(request, style_name):
     return HttpResponse(content, mimetype)
 
 def javascript_controller(request, file_path):
-    accesslogmanager.log_access(request)
     active_path = file_path.split("/")
     while "" in active_path:
         active_path.remove("")
@@ -192,7 +188,6 @@ def section_json(request):
     return HttpResponse(content, content_type="application/json")
 
 def manual_controller(request, manual):
-    accesslogmanager.log_access(request)
     manualsdir = f"{SITECODE}/manuals/"
     directory_path = f"{manualsdir}/{manual}/"
 
@@ -245,7 +240,6 @@ def section_controller(request, section, subsection_path):
     if section in ("git", "project") and subsections[0].lower().endswith(".git"):
         subsections[0] = subsections[0][0:subsections[0].rfind(".")]
 
-    accesslogmanager.log_access(request)
 
     if section in ("git", "project") or (section == 'software' and subsections[0] in ('apres', 'wrecked')):
         return git_controller(request, subsections[0], *subsections[1:])
@@ -325,7 +319,6 @@ def section_controller(request, section, subsection_path):
     return HttpResponse(repr(top))
 
 def index(request):
-    accesslogmanager.log_access(request)
     active_path = request.get_full_path().split("/")
 
     while "" in active_path:
@@ -455,7 +448,6 @@ def index(request):
     return HttpResponse(repr(top))
 
 def api_controller(request, section_path):
-    accesslogmanager.log_access(request)
     section_split = section_path.split("/")
     while "" in section_split:
         section_split.remove("")
@@ -484,7 +476,6 @@ def git_controller(request, project, *project_path):
     if uagent in get_botlist() and len(request.GET.keys()) > 0:
         raise Http404()
 
-    accesslogmanager.log_access(request)
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
@@ -627,7 +618,6 @@ class GitDumbServer:
 def content_controller(request, content_path):
     status = 200
 
-    accesslogmanager.log_access(request)
 
     abs_content_path = os.path.abspath(f"{STATIC_PATH}/{content_path}")
 
@@ -660,7 +650,6 @@ def content_controller(request, content_path):
 def releases_atom_controller(request, project):
     status = 200
 
-    accesslogmanager.log_access(request)
     releases_dir = f"{STATIC_PATH}/release/{project}/"
     if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok") or not os.path.exists(releases_dir):
         raise Http404()
@@ -689,7 +678,6 @@ def releases_atom_controller(request, project):
 def issues_rss_controller(request, project):
     status = 200
 
-    accesslogmanager.log_access(request)
     if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
 
@@ -727,7 +715,6 @@ def issues_rss_controller(request, project):
 def issues_controller(request, project):
     status = 200
 
-    accesslogmanager.log_access(request)
     if project not in os.listdir(GIT_PATH) or not os.path.exists(f"{GIT_PATH}/{project}/git-daemon-export-ok"):
         raise Http404()
 
@@ -804,7 +791,6 @@ def issues_controller(request, project):
 
 def issue_controller(request, issue_id):
     status = 200
-    accesslogmanager.log_access(request)
 
     state_labels = ["cancelled", "open", "in progress", "resolved"]
     urgency_labels = ["feature", "low", "pressing", "urgent"]

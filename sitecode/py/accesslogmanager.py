@@ -1,6 +1,7 @@
 import os
 import mariadb
 import time
+from burnsomninet import wrappers
 from datetime import datetime, timezone
 from django.conf import settings
 
@@ -12,7 +13,7 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR')
     return ip
 
-def log_access(request):
+def log_access(request, response):
     access_log_dir = f"{settings.BASE_DIR}/access_logs"
     if not os.path.isdir(access_log_dir):
         os.mkdir(access_log_dir)
@@ -25,7 +26,9 @@ def log_access(request):
 
     ip = get_client_ip(request)
     uagent = request.META.get('HTTP_USER_AGENT', '')
-    entry_string = f"{now.strftime('%Y-%m-%d %H:%M:%S')}\t|{ip}\t|{uagent}\t|{request.get_full_path()}\n"
+    entry_string = f"{now.strftime('%Y-%m-%d %H:%M:%S')}\t|{response.status_code}\t|{ip}\t|{uagent}\t|{request.get_full_path()}\n"
     with open(current_log, mode) as fp:
         fp.write(entry_string)
+
+
 
