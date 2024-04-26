@@ -8,7 +8,8 @@ from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.shortcuts import redirect
 from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
-from sitecode.py.cachemanager import check_cache, get_cached, update_cache, connect_to_mariadb
+from sitecode.py.cachemanager import check_cache, get_cached, update_cache, get_latest_update
+from sitecode.py.quicksql import connect_to_mariadb
 from sitecode.py.gitmanip import Project as GitProject
 from sitecode.py.gitmanip import FileNotFound, InvalidBranch
 from burnsomninet import wrappers
@@ -150,6 +151,7 @@ def style(request, style_name):
     else:
         content = ""
         paths.sort()
+
         for filepath in paths:
             with open(filepath, 'r', encoding='utf-8') as file_pipe:
                 content += "\n" + file_pipe.read()
@@ -690,15 +692,11 @@ def issues_rss_controller(request, project):
     max_ts = None
     for vals in cursor.fetchall():
         max_ts = vals[0]
+    connection.close()
 
     cache_key = f"rss_issues_{project}"
-    query = "SELECT lastupdate FROM cache WHERE `key` = ? LIMIT 1;"
-    cursor.execute(query, (cache_key, ))
-    last_update = None
-    for vals in cursor.fetchall():
-        last_update = vals[0]
+    last_update = get_latest_update(cache_key)
 
-    connection.close()
 
     # End Cache Control---------------------
 
@@ -727,15 +725,11 @@ def issues_controller(request, project):
     max_ts = None
     for vals in cursor.fetchall():
         max_ts = vals[0]
+    connection.close()
 
     cache_key = f"issues_{project}"
-    query = "SELECT lastupdate FROM cache WHERE `key` = ? LIMIT 1;"
-    cursor.execute(query, (cache_key, ))
-    last_update = None
-    for vals in cursor.fetchall():
-        last_update = vals[0]
+    last_update = get_latest_update(cache_key)
 
-    connection.close()
     # End Cache Control---------------------
 
     if max_ts is not None and last_update is not None and max_ts <= last_update:
