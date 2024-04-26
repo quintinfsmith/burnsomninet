@@ -1,10 +1,15 @@
 import os
 from datetime import datetime
 from sitecode.py.quicksql import connect_to_mariadb, sql_get_simple
+from django.conf import settings
 
 # Get Cursor
-def check_cache(cache_key, *file_list):
+def check_cache(cache_key, *file_list) -> bool:
     """ Is cache out of date? """
+
+    if not key_exists(cache_key):
+        return True
+
     max_date = 0
     for path in file_list:
         if os.path.isdir(path):
@@ -17,29 +22,38 @@ def check_cache(cache_key, *file_list):
             max_date = max(max_date, s.st_mtime, s.st_ctime)
 
     latest_file_change = datetime.fromtimestamp(max_date)
-    lastupdate = sql_get_simple("cache", "lastupdate", "key", cache_key)
+    
+    file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
+    file_stat = os.stat(file_path)
+    last_update = datetime.fromtimestamp(max(file_stat.st_mtime, file_stat.st_ctime))
 
     out_of_date = True
-    if lastupdate is not None:
-        out_of_date = latest_file_change > lastupdate
+    if last_update is not None:
+        out_of_date = latest_file_change > last_update
 
     return out_of_date
 
-def key_exists(cache_key):
-    last_update = sql_get_simple("cache", "lastupdate", "key", cache_key)
-    return last_update is not None
+def key_exists(cache_key: str) -> bool:
+    file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
+    return os.path.isfile(file_path)
 
-def get_cached(cache_key):
-    content = sql_get_simple("cache", "content", "key", cache_key)
-    mimetype = sql_get_simple("cache", "mimetype", "key", cache_key)
+def get_cached(cache_key: str) -> tuple[str, str]:
+    file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
+
+    content = ""
+    with open(file_path, "r") as fp:
+        content = fp.read()
+
+    mimetype = content[0:content.find("||")]
+    content = content[content.find("||") + 2:]
     return (content, mimetype)
 
-def update_cache(cache_key, value, mime="text/html"):
-    connection = connect_to_mariadb()
-    cursor = connection.cursor()
+def update_cache(cache_key: str, value: str, mime="text/html"):
+    cached_dir = f"{settings.BASE_DIR}/cached_files/"
+    if not os.path.isdir(cached_dir):
+        os.mkdir(cached_dir)
 
-    query = f"REPLACE INTO cache (`key`, `content`, `mimetype`) VALUES (?, ?, ?);"
-    cursor.execute(query, (cache_key, value, mime))
-    connection.commit()
-    connection.close()
+    file_path = f"{cached_dir}/{cache_key}"
+    with open(file_path, "w") as fp:
+        fp.write(f"{mime}||{value}")
 

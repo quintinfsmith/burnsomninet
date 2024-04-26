@@ -822,35 +822,15 @@ def is_malicious_query(path):
         or path.endswith("/udd.php") \
         or path.endswith("?xdebug_session_start=phpstorm") \
         or "/jquery-file-upload/" in path
-    #result = sql_get_inverse_regex(
-    #    "malicious_query",
-    #    "query",
-    #    "query",
-    #    path
-    #)
 
 
 def register_banned_ip(ip_address):
     with open(f"{BASE_DIR}/banned_ips", "a") as fp:
         fp.write(f"{ip_address}\n")
-    #if is_ip_banned(ip_address):
-    #    return
-
-    #connection = connect_to_mariadb()
-    #cursor = connection.cursor()
-
-    #query = "INSERT INTO banned_ip (`ip`) VALUES (?);"
-    #cursor.execute(query, [ip_address])
-    #connection.commit()
-
-    #connection.close()
 
 def is_ip_banned(ip_address: str):
     with open(f"{BASE_DIR}/banned_ips", "r") as fp:
         return f"{ip_address}\n" in fp.read()
-
-    # result = sql_get_simple("banned_ip", "ip", "ip", ip_address)
-    # return result is not None
 
 def log(msg, suffix=""):
     with open("/var/log/httpd/burnsomninet/log", "a") as fp:
