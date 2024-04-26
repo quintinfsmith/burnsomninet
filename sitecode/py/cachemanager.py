@@ -33,6 +33,15 @@ def check_cache(cache_key, *file_list) -> bool:
 
     return out_of_date
 
+def get_latest_update(cache_key: str):
+    file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
+    if not os.path.isfile(file_path):
+        return None
+
+    file_stat = os.stat(file_path)
+    last_update = datetime.fromtimestamp(max(file_stat.st_mtime, file_stat.st_ctime))
+    return last_update
+
 def key_exists(cache_key: str) -> bool:
     file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
     return os.path.isfile(file_path)
