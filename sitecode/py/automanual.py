@@ -10,7 +10,7 @@ import json
 import re
 import html
 
-SVG_PATT = re.compile("!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
+SVG_PATT = re.compile(r"!\[(?P<desc>.*?)\]\((?P<path>.*?svg)\)", re.M)
 CONTENT_PATT = re.compile("^@\\$(?P<cname>.*?)$", re.M)
 TITLE_PATT = re.compile("^# (?P<title>.*?)$", re.M)
 SUBTITLE_PATT = re.compile("^### (?P<title>.*?)$", re.M)
