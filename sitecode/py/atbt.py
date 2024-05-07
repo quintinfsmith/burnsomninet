@@ -26,6 +26,7 @@ class MariaObj:
         MariaObj.connection_count -= 1
         if not (MariaObj.connection is None) and MariaObj.connection_count == 0:
             MariaObj.connection.commit()
+            MariaObj.connection.cursor().close()
             MariaObj.connection.close()
 
             MariaObj.connection = None

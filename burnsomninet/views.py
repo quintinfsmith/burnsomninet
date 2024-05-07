@@ -692,6 +692,7 @@ def issues_rss_controller(request, project):
     max_ts = None
     for vals in cursor.fetchall():
         max_ts = vals[0]
+    cursor.close()
     connection.close()
 
     cache_key = f"rss_issues_{project}"
@@ -725,6 +726,7 @@ def issues_controller(request, project):
     max_ts = None
     for vals in cursor.fetchall():
         max_ts = vals[0]
+    cursor.close()
     connection.close()
 
     cache_key = f"issues_{project}"
