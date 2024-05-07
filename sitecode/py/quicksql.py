@@ -22,6 +22,7 @@ def sql_get_simple(table, column, match_column, match_value):
     if rows:
         output = rows[0][0]
 
+    cursor.close()
     connection.close()
 
     return output
@@ -39,6 +40,7 @@ def sql_get_inverse_regex(table, column, match_column, match_value):
     if rows:
         output = rows[0][0]
 
+    cursor.close()
     connection.close()
 
     return output
