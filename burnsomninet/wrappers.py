@@ -735,6 +735,9 @@ def atom_releases(project):
         if file_name is None:
             continue
 
+        if file_name.startswith("/"):
+            file_name = file_name[1:]
+
         version_code = result["version_code"]
         version_name = result["version_name"]
         timestamp = result["timestamp"]
