@@ -33,7 +33,7 @@ def sass_compile(input_scss):
     css_path = f"/tmp/.tmp_css{timestamp}"
     with open(scss_path, "w") as file_pipe:
         file_pipe.write(input_scss)
-    os.system(f"source /srv/bon_env/bin/activate && pysassc {scss_path} {css_path} && deactivate")
+    os.system(f"source /srv/bon_venv/bin/activate && pysassc {scss_path} {css_path} && deactivate")
     output = ""
     with open(css_path, "r") as file_pipe:
         output = file_pipe.read()
