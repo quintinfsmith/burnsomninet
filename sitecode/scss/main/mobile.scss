@@ -132,9 +132,11 @@ body {
             display: inline-flex;
             flex-direction: column;
             width: 100%;
-            max-height: calc(100% - 2em);
             > .mp_video_wrapper {
                 flex: 1 1 auto;
+                video {
+                    max-height: calc(100vh - 10em);
+                }
             }
 
             > div:nth-child(2) {
