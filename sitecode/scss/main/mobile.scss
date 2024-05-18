@@ -129,11 +129,15 @@ body {
     > div {
         display: block;
         > div:nth-child(2) {
-            .mp_video_wrapper {
-               height: calc(100vh - 10em);
+            display: inline-flex;
+            flex-direction: column;
+            width: 100%;
+            > .mp_video_wrapper {
+                flex: 1 1 auto;
             }
 
             > div:nth-child(2) {
+                flex: 0 1 auto;
                 > .mp_selector {
                     height: 7em;
                     max-width: 100%;
