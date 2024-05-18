@@ -771,7 +771,7 @@ def atom_releases(project):
             "xmlns": "http://www.w3.org/2005/Atom",
             "xml:lang": "en-US"
         },
-        Tag("id", f"https://burnsomni.net/releases/{project}/atom"),
+        Tag("id", f"https://burnsomni.net/releases/{project}.atom"),
         Tag("author",
             Tag("name", "Quintin Smith")
         ),
@@ -783,7 +783,7 @@ def atom_releases(project):
         Tag("link", {
             "type": "application/atom+xml",
             "rel": "self",
-            "href": f"https://burnsomni.net/releases/{project}/atom"
+            "href": f"https://burnsomni.net/releases/{project}.atom"
         }),
         Tag("title", f"{project.title()} Releases"),
         Tag("updated", last_date.isoformat()),
