@@ -156,9 +156,9 @@ class MediaPlayer {
         if (this.element_selector) {
             var prev_thumb = this.element_selector.childNodes[this.active_index];
             var current_thumb = this.element_selector.childNodes[index];
-            removeClass(prev_thumb, 'selected');
             addClass(current_thumb, 'selected');
-            current_thumb.scrollIntoView();
+            removeClass(prev_thumb, 'selected');
+            current_thumb.scrollIntoView(false);
         }
 
         this.active_index = index;
