@@ -2,7 +2,7 @@
 
 body {
     flex-direction: column;
-    max-height: 100vh;
+    max-height: 100dvh;
 }
 
 .sitemap {
@@ -48,7 +48,7 @@ body {
             border-top: 1px solid rgba(0, 0, 0, .1);
             display: flex;
             width: 100%;
-            max-height: calc(100vh - 4em - 1px);
+            max-height: calc(100dvh - 4em - 1px);
             overflow: auto;
             > div {
                 flex: 1 1 auto;
@@ -79,12 +79,12 @@ body {
 .content {
     position: absolute;
     top: calc(4em + 1px);
-    height: calc(100vh - 4em - 2em - 1px);
+    height: calc(100dvh - 4em - 2em - 1px);
     overflow: auto;
 }
 
 .content.index {
-    height: calc(100vh - 8em - 1px);
+    height: calc(100dvh - 8em - 1px);
     width: calc(100vw - 4em);
 
     .img_wrapper {
@@ -102,7 +102,7 @@ body {
 }
 
 .content.daisy {
-    max-height: calc(100vh - 6em - 1px);
+    max-height: calc(100dvh - 6em - 1px);
 }
 
 
@@ -110,7 +110,7 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    height: 100vh;
+    height: 100dvh;
     width: 100vw;
     background-color: rgba(0, 0, 0, .7);
     text-align:center;
@@ -123,22 +123,17 @@ body {
 }
 
 .media_player {
-    height: calc(100vh - 1em);
+    height: calc(100dvh - 1em);
     width: calc(100vw - 1em);
     border: none;
     > div {
         display: block;
         > div:nth-child(2) {
-            display: inline-flex;
-            flex-direction: column;
-            width: 100%;
-            max-height: calc(100% - 12em);
-            > .mp_video_wrapper {
-                flex: 1 1 auto;
+            .mp_video_wrapper {
+               height: calc(100dvh - 10em);
             }
 
             > div:nth-child(2) {
-                flex: 0 1 auto;
                 > .mp_selector {
                     height: 7em;
                     max-width: 100%;
