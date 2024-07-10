@@ -1,5 +1,6 @@
 import os, sys
 import re, time
+import json
 from datetime import datetime, timedelta, timezone
 from sitecode.py.cachemanager import check_cache, get_cached, key_exists, update_cache
 
@@ -16,6 +17,12 @@ class Author:
         self.alias = alias
         self.email = email
 
+    def as_dict(self):
+        return {
+            "alias": self.alias,
+            "email": self.email
+        }
+
 _MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 MONTHMAP = {}
 for i, m in enumerate(_MONTHS):
@@ -26,8 +33,59 @@ class Project:
         self.path = path
         self.authors = {}
 
+    def as_dict(self):
+        authors_compat = {}
+        for key, author in self.authors.items():
+            authors_compat[key] = author.as_dict()
+
+        return {
+            "path": self.path,
+            "authors": authors_compat
+        }
+
+    @staticmethod
+    def from_dict(input_dict):
+        output = Project(input_dict["path"])
+        output.authors = {}
+        for key, author_dict in input_dict["authors"].items():
+            output.authors[key] = Author(**author_dict)
+        return output
+
     def get_branch(self, branch_name=""):
-        return ProjectBranch(self, branch_name)
+        cache_key = f"git_project_branch_{self.get_name()}_{branch_name}_json"
+
+        # NOTE: This breaks branch name reuse
+        try:
+            needs_update = check_cache(
+                cache_key,
+                f"{self.get_path()}/refs/heads/{branch_name}"
+            )
+        except FileNotFoundError:
+            needs_update = not key_exists(cache_key)
+
+        if needs_update:
+            cwd = os.getcwd()
+            os.chdir(f"{self.get_path()}")
+            whatchanged_dump = get_cmd_output(f"git whatchanged {branch_name}")
+            os.chdir(cwd)
+            project_branch = ProjectBranch(self, branch_name)
+
+            if whatchanged_dump:
+                whatchanged_dump = whatchanged_dump[7:]
+                chunks = whatchanged_dump.split("\ncommit ")
+
+                for chunk in chunks:
+                    commit = Commit.from_dump(chunk, self)
+                    if commit is not None:
+                        project_branch.commits[commit.id] = commit
+
+            update_cache(cache_key, json.dumps(project_branch.as_dict()))
+        else:
+            whatchanged_json, _ = get_cached(cache_key)
+            project_branch = ProjectBranch.from_dict(
+                json.loads(whatchanged_json)
+            )
+        return project_branch
 
     def get_branch_names(self):
         os.chdir(f"{self.path}")
@@ -70,6 +128,7 @@ class Project:
         refsmap = {}
         for branch, hashstr in heads.items():
             refsmap[f"refs/heads/{branch}"] = hashstr
+
         for branch, hashstr in remotes.items():
             refsmap[f"refs/remotes/origin/{branch}"] = hashstr
 
@@ -147,34 +206,27 @@ class ProjectBranch:
         self.commits = {}
         self.branch = branch
 
-        cache_key = f"git_project_branch_{self.project.get_name()}_{branch}"
+    def as_dict(self):
+        commit_dicts = {}
+        for key, value in self.commits.items():
+            commit_dicts[key] = value.as_dict()
 
-        # NOTE: This breaks branch name reuse
-        try:
-            needs_update = check_cache(
-                cache_key,
-                f"{self.project.get_path()}/refs/heads/{branch}"
-            )
-        except FileNotFoundError:
-            needs_update = not key_exists(cache_key)
+        return {
+            "project": self.project.as_dict(),
+            "commits": commit_dicts,
+            "branch": self.branch
+        }
 
-        if needs_update:
-            cwd = os.getcwd()
-            os.chdir(f"{self.project.get_path()}")
-            whatchanged_dump = get_cmd_output(f"git whatchanged {branch}")
-            os.chdir(cwd)
-            update_cache(cache_key, whatchanged_dump)
-        else:
-            whatchanged_dump, _ = get_cached(cache_key)
+    @staticmethod
+    def from_dict(input_dict):
+        output = ProjectBranch(
+            Project.from_dict(input_dict["project"]),
+            input_dict["branch"]
+        )
+        for key, commit_dict in input_dict["commits"].items():
+            output.commits[key] = Commit.from_dict(commit_dict)
 
-        if whatchanged_dump:
-            whatchanged_dump = whatchanged_dump[7:]
-            chunks = whatchanged_dump.split("\ncommit ")
-
-            for chunk in chunks:
-                commit = Commit.from_dump(chunk, self.project)
-                if commit is not None:
-                    self.commits[commit.id] = commit
+        return output
 
     def get_latest_commit_id(self):
         return self.get_commits()[1].id
@@ -392,6 +444,24 @@ class Commit:
     def get_author_email(self):
         return self.author
 
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "date": self.date.timestamp(),
+            "description": self.description,
+            "files": self.files,
+            "author": self.author
+        }
+
+    @staticmethod
+    def from_dict(input_dict):
+        return Commit(
+            id=input_dict["id"],
+            date=datetime.fromtimestamp(input_dict["date"]),
+            description=input_dict["description"],
+            files=input_dict["files"],
+            author=input_dict["author"]
+        )
 
 def get_cmd_output(cmd, mode="r"):
     if mode not in ["rb", "r"]:
@@ -408,19 +478,3 @@ def get_cmd_output(cmd, mode="r"):
 
     return output
 
-if __name__ == "__main__":
-    test_project = Project(sys.argv[1])
-    test_branch = test_project.get_branch(sys.argv[2])
-
-    #commit_id = "079de5655440e92429637ba8d834b047552fa758"
-    #commits = test_branch.get_commits()
-
-    #for commit in commits:
-    #    print(commit.author)
-    #    print(commit.description)
-    #    print(commit.date)
-    #    print("----------------")
-
-    filelist = test_branch.get_filelist("scales")
-    for file, commit_id in filelist:
-        print(file, f"({commit_id})")
