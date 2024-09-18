@@ -1,4 +1,5 @@
-# Pagan Music Sequencer
+# Pagan
+A Music Sequencer
 
 <div style="text-align: center; display: block;">
     <div style="display: inline-block; height: 4em;">
