@@ -21,6 +21,8 @@ A Music Sequencer
 
 @@TOC
 
+@$how_to_read
+
 @$overview
 
 @$settings
