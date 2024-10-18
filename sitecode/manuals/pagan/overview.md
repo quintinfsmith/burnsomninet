@@ -5,7 +5,7 @@
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "/content/manuals/pagan/imgs/mainlayout.png",
+        "img": "/content/manuals/pagan/imgs/1.5.9/mainlayout.png",
         "entries": [
             [0.65, 0.04, "Start Playback. Tap again to stop. Also tap anywhere to stop"],
             [0.80, 0.04, "Undo last action. (max history size is 100 actions)"],
@@ -14,6 +14,8 @@
             [0.0, 0.20, "Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)"],
             [0.0, 0.39, "Select percussion line. the \"!\" denotes the line belongs to the percussion channel and the number is the drum assigned to the line."],
             [0.53, 0.575, "Select a note. Brings up note menu. Tap and hold to link, copy or move beats."]
+            [0, 0, "Set the initial tempo."],
+            [0, 0, "Set a tempo change."]
         ]
     }
 }
@@ -24,11 +26,10 @@
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "/content/manuals/pagan/imgs/configlayout.png",
+        "img": "/content/manuals/pagan/imgs/1.5.9/configlayout.png",
         "entries": [
             [0.64, 0.065, "Set the song's name"],
             [0.11, 0.12, "Open The Tuning Table. This is where you can set the transposition and manually tweak the tuning."],
-            [0.64, 0.12, "Set the Tempo"],
             [0.24, 0.18, "Add New Channels (Instruments) to the Song"],
             [0.11, 0.25, "Change Channel Instrument"],
             [0.64, 0.25, "Remove Channel"],
@@ -42,13 +43,28 @@
     }
 }
 
+## The Tuning Table
+
+~SLUG{
+    "slug": "NumberedDiagram",
+    "class": "slug-NumberedDiagram",
+    "data-json": {
+        "img": "/content/manuals/pagan/imgs/1.5.9/tuningtablelayout.png",
+        "entries": [
+            [0, 0, "Transpose the project by the given note. Maximum is the Radix - 1],
+            [0, 0.5, "Set the number of notes-per-octave to use in the project. Default is 12],
+            [0, 0, "Tune the notes using ratios rather than 'cents'. Default values are the pegged note values. In order to use cents, multiply the values by 100 then add the desired number of cents to the numerator"]
+        ]
+    }
+}
+
 ## The Line Control Menu
 
 ~SLUG{
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "/content/manuals/pagan/imgs/linemenulayout.png",
+        "img": "/content/manuals/pagan/imgs/1.5.9/linemenulayout.png",
         "entries": [
             [0.56, 0.79, "Control the line's volume"],
             [0.23, 0.86, "Set line's drum. (Exclusive to the Percussion Channel)"],
@@ -64,7 +80,7 @@
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "/content/manuals/pagan/imgs/columnmenulayout.png",
+        "img": "/content/manuals/pagan/imgs/1.5.9/columnmenulayout.png",
         "entries": [
             [0.73, 0.9, "Remove beats from the column. (Short tap for 1. Hold to input a number)"],
             [0.9, 0.9, "Add more beats to the column. (Short tap for 1. Hold to input a number)"]
@@ -78,7 +94,7 @@
     "slug": "NumberedDiagram",
     "class": "slug-NumberedDiagram",
     "data-json": {
-        "img": "/content/manuals/pagan/imgs/cellmenulayout.png",
+        "img": "/content/manuals/pagan/imgs/1.5.9/cellmenulayout.png",
         "entries": [
             [0.01, 0.84, "Change to Relative/Absolute Note Input Mode. This can be toggled from the settings menu."],
             [0.18, 0.78, "Split a cell into finite divisions. (Hold to input a number)"],
