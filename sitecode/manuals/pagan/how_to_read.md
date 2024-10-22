@@ -75,7 +75,7 @@ On the left side of the Pagan interface, you'll notice labels that look somethin
 <u>The lines written as a number with an exclamation mark <b>(0!)</b> are <i><b>Percussion Lines</b></i></u>.
 
 <div style="font-weight: 300; padding-left: 1em;">
-    The number the instrument identifier, it varies based on the soundfont being used, but soundfonts that adhere to the <b>General MIDI Standard</b> will follow this table:
+    The numbers identify the percussion instruments being used. It varies based on the soundfont being used, but soundfonts that adhere to the <b>General MIDI Standard</b> will follow this table:
     <table class="gm_perc_table">
         <tr><td>08</td><td>Acoustic Bass Drum</td><td>09</td><td>Bass Drum 1</td><td>10</td><td>Side Stick</td></tr>
         <tr><td>11</td><td>Acoustic Snare</td><td>12</td><td>Hand Clap</td><td>13</td><td>Electric Snare</td><td>14</td><td>Low Floor Tom</td></tr>
