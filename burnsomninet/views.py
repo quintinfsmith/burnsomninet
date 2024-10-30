@@ -417,7 +417,7 @@ def index(request):
                                         "Keybase"
                                     ),
                                     Tag("div",
-                                        { "class": "nvm" },
+                                        { "href": "https://github.com/quintinfsmith" },
                                         Tag("div", { "class": "vh_mid" }),
                                         "GitHub"
                                     ),
