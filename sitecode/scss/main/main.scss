@@ -1421,3 +1421,42 @@ div.slug-IssuesTable {
         max-width: calc(100% - 3em);
     }
 }
+
+div.slug-StepDiagram {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: 2%;
+
+  > div:nth-child(odd) {
+    flex: 1 1 0;
+    min-width: 30%;
+  }
+  > div:nth-child(even) {
+    flex: 1 1 1;
+  }
+  > div {
+    margin-left: 2%;
+    margin-bottom: 1em;
+
+    .img-wrapper {
+      text-align: center;
+      margin-bottom: 1em;
+      > img {
+        display: inline-block;
+      }
+    }
+
+    .label {
+      text-align: center;
+      padding: .5em;
+    }
+
+    .label:empty {
+      display: none;
+    }
+    
+    > * {
+      border: 1px solid var(--col_fore);
+    }
+  }
+}

@@ -604,3 +604,36 @@ class ViewableImg extends SlugWidget {
         });
     }
 }
+
+class StepDiagram extends SlugWidget {
+    constructor(element, options) {
+        super(element, options);
+
+        for (let i = 0; i < options["entries"].length; i++) {
+            let entry = options["entries"][i]
+            if (i != 0) {
+                this.element.appendChild(
+                    crel("div", String.fromCodePoint(0x27F6))
+                )
+            }
+
+            let label_text = ""
+            if (entry["label"]) {
+                label_text = (i + 1).toString() + ". " + entry["label"]
+            }
+
+            this.element.appendChild(
+                crel("div",
+                    crel("div",
+                        { "class": "img-wrapper" },
+                        crel("img", { "src": entry["src"] })
+                    ),
+                    crel("div", 
+                        { "class": "label" },
+                        label_text
+                    )
+                )
+            )
+        }
+    }
+}
