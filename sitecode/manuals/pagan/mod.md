@@ -27,4 +27,3 @@ A Music Sequencer
 
 @$settings
 
-@$faq
