@@ -8,11 +8,6 @@ A Music Sequencer
         </a>
     </div>
     <div style="display: inline-block; height: 4em;">
-        <a href='https://burnsomni.net/releases/pagan.atom'>
-            <img alt='Get it over RSS' src='/content/get-it-on-rss.png' style="display: inline-block; height: 100%;"/>
-        </a>
-    </div>
-    <div style="display: inline-block; height: 4em;">
         <a href='https://play.google.com/store/apps/details?id=com.qfs.pagan'>
             <img alt='Get it on Google Play' src='/content/google-play-badge.png' style="display: inline-block; height: 100%;"/>
         </a>
