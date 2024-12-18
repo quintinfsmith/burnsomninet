@@ -927,6 +927,16 @@ body {
     }
     .readme {
         text-align: left;
+        table {
+          border-collapse: collapse;
+          td {
+            border: 1px solid var(--col_fore);
+            padding: .5em;
+            img {
+              width: 100%;
+            }
+          }
+        }
     }
     .slug-GitActivityWidget:empty {
         height: 9em;
