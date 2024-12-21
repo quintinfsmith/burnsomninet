@@ -129,22 +129,111 @@ def populate_page(directory):
             content = content[0:pivot] + subcontent + content[pivot + len(reptag):]
 
     if "@@TOC" in content:
-        toc_lines = ["## Table of Contents"]
-        path_info.sort()
-        for insert_point, subpath, title in path_info:
-            depth = subpath.count('/')
-            key = subpath.replace("/", "_")
-            depth_buffer = " " * (depth * 4)
-            toc_lines.append(f"{depth_buffer}- [{title}](#{key})")
 
-        for insert_point, subpath, _title in path_info[::-1]:
-            key = subpath.replace("/", "_")
-            content = content[0:insert_point] + f"<a name=\"{key}\"></a>\n" + content[insert_point:]
+        #toc_lines = ["## Table of Contents"]
 
-        content = content.replace("@@TOC", "\n".join(toc_lines))
+        #path_info.sort()
+        #for insert_point, subpath, title in path_info:
+        #    depth = subpath.count('/')
+        #    key = subpath.replace("/", "_")
+        #    depth_buffer = " " * (depth * 4)
+        #    toc_lines.append(f"{depth_buffer}- [{title}](#{key})")
+
+        #for insert_point, subpath, _title in path_info[::-1]:
+        #    key = subpath.replace("/", "_")
+        #    content = content[0:insert_point] + f"<a name=\"{key}\"></a>\n" + content[insert_point:]
+
+        (toc, link_pairs) = build_toc(content)
+
+        lines = content.split("\n")
+        link_pairs.sort()
+        for (index, key) in link_pairs[::-1]:
+            lines.insert(index, f"<a name=\"{key}\"></a>")
+
+        toc.insert(0, "## Table of Contents")
+
+        content = "\n".join(lines).replace("@@TOC", "\n".join(toc))
 
 
     return content
+
+def build_toc(content):
+    lines = content.split("\n")
+    top_node = { "node": None,  "children": [] }
+    working_position = []
+    last_count = 0
+    y = 0
+    for line in lines:
+        if line.startswith("#"):
+            hashtag_count = 0
+
+            while hashtag_count < len(line) and line[hashtag_count] == "#":
+                hashtag_count += 1
+
+            if hashtag_count > 1:
+                hashtag_count -= 1
+                if hashtag_count > last_count:
+                    working_position += [0] * (hashtag_count - last_count)
+                elif hashtag_count == last_count:
+                    working_position[-1] += 1
+                else:
+                    working_position = working_position[0:hashtag_count] 
+                    working_position[-1] += 1
+
+                check = top_node
+                for p in working_position:
+                    while len(check["children"]) <=p:
+                        check["children"].append({ "node": None, "children": [] })
+                    check = check["children"][p]
+
+                last_count = hashtag_count
+
+                check["node"] = (line[hashtag_count + 1:].strip(), y)
+        y += 1
+    return _build_toc_from_tree(top_node)
+
+
+def _build_toc_from_tree(node, depth=0, key_split=[]):
+    node_content = node["node"]
+    logg(node_content, depth)
+
+    key_indices = []
+    output_lines = []
+
+    if node_content is None:
+        new_key_split = key_split.copy()
+        level_tag = "top"
+    else:
+        level_tag = node_content[0].replace("#", "").replace(" ", "-").strip().replace("?", "").lower()
+        new_key_split = key_split.copy() + [level_tag]
+        working_key = "_".join(new_key_split)
+
+        output_lines.append(f"{'    ' * (depth - 1)}- [{node_content[0]}](#{working_key})")
+
+        key_indices.append((node_content[1], working_key))
+
+    for child_node in node["children"]:
+        (working_lines, working_key_indices) = _build_toc_from_tree(child_node, depth + 1, new_key_split)
+
+        output_lines += working_lines
+        key_indices += working_key_indices
+
+    return (output_lines, key_indices)
+
+
+
+
+
+
+
+def logg(*msgs):
+    with open("/var/log/httpd/burnsomninet/log", "a") as fp:
+        v = []
+        for msg in msgs:
+            v.append(str(msg))
+
+        fp.write(", ".join(v) + "\n")
+            
 
 BR_PATT = re.compile("(?P<c>[^\n])\n(?P<c2>[^\n])", re.M)
 def extra_markdown(content):
