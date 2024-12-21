@@ -22,5 +22,7 @@ A Music Sequencer
 
 @$settings
 
+@$tuning
+
 @$faq
 
