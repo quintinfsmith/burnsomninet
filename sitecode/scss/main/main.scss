@@ -718,6 +718,17 @@ body {
     }
 }
 
+.manual + .content {
+    .markdown-wrapper {
+        > .markdown {
+            > h1,
+            > h1 + p {
+                text-align: center;
+            }
+        }
+    }
+}
+
 .markdown-wrapper {
     > .markdown {
 
@@ -748,7 +759,6 @@ body {
                 max-width: 100%;
             }
         }
-
         > h1 {
             text-decoration: underline;
         }
