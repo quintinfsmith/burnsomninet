@@ -54,7 +54,7 @@
         "entries": [
             [0.35, 0.05, "Transpose the project by the given note. Maximum is the Radix - 1"],
             [0.65, 0.05, "Set the number of notes-per-octave to use in the project. Default is 12"],
-            [0.4, 0.4, "Tune the notes using ratios rather than 'cents'. Default values are the pegged note values. In order to use cents, multiply the values by 100 then add the desired number of cents to the numerator"]
+            [0.4, 0.4, "Tune the notes using ratios rather than 'cents'. See <a href=\"#how-tuning-works\"><b>How tuning works</b></a> for more information."]
         ]
     }
 }

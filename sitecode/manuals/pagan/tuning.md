@@ -20,7 +20,7 @@ Where, relative to western music:
 
 
 
-## Using Tuning Table
+## Using The Tuning Table
 The tuning table has 3 parts:
 
 ### Radix

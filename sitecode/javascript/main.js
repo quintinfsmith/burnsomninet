@@ -379,10 +379,12 @@ class NumberedDiagram extends SlugWidget {
             while (padded_i.length < 2) {
                 padded_i = "0" + padded_i
             }
+            let td_label = crel("td")
+            td_label.insertAdjacentHTML("beforeend", options["entries"][i][2])
             item_table.appendChild(
                 crel("tr",
                     crel("td", padded_i),
-                    crel("td", options["entries"][i][2])
+                    td_label
                 )
             )
 
