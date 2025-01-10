@@ -374,6 +374,23 @@ def index(request):
     # with open(f"{STATIC_PATH}/bmac.svg", "r") as fp:
     #     bmac_content = fp.read()
 
+
+    svg_bsky = ""
+    with open(f"{STATIC_PATH}/icons/bsky.svg", "r") as fp:
+        svg_bsky = fp.read()
+
+    svg_github = ""
+    with open(f"{STATIC_PATH}/icons/github.svg", "r") as fp:
+        svg_github = fp.read()
+
+    svg_email = ""
+    with open(f"{STATIC_PATH}/icons/email.svg", "r") as fp:
+        svg_email = fp.read()
+
+    svg_keybase = ""
+    with open(f"{STATIC_PATH}/icons/keybase.svg", "r") as fp:
+        svg_keybase = fp.read()
+
     top = Tag("html",
         wrappers.build_head(
             title="Quintin Smith - Developer, Unicyclist",
@@ -406,20 +423,26 @@ def index(request):
                                 ),
                                 Tag("div",
                                     { "class": "externals" },
+                                    Tag("div", { "class": "vh_mid" }),
                                     Tag("a",
-                                        { "href": "mailto:smith.quintin@protonmail.com" },
+                                        { "href": "mailto:smith.quintin@protonmail.com", "alt": "Email" },
                                         Tag("div", { "class": "vh_mid" }),
-                                        "Email"
+                                        RawHTML(svg_email)
                                     ),
                                     Tag("a",
-                                        { "href": "https://keybase.io/quintinfsmith" },
+                                        { "href": "https://github.com/quintinfsmith", "alt": "Github" },
                                         Tag("div", { "class": "vh_mid" }),
-                                        "Keybase"
+                                        RawHTML(svg_github)
                                     ),
                                     Tag("a",
-                                        { "href": "https://github.com/quintinfsmith" },
+                                        { "href": "https://bsky.app/profile/quintinfsmith.bsky.social", "alt": "Bluesky" },
                                         Tag("div", { "class": "vh_mid" }),
-                                        "GitHub"
+                                        RawHTML(svg_bsky)
+                                    ),
+                                    Tag("a",
+                                        { "href": "https://keybase.io/quintinfsmith", "alt": "Keybase" },
+                                        Tag("div", { "class": "vh_mid" }),
+                                        RawHTML(svg_keybase)
                                     ),
                                 )
                                 # Tag("div",
