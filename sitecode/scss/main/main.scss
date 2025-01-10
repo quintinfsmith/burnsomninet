@@ -516,7 +516,7 @@ body {
             height: 5em;
             svg {
               transition-duration: .2s;
-              transition-property: width, height;
+              transition-property: width, height, padding, margin;
               transition-timing-function: ease;
               padding: .5em 1em;
               background-color: rgba(255, 255, 255, .05);
@@ -532,6 +532,9 @@ body {
               }
             }
             > * {
+              transition-duration: .2s;
+              transition-property: padding, margin;
+              transition-timing-function: ease;
               text-align: center;
               white-space: nowrap;
               display: inline-block;
@@ -540,6 +543,8 @@ body {
               padding-left: 1em;
             }
             > *:hover {
+              margin-right: -1em;
+              padding-left: 0em;
               svg {
                 width: 4em;
                 height: 4em;
