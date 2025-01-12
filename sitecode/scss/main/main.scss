@@ -513,16 +513,14 @@ body {
         }
 
         .externals {
-            min-height: 5em;
+            padding-bottom: 1em;
             > a {
-              transition-duration: .2s;
-              transition-property: padding, margin;
-              transition-timing-function: ease;
+              height: 5em;
+              width: 5em;
+              margin-bottom: -1em;
               text-align: center;
               white-space: nowrap;
               display: inline-block;
-              padding-top: 1.5em;
-              padding-bottom: 1.5em;
               svg {
                 transition-duration: .2s;
                 transition-property: width, height, padding, margin, box-shadow;
@@ -532,6 +530,7 @@ body {
                 background-color: rgba(255, 255, 255, .05);
                 width: 2em;
                 height: 2em;
+                margin-top: 1em;
                 path {
                   fill: var(--col_text);
                 }
@@ -542,22 +541,14 @@ body {
                 }
               }
             }
-            > a:not(:first-child) {
-              padding-left: 1em;
-            }
             > a:hover {
-              margin-right: -1em;
-              padding-left: 0em;
-              padding-top: 0;
-              padding-bottom: 0;
               svg {
-                width: 4em;
-                height: 4em;
+                margin-left: -0.25em;
+                margin-top: 0.25em;
+                width: 3.5em;
+                height: 3.5em;
                 box-shadow: var(--shadow);
               }
-            }
-            .nvm {
-                text-decoration: line-through;
             }
         }
     }

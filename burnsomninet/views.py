@@ -426,22 +426,18 @@ def index(request):
                                     Tag("div", { "class": "vh_mid" }),
                                     Tag("a",
                                         { "href": "mailto:smith.quintin@protonmail.com", "alt": "Email" },
-                                        Tag("div", { "class": "vh_mid" }),
                                         RawHTML(svg_email)
                                     ),
                                     Tag("a",
                                         { "href": "https://github.com/quintinfsmith", "alt": "Github" },
-                                        Tag("div", { "class": "vh_mid" }),
                                         RawHTML(svg_github)
                                     ),
                                     Tag("a",
                                         { "href": "https://bsky.app/profile/quintinfsmith.bsky.social", "alt": "Bluesky" },
-                                        Tag("div", { "class": "vh_mid" }),
                                         RawHTML(svg_bsky)
                                     ),
                                     Tag("a",
                                         { "href": "https://keybase.io/quintinfsmith", "alt": "Keybase" },
-                                        Tag("div", { "class": "vh_mid" }),
                                         RawHTML(svg_keybase)
                                     ),
                                 )
