@@ -150,7 +150,7 @@ Mutliple Beats:
 
 1. Tap the hamburger menu to open the configuration menu.
 2. Tap the 'Tuning' button.
-3. See the [**Tuning Section**](#tuning) if this table doesn't make sense to you.
+3. See the [**Tuning Section**](#how-tuning-works) if this table doesn't make sense to you.
 
 ### Save the project?
 1. Tap the hamburger menu to open the configuration menu.
