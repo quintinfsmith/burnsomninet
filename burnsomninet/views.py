@@ -391,6 +391,10 @@ def index(request):
     with open(f"{STATIC_PATH}/icons/keybase.svg", "r") as fp:
         svg_keybase = fp.read()
 
+    svg_kofi = ""
+    with open(f"{STATIC_PATH}/icons/kofi.svg", "r") as fp:
+        svg_kofi = fp.read()
+
     top = Tag("html",
         wrappers.build_head(
             title="Quintin Smith - Developer, Unicyclist",
@@ -440,6 +444,10 @@ def index(request):
                                         { "href": "https://keybase.io/quintinfsmith", "alt": "Keybase" },
                                         RawHTML(svg_keybase)
                                     ),
+                                    Tag("a",
+                                        { "href": "https://ko-fi.com/quintinfsmith", "alt": "Ko-Fi" },
+                                        RawHTML(svg_kofi)
+                                    )
                                 )
                                 # Tag("div",
                                 #     { "class": "externals" },
