@@ -541,7 +541,8 @@ body {
                 }
               }
             }
-            > a:hover {
+            > a:hover,
+            > a:focus {
               svg {
                 margin-left: -0.25em;
                 margin-top: 0.25em;
