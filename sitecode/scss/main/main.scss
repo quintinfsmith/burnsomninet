@@ -543,6 +543,7 @@ body {
             }
             > a:hover,
             > a:focus {
+              outline: none;
               svg {
                 margin-left: -0.25em;
                 margin-top: 0.25em;
@@ -782,7 +783,9 @@ body {
                 padding: .5em 1em;
                 box-shadow: var(--shadow);
             }
+            > a:focus,
             > a:hover {
+                outline: none;
                 background-color: var(--col_button_hover);
                 color: var(--col_button_hover_text);
             }
