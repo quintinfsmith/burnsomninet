@@ -30,10 +30,11 @@ STATIC_PATH = f"{Path(__file__).resolve().parent.parent.parent}/content"
 SECRET_KEY = '4_m6_(zq#$!u#i=b0o=911e3)_xfq!_3mh9%)nhxqw5r@24fv&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
+    "127.0.0.1",
     "burnsomni.stage",
     "burnsomni.net",
     "www.burnsomni.net"
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'burnsomninet'
 ]
 
 MIDDLEWARE = [
