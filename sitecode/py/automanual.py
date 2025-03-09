@@ -227,12 +227,13 @@ def _build_toc_from_tree(node, depth=0, key_split=[]):
 
 
 def logg(*msgs):
-    with open("/var/log/httpd/burnsomninet/log", "a") as fp:
-        v = []
-        for msg in msgs:
-            v.append(str(msg))
-
-        fp.write(", ".join(v) + "\n")
+    return
+#    with open("/var/log/httpd/burnsomninet/log", "a") as fp:
+#        v = []
+#        for msg in msgs:
+#            v.append(str(msg))
+#
+#        fp.write(", ".join(v) + "\n")
             
 
 BR_PATT = re.compile("(?P<c>[^\n])\n(?P<c2>[^\n])", re.M)
@@ -286,4 +287,8 @@ def replace_svg(content, root_path):
 
         content = f"{content[0:a]}<span class=\"inline-svg\">{svg_content}</span>{content[b:]}"
     return content
+
+if __name__ == "__main__":
+    import sys
+    print(populate_page(sys.argv[1]))
 

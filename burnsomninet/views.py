@@ -4,6 +4,7 @@ import time
 import marko
 import zlib
 import re
+import subprocess
 from django.http import HttpResponse, Http404
 from django.conf import settings
 from django.shortcuts import redirect
@@ -330,6 +331,7 @@ def index(request):
     private_projects = set()
     repositories = os.listdir(GIT_PATH)
     repositories.sort()
+
     working_repositories = []
     for path in repositories:
         if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path != "burnsomninet":
@@ -489,7 +491,6 @@ def api_controller(request, section_path):
         content = api.handle(*section_split, **kwargs)
     except ModuleNotFoundError:
         raise Http404()
-
     content = json.dumps(content)
     return HttpResponse(content, content_type="application/json")
 
@@ -498,6 +499,7 @@ def get_botlist():
     with open(f"{SITECODE}/robot_useragents", "r") as fp:
         bots = fp.read().split("\n")
     return bots
+
 
 def git_controller(request, project, *project_path):
     uagent = request.META.get("HTTP_USER_AGENT", "")

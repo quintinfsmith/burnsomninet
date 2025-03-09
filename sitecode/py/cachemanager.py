@@ -22,7 +22,7 @@ def check_cache(cache_key, *file_list) -> bool:
             max_date = max(max_date, s.st_mtime, s.st_ctime)
 
     latest_file_change = datetime.fromtimestamp(max_date)
-    
+
     file_path = f"{settings.BASE_DIR}/cached_files/{cache_key}"
     file_stat = os.stat(file_path)
     last_update = datetime.fromtimestamp(max(file_stat.st_mtime, file_stat.st_ctime))
