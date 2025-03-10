@@ -26,6 +26,7 @@ def process_request(**kwargs):
         project_branches = all_project_branches
     else:
         project_branches = [project_branch]
+
     mapped_commits = {}
     for branch_name in project_branches:
         branch  = project.get_branch(branch_name)
