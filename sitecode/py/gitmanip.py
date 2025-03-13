@@ -298,6 +298,9 @@ class ProjectBranch:
 
     def get_file_content(self, filepath, commit_id=None):
         filelist = self.get_filelist("", commit_id)
+        while filepath.startswith("/"):
+            filepath = filepath[1:]
+
         file_exists = False
         for (name, _) in filelist:
             if name == filepath:
@@ -318,6 +321,7 @@ class ProjectBranch:
         os.chdir(cwd)
 
         return content
+
 
     def get_blame(self, filepath, commit_id=None):
         filelist = self.get_filelist("", commit_id)

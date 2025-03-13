@@ -515,7 +515,7 @@ def build_git_overview(request, project_name: str, branch_name: str, active_comm
                 project=project_name,
                 branch=branch_name,
                 datefrom=from_date.timestamp() * 1000, # JS timestamp
-                datefirst=first_commit_date.timestamp() * 1000,
+                datefirst=from_date.timestamp() * 1000,
                 orientation="horizontal",
                 commits=api.handle(
                     'git', 'commits',
@@ -589,7 +589,12 @@ def get_raw_file_content(project_name, branch_name, commit_id, path):
 def build_git_file_view(project_name, branch_name, commit_id, path):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
     branch = git_project.get_branch(branch_name)
-    body_content = branch.get_file_content(path, commit_id)
+    is_binary = False
+    try:
+        body_content = branch.get_file_content(path, commit_id)
+    except UnicodeDecodeError:
+        is_binary = True
+        body_content = "Binary File"
 
     ext = path[path.rfind(".") + 1:].lower()
     if ext == "py":
@@ -618,8 +623,22 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
         query_attrs['commit'] = commit_id
     else:
         commit_id = branch.get_latest_commit_id()
+    download_button_wrapper = Tag("div")
 
-    return Tag("div",
+    if not is_binary:
+        download_button_wrapper.append(VH_MID)
+        download_button_wrapper.append(
+            Tag("a",
+                {
+                    "href": "?" + urlencode(query_attrs),
+                    "download": path[path.rfind("/") + 1:],
+                    "class": "button"
+                },
+                "Download File"
+            )
+        )
+
+    output = Tag("div",
         { "class": "git-fileoverview" },
         Tag("div",
             { "class": "title-row" },
@@ -636,17 +655,7 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
             Tag("div",
                 build_git_path_navigator(branch_name, commit_id, path)
             ),
-            Tag("div",
-                VH_MID,
-                Tag("a",
-                    {
-                        "href": "?" + urlencode(query_attrs),
-                        "download": path[path.rfind("/") + 1:],
-                        "class": "button"
-                    },
-                    "Download File"
-                )
-            )
+            download_button_wrapper
         ),
         Tag("pre",
             { "class": f"language-{language} line-numbers" },
@@ -656,6 +665,8 @@ def build_git_file_view(project_name, branch_name, commit_id, path):
             )
         )
     )
+
+    return output
 
 def build_git_commit_view(project_name, branch_name, commit_id=None):
     git_project = GitProject(f"{GIT_PATH}/{project_name}")
