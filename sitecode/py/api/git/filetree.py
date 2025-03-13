@@ -10,7 +10,8 @@ def process_request(**kwargs):
     #     raise HTTP404()
 
     project = GitProject(project_name)
-    branch = project.get_branch(kwargs.get("branch", "master"))
+    branch_name = kwargs.get("branch", "master")
+    branch = project.get_branch(branch_name)
 
     filelist = branch.get_filelist("")
     commits = {}
@@ -67,6 +68,7 @@ def process_request(**kwargs):
 
 
     return {
+        "branch": branch_name,
         "tree": output_tree,
         "commits": commits
     }

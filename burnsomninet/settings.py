@@ -34,10 +34,14 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
+    "ang.localhost",
+    "django.localhost",
     "127.0.0.1",
     "burnsomni.stage",
     "burnsomni.net",
-    "www.burnsomni.net"
+    "www.burnsomni.net",
+    "ang.burnsomni.net",
+    "django.burnsomni.net"
 ]
 
 # Application definition

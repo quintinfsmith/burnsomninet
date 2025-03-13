@@ -20,7 +20,12 @@ def process_request(**kwargs):
 
     all_commits = []
     now = datetime.now()
-    from_date = datetime(year=now.year - 1, month=now.month, day=now.day) - timedelta(days=1)
+    from_date = kwargs.get("datefrom", None)
+    if from_date is None:
+        from_date = datetime(year=now.year - 1, month=now.month, day=now.day) - timedelta(days=1)
+    else:
+        from_date = datetime.fromtimestamp(int(from_date))
+
     for project in repositories:
         cache_key = f"INDEX_GIT_{project}"
         needs_update = check_cache(

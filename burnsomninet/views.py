@@ -16,7 +16,7 @@ from sitecode.py.gitmanip import FileNotFound, InvalidBranch
 from burnsomninet import wrappers
 from sitecode.py import api, accesslogmanager
 from datetime import datetime, timedelta
-from urllib.parse import urlencode, quote_plus
+from urllib.parse import urlencode, quote_plus, unquote
 import mimetypes
 from sitecode.py import automanual
 from sitecode.py.atbt import Issue, IssueNote
@@ -486,13 +486,19 @@ def api_controller(request, section_path):
     kwargs = {}
     for key in request.GET:
         kwargs[key] = request.GET.get(key, None)
+        if kwargs[key] is not None:
+            kwargs[key] = unquote(kwargs[key])
 
     try:
         content = api.handle(*section_split, **kwargs)
     except ModuleNotFoundError:
         raise Http404()
-    content = json.dumps(content)
-    return HttpResponse(content, content_type="application/json")
+
+    if content is bytes:
+        return HttpResponse(content, content_type="application/octet-stream")
+    else:
+        content = json.dumps(content)
+        return HttpResponse(content, content_type="application/json")
 
 def get_botlist():
     bots = []

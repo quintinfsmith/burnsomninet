@@ -17,7 +17,7 @@ def process_request(**kwargs):
     if not os.path.isdir(directory_path):
         raise Exception("") # TODO: 404
 
-    raw_content = automanual.populate_page(directory_path)
+    raw_content = automanual.populate_page(directory_path, f"/manual/{manual}")
     raw_content = automanual.do_slugs(raw_content)
     description = raw_content[raw_content.find("## About") + 8:].strip()
     description = description[0:description.find("\n")]

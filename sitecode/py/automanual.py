@@ -71,7 +71,7 @@ def do_slugs(content):
 
     return content
 
-def populate_page(directory):
+def populate_page(directory, url_path=""):
     section_paths = get_all_paths(directory)
 
     content = ''
@@ -143,7 +143,7 @@ def populate_page(directory):
         #    key = subpath.replace("/", "_")
         #    content = content[0:insert_point] + f"<a name=\"{key}\"></a>\n" + content[insert_point:]
 
-        (toc, link_pairs) = build_toc(content)
+        (toc, link_pairs) = build_toc(content, url_path)
 
         lines = content.split("\n")
         link_pairs.sort()
@@ -154,10 +154,9 @@ def populate_page(directory):
 
         content = "\n".join(lines).replace("@@TOC", "\n".join(toc))
 
-
     return content
 
-def build_toc(content):
+def build_toc(content, url_path=""):
     lines = content.split("\n")
     top_node = { "node": None,  "children": [] }
     working_position = []
@@ -190,10 +189,13 @@ def build_toc(content):
 
                 check["node"] = (line[hashtag_count + 1:].strip(), y)
         y += 1
-    return _build_toc_from_tree(top_node)
+    return _build_toc_from_tree(top_node, 0, [], url_path)
 
 
-def _build_toc_from_tree(node, depth=0, key_split=[]):
+def _build_toc_from_tree(node, depth=0, key_split=None, url_path=""):
+    if key_split is None:
+        key_split = []
+
     node_content = node["node"]
     logg(node_content, depth)
 
@@ -208,21 +210,17 @@ def _build_toc_from_tree(node, depth=0, key_split=[]):
         new_key_split = key_split.copy() + [level_tag]
         working_key = "_".join(new_key_split)
 
-        output_lines.append(f"{'    ' * (depth - 1)}- [{node_content[0]}](#{working_key})")
+        output_lines.append(f"{'    ' * (depth - 1)}- [{node_content[0]}]({url_path}#{working_key})")
 
         key_indices.append((node_content[1], working_key))
 
     for child_node in node["children"]:
-        (working_lines, working_key_indices) = _build_toc_from_tree(child_node, depth + 1, new_key_split)
+        (working_lines, working_key_indices) = _build_toc_from_tree(child_node, depth + 1, new_key_split, url_path)
 
         output_lines += working_lines
         key_indices += working_key_indices
 
     return (output_lines, key_indices)
-
-
-
-
 
 
 
