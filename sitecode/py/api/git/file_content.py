@@ -9,6 +9,7 @@ def process_request(**kwargs):
     if project_name is None:
         raise FileNotFoundError()
 
+    content_type = kwargs.get("fmt", "md")
     project = GitProject(f"/srv/git/{project_name}")
 
     branch_names = project.get_branch_names()
@@ -30,14 +31,10 @@ def process_request(**kwargs):
     try:
         readme_content = branch.get_file_content(path, active_commit)
         success = True
+        if content_type == "md":
+            readme_content = marko.convert(readme_content)
     except UnicodeDecodeError:
         readme_content = ""
-
-    content_type = kwargs.get("fmt", "md")
-
-    if content_type == "md":
-        return marko.convert(readme_content)
-
 
     return {
         "success": success,

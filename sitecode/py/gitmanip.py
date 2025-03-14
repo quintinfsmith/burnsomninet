@@ -6,8 +6,6 @@ from sitecode.py.cachemanager import check_cache, get_cached, key_exists, update
 
 class InvalidBranch(Exception):
     """Invalid Branch"""
-class FileNotFound(Exception):
-    """File Not Found"""
 class InvalidCommit(Exception):
     def __init__(self, commit_id):
         super.__init__("Invalid Commit: " + commit_id)
@@ -308,7 +306,7 @@ class ProjectBranch:
                 break
 
         if not file_exists:
-            raise FileNotFound()
+            raise FileNotFoundError()
 
         if not commit_id:
             cmd = f"git show \"{self.branch}:{filepath}\""
@@ -332,7 +330,7 @@ class ProjectBranch:
                 break
 
         if not file_exists:
-            raise FileNotFound()
+            raise FileNotFoundError()
         if not commit_id:
             commit_chunk = ""
         else:
