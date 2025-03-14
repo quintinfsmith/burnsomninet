@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 import time
 import re
-from sitecode.py.gitmanip import Project, FileNotFound
+from sitecode.py.gitmanip import Project
 
 def process_not_found(_, **kwargs):
     return []
@@ -34,7 +34,7 @@ def process_android(project_name, **kwargs):
             continue
         try:
             changelog = project_branch.get_file_content(f"fastlane/metadata/android/en-US/changelogs/{version_code}.txt")
-        except FileNotFound as e:
+        except FileNotFoundError as e:
             changelog = ""
         entry = {
             "version_name": tag,

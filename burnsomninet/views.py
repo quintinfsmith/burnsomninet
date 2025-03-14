@@ -12,7 +12,7 @@ from sitecode.py.httree import Tag, Text, RawHTML, slug_tag
 from sitecode.py.cachemanager import check_cache, get_cached, update_cache, get_latest_update
 from sitecode.py.quicksql import connect_to_mariadb
 from sitecode.py.gitmanip import Project as GitProject
-from sitecode.py.gitmanip import FileNotFound, InvalidBranch
+from sitecode.py.gitmanip import InvalidBranch
 from burnsomninet import wrappers
 from sitecode.py import api, accesslogmanager
 from datetime import datetime, timedelta
@@ -493,6 +493,8 @@ def api_controller(request, section_path):
         content = api.handle(*section_split, **kwargs)
     except ModuleNotFoundError:
         raise Http404()
+    except FileNotFoundError:
+        raise Http404()
 
     if content is bytes:
         return HttpResponse(content, content_type="application/octet-stream")
@@ -575,7 +577,7 @@ def git_controller(request, project, *project_path):
                     )
                 )
             )
-    except FileNotFound:
+    except FileNotFoundError:
         raise Http404()
     except InvalidBranch:
         raise Http404()
