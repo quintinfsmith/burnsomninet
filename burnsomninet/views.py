@@ -515,6 +515,7 @@ def git_controller(request, project, *project_path):
     if uagent in get_botlist() and len(request.GET.keys()) > 0:
         raise Http404()
 
+
     if not os.path.isdir(f"{GIT_PATH}/{project}"):
         raise Http404()
 
@@ -530,11 +531,13 @@ def git_controller(request, project, *project_path):
 
     view = request.GET.get('view', 'files')
     branch = request.GET.get('branch', 'master')
-    commit = request.GET.get('commit', None)
+    commit = request.GET.get('commit', "BADCOMMIT_9382")
 
     # Disabled commit/branch browsing
-    if branch != 'master' or commit is not None:
+    if branch != 'master' or commit != "BADCOMMIT_9382":
         Http404()
+
+    commit = None
 
     path = request.GET.get('path', '')
     raw = request.GET.get("raw", 0)
