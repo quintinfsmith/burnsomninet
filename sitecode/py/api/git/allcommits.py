@@ -13,7 +13,7 @@ def process_request(**kwargs):
 
     working_repositories = []
     for path in repositories:
-        if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path != "burnsomninet":
+        if not os.path.isfile(f"{GIT_PATH}/{path}/git-daemon-export-ok") and path not in ("burnsomninet", "bon_angular"):
             private_projects.add(path)
         working_repositories.append(path)
     repositories = working_repositories
