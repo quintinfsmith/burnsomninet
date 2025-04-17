@@ -14,9 +14,12 @@ This can also be done in binary:
 ```
 find \b1001....
 ```
+
 and doesn't need to be sequential
+
 ```
 find \b100100.0
 ```
+
 will match \x90 & \x92
 
