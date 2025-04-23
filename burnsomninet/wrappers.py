@@ -48,6 +48,7 @@ def build_head(**kwargs):
 
     return Tag("head",
         Tag("title", title),
+        Tag("style", "body { background-color: #2d2d2d; }"),
         Tag("link", {
             "rel": "stylesheet",
             "type": "text/css",
