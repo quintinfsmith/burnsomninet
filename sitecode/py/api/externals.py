@@ -16,9 +16,9 @@ def process_request(**kwargs):
     with open(f"{STATIC_PATH}/icons/email.svg", "r") as fp:
         svg_email = fp.read()
 
-    #svg_bsky = ""
-    #with open(f"{STATIC_PATH}/icons/bsky.svg", "r") as fp:
-    #    svg_bsky = fp.read()
+    svg_bsky = ""
+    with open(f"{STATIC_PATH}/icons/bsky.svg", "r") as fp:
+        svg_bsky = fp.read()
 
 
     svg_keybase = ""
@@ -40,11 +40,11 @@ def process_request(**kwargs):
             "alt": "Github",
             "svg": svg_github
         },
-        #{
-        #    "href": "https://bsky.app/profile/quintinfsmith.bsky.social",
-        #    "alt": "Bluesky",
-        #    "svg": svg_bsky
-        #},
+        {
+            "href": "https://bsky.app/profile/quintinfsmith.bsky.social",
+            "alt": "Bluesky",
+            "svg": svg_bsky
+        },
         {
             "href": "https://keybase.io/quintinfsmith",
             "alt": "Keybase",
