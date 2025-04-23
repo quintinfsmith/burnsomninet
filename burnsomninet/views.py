@@ -59,6 +59,7 @@ def handler404(request, exception):
     top = Tag("html",
         wrappers.build_head(title="404"),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap(),
             Tag("div",
                 { "class": "content daisy" },
@@ -213,6 +214,7 @@ def manual_controller(request, manual):
             "favicon": manual
         }),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap('manual', manual),
             Tag("div",
                 { "class": "content" },
@@ -311,6 +313,7 @@ def section_controller(request, section, subsection_path):
             "title": title
         }),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap(section, subsection),
             Tag("div",
                 { "class": "content" },
@@ -402,6 +405,7 @@ def index(request):
             title="Quintin Smith - Developer, Unicyclist",
         ),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap(*active_path),
             Tag("div",
                 { "class": "content index" },
@@ -570,6 +574,7 @@ def git_controller(request, project, *project_path):
                     favicon=project
                 ),
                 Tag("body",
+                    { "style": "background-color:\"#2d2d2d\";" },
                     wrappers.build_sitemap('git', project),
                     Tag("div",
                         { "class": "content" },
@@ -807,6 +812,7 @@ def issues_controller(request, project):
             "favicon": project
         }),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap("git", project),
             Tag("div",
                 { "class": "content" },
@@ -950,6 +956,7 @@ def issue_controller(request, issue_id):
             "favicon": issue.project
         }),
         Tag("body",
+            { "style": "background-color:\"#2d2d2d\";" },
             wrappers.build_sitemap("git", issue.project),
             Tag("div",
                 { "class": "content" },

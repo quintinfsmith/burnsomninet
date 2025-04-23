@@ -17,6 +17,7 @@ class GitActivityWidget extends SlugWidget {
     WEEKDAY_OFFSET = 1; // Start at monday
     constructor(element, options) {
         super(element, options);
+        this.element.classList.add("removed"); // Temporary
         this.branch_name = options.branch
         this.commits = [];
         this.commit_block_elements = {};
@@ -68,10 +69,6 @@ class GitActivityWidget extends SlugWidget {
 
             api_call(url,
                 function(response) {
-                    let year = (new Date()).getFullYear();
-                    if (response.length == 0) {
-                        this.new_year_table(year);
-                    }
                     this.update_commits(response);
                 }.bind(this),
                 function(response) {
@@ -79,6 +76,7 @@ class GitActivityWidget extends SlugWidget {
                 }
             );
         }
+
     }
 
     get_doy(date) {
@@ -369,8 +367,13 @@ class GitActivityWidget extends SlugWidget {
                 element_td.classList.add("other")
             }
 
-            this.commits.push[commit];
+            this.commits.push(commit);
         }
+	if (this.commits.length == 0) {
+	    this.element.classList.add("removed");
+	} else {
+	    this.element.classList.remove("removed");
+	}
     }
 }
 
