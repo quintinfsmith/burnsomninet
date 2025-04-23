@@ -759,6 +759,7 @@ body {
 
         }
 
+        .md-table-of-contents > ul,
         > ul {
             margin: 1em 0 0 0;
             padding-left: 0em;
@@ -774,6 +775,9 @@ body {
             }
         }
 
+        .md-table-of-contents a:hover {
+          color: var(--col_sitemap_hover);
+        }
 
     }
 
