@@ -152,7 +152,7 @@ def populate_page(directory, url_path=""):
 
         toc.insert(0, "## Table of Contents")
 
-        content = "\n".join(lines).replace("@@TOC", "\n".join(toc))
+        content = "\n".join(lines).replace("@@TOC", "<span class=\"md-table-of-contents\">\n\n" + "\n".join(toc) + "\n\n</span>")
 
     return content
 
