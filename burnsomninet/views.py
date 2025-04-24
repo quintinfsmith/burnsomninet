@@ -421,11 +421,9 @@ def index(request):
                                 Tag("div",
                                     Tag("div",
                                         { "class": "nametag" },
-                                        "Quintin Smith",
+                                        "Quintin F Smith",
                                     ),
-                                    Tag("div",
-                                        "Software Developer"
-                                    )
+                                    Tag("div", "Fully Stacked Software Developer")
                                 ),
                                 Tag("div",
                                     { "class": "externals" },
