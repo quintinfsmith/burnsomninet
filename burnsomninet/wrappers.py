@@ -355,8 +355,9 @@ def build_git_path_navigator(branch_name: str, active_commit: Optional[str], pat
     query_attrs = {
         "branch": branch_name
     }
-    if active_commit is not None:
-        query_attrs['commit'] = active_commit
+    # Ignore Commit for now
+    #if active_commit is not None:
+    #    query_attrs['commit'] = active_commit
 
     tag_nav_path = Tag("div",
         { "class": "breadcrumb-nav" },
