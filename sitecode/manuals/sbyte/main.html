@@ -1,307 +1,267 @@
-<div>
-    <div> Sbyte </div>
-    <div> An in-console byte editor. </div>
-    <div>
-        <a href="/git/sbyte">Git Projects</a>
-        <a href="https://crates.io/crates/sbyte">Crates.io</a>
-    </div>
-    <div>
-        <div>Installation</div>
-        <div>Currently Sbyte is only available through cargo</div>
-        <code>
-            <pre>
-                cargo install sbyte
-                sbyte <filename>
-            </pre>
+<h1>Sbyte</h1>
+<div class="subtitle">An in-console byte editor.</div>
+<div class="links">
+    <a href="/git/sbyte">Git Projects</a>
+    <a href="https://crates.io/crates/sbyte">Crates.io</a>
+</div>
+
+<div class="table-of-contents">
+</div>
+
+<div class="section" id="installation">
+    <div>Installation</div>
+    <div>Currently Sbyte is only available through cargo</div>
+    <pre class="language-bash">
+        <code class="language-bash">
+            cargo install sbyte
+            sbyte &lt;filename&gt;
         </code>
-    </div>
+    </pre>
+</div>
 
+<div class="section" id="about">
+    <div>About</div>
+    <div>It's a byte editor. It's console-based. I don't *think* it sucks.</div>
     <div>
-        <div>About</div>
-        <div>It's a byte editor. It's console-based. I don't *think* it sucks.</div>
-        <div>
-            <div>Features</div>
-            <ul>
-                <li>Hexadecimal, Binary and Decimal views</li>
-                <li>Configurable controls</li>
-                <li>Vi-ish environment</li>
-                <li>Regex-ish searching<li>
-            </ul>
-        </div>
+        <div>Features</div>
+        <ul>
+            <li>Hexadecimal, Binary and Decimal views</li>
+            <li>Configurable controls</li>
+            <li>Vi-ish environment</li>
+            <li>Regex-ish searching<li>
+        </ul>
     </div>
-    <div>
-        <div>Controls</div>
-        <div>The current defaults *(while prone to change until v1.0.0 is released)* are as follows:</div>
+</div>
 
-        <div>**NOTE**: If the register is set, user actions are applied that many times</div>
-        <div>
-            <div>While in default mode</div>
-            <table>
-                <tbody>
-                    <tr>
-                        <td>0-9</td>
-                        </td>add digit to register</td>
-                    </tr>
-                    <tr>
-                        <td>=</td>
-                        </td>cycle between hex/binary/decimal views</td>
-                    </tr>
-                    <tr>
-                        <td>x</td>
-                        </td>cut selection</td>
-                    </tr>
-                    <tr>
-                        <td>p</td>
-                        </td>paste</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">
-                            Movement & Selection
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>h</td>
-                        <td>Move Cursor Left</td>
-                    </tr>
-                    <tr>
-                        <td>j</td>
-                        <td>Move Cursor Down</td>
-                    </tr>
-                    <tr>
-                        <td>k</td>
-                        <td>Move Cursor Up</td>
-                    </tr>
-                    <tr>
-                        <td>l</td>
-                        <td>Move Cursor Right</td>
-                    </tr>
-                    <tr>
-                        <td>H</td>
-                        <td>Decrease length of selection</td>
-                    </tr>
-                    <tr>
-                        <td>J</td>
-                        <td>Increase length of selection by a line</td>
-                    </tr>
-                    <tr>
-                        <td>K</td>
-                        <td>Decrease length of selection by a line</td>
-                    </tr>
-                    <tr>
-                        <td>L</td>
-                        <td>Increase length of selection</td>
-                    </tr>
-                    <tr>
-                        <td>R</td>
-                        <td>Jump to index denoted by selection (Big Endian)</td>
-                    </tr>
-                    <tr>
-                        <td>T</td>
-                        <td>Jump to index denoted by selection (tdttle Endian)</td>
-                    </tr>
-                    <tr>
-                        <td>/</td>
-                        <td>search</td>
-                    </tr>
-                </tbody>
-            </div>
+<div class="section" id="controls">
+    <div>Controls</div>
+    <div>The current defaults *(while prone to change until v1.0.0 is released)* are as follows:</div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Mode Switching</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>o</td>
-                        <td>switch to mode overwrite</td>
-                    </tr>
-                    <tr>
-                        <td>i</td>
-                        <td>switch to mode insert</td>
-                    </tr>
-                    <tr>
-                        <td>:</td>
-                        <td>switch to shell</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">History & Automation</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>u</td>
-                        <td>undo action</td>
-                    </tr>
-                    <tr>
-                        <td>ctrl+r</td>
-                        <td>redo action</td>
-                    </tr>
-                    <tr>
-                        <td>q</td>
-                        <td>start/stop recording user actions</td>
-                    </tr>
-                    <tr>
-                        <td>@</td>
-                        <td>play back recorded user actions</td>
-                    </tr>
-                </tbody>
-            </table>
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Masking</th>
-                    </tr>
-                </thead>
-                <tbody>
-            
-                    <tr>
-                        <td>~</td>
-                        <td>apply NOT to cursor selection</td>
-                    </tr>
-                    <tr>
-                        <td>&</td>
-                        <td>apply AND to cursor selection</td>
-                    </tr>
-                    <tr>
-                        <td>|</td>
-                        <td>apply OR to cursor selection</td>
-                    </tr>
-                    <tr>
-                        <td>^</td>
-                        <td>apply XOR to cursor selection</td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th colspan="2">Math</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>+</td>
-                        <td>increment selection (ignore overflow)</td>
-                    </tr>
-                    <tr>
-                        <td>-</td>
-                        <td>decrement selection (ignore overflow)</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div>
-            <div>While in overwrite mode</div>
-            <div>**Note:** Depending on which view is enabled, different numerals will be active.</div>
-            <table>
-                <tbody>
-            
-                    <tr>
-                        <td>0-9 a-f</td>
-                        <td>overwrite digit</td>
-                    </tr>
-                    <tr>
-                        <td>p</td>
-                        <td>paste</td>
-                    </tr>
-                    <tr>
-                        <td>x</td>
-                        <td>cut selection</td>
-                    </tr>
-                    <tr>
-                        <td>h</td>
-                        <td>Move sub-cursor to next digit</td>
-                    </tr>
-                    <tr>
-                        <td>l</td>
-                        <td>Move sub-cursor to previous digit</td>
-                    </tr>
-                    <tr>
-                        <td>esc</td>
-                        <td>return to default mode</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
+    <div>**NOTE**: If the register is set, user actions are applied that many times</div>
     <div>
         <table>
             <thead>
-                <tr><th colspan="2">Shell Commands</th></tr>
+                <tr>
+                    <th colspan="2">While in default mode</th>
+                </tr>
             </thead>
             <tbody>
-                <tr><td>find &lt;pattern&gt;</td><td>Search for, and jump to, a pattern</td></tr>
-                <tr><td>fr &lt;pattern&gt; &lt;replacewith&gt;</td><td>Search for all instances of pattern and replace them</td></tr>
-                <tr><td>insert &lt;pattern&gt;</td><td>Insert pattern</td></tr>
-                <tr><td>overwrite &lt;pattern&gt;</td><td>Overwrite with pattern</td></tr>
-                <tr><td>q</td><td>Quit</td></tr>
-                <tr><td>w</td><td>Save</td></tr>
-                <tr><td>w &lt;path&gt;</td><td>Save to *path*</td></tr>
-                <tr><td>wq</td><td>Save & Quit</td></tr>
-                
-                <tr><td colspan="2"></td></tr>
-
-                <tr><td colspan="2">Bitwise Masks</td></tr>
-                <tr><td colspan="2">and &lt;mask&gt;</td></tr>
-                <tr><td colspan="2">nand &lt;mask&gt;</td></tr>
-                <tr><td colspan="2">or &lt;mask&gt;</td></tr>
-                <tr><td colspan="2">nor &lt;mask&gt;</td></tr>
-                <tr><td colspan="2">xor &lt;mask&gt;</td></tr>
-                <tr><td colspan="2">not</td></tr>
-
-                <tr><td colspan="2"></td></tr>
-
-                <tr><td colspan="2">Record &amp; Play</td></tr>
-                <tr><td>rec &lt;keyword&gt;</td><td>Start recording user actions and save playback to *keyword*</td></tr>
-                <tr><td>rec</td><td>If recording, stop the recording</td></tr>
-                <tr><td>play &lt;keyword&gt;</td><td>Replay user actions saved to *keyword*</td></tr>
+                <tr>
+                    <td>0-9</td>
+                    <td>add digit to register</td>
+                </tr>
+                <tr>
+                    <td>=</td>
+                    <td>cycle between hex/binary/decimal views</td>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>cut selection</td>
+                </tr>
+                <tr>
+                    <td>p</td>
+                    <td>paste</td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        Movement & Selection
+                    </th>
+                </tr>
+                <tr>
+                    <td>h</td>
+                    <td>Move Cursor Left</td>
+                </tr>
+                <tr>
+                    <td>j</td>
+                    <td>Move Cursor Down</td>
+                </tr>
+                <tr>
+                    <td>k</td>
+                    <td>Move Cursor Up</td>
+                </tr>
+                <tr>
+                    <td>l</td>
+                    <td>Move Cursor Right</td>
+                </tr>
+                <tr>
+                    <td>H</td>
+                    <td>Decrease length of selection</td>
+                </tr>
+                <tr>
+                    <td>J</td>
+                    <td>Increase length of selection by a line</td>
+                </tr>
+                <tr>
+                    <td>K</td>
+                    <td>Decrease length of selection by a line</td>
+                </tr>
+                <tr>
+                    <td>L</td>
+                    <td>Increase length of selection</td>
+                </tr>
+                <tr>
+                    <td>R</td>
+                    <td>Jump to index denoted by selection (Big Endian)</td>
+                </tr>
+                <tr>
+                    <td>T</td>
+                    <td>Jump to index denoted by selection (tdttle Endian)</td>
+                </tr>
+                <tr>
+                    <td>/</td>
+                    <td>search</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Mode Switching</th>
+                </tr>
+                <tr>
+                    <td>o</td>
+                    <td>switch to mode overwrite</td>
+                </tr>
+                <tr>
+                    <td>i</td>
+                    <td>switch to mode insert</td>
+                </tr>
+                <tr>
+                    <td>:</td>
+                    <td>switch to shell</td>
+                </tr>
+                <tr>
+                    <th colspan="2">History & Automation</th>
+                </tr>
+                <tr>
+                    <td>u</td>
+                    <td>undo action</td>
+                </tr>
+                <tr>
+                    <td>ctrl+r</td>
+                    <td>redo action</td>
+                </tr>
+                <tr>
+                    <td>q</td>
+                    <td>start/stop recording user actions</td>
+                </tr>
+                <tr>
+                    <td>@</td>
+                    <td>play back recorded user actions</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Masking</th>
+                </tr>
+                <tr>
+                    <td>~</td>
+                    <td>apply NOT to cursor selection</td>
+                </tr>
+                <tr>
+                    <td>&</td>
+                    <td>apply AND to cursor selection</td>
+                </tr>
+                <tr>
+                    <td>|</td>
+                    <td>apply OR to cursor selection</td>
+                </tr>
+                <tr>
+                    <td>^</td>
+                    <td>apply XOR to cursor selection</td>
+                </tr>
+                <tr>
+                    <th colspan="2">Math</th>
+                </tr>
+                <tr>
+                    <td>+</td>
+                    <td>increment selection (ignore overflow)</td>
+                </tr>
+                <tr>
+                    <td>-</td>
+                    <td>decrement selection (ignore overflow)</td>
+                </tr>
+                <tr><td colspan="2">&nbsp;</td></tr>
+                <tr>
+                    <th colspan="2">
+                        While in overwrite mode<br/>
+                        <i>Note:</i> Depending on which view is enabled, different numerals will be active.
+                    </th>
+                </tr>
+                <tr>
+                    <td>0-9 a-f</td>
+                    <td>overwrite digit</td>
+                </tr>
+                <tr>
+                    <td>p</td>
+                    <td>paste</td>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>cut selection</td>
+                </tr>
+                <tr>
+                    <td>h</td>
+                    <td>Move sub-cursor to next digit</td>
+                </tr>
+                <tr>
+                    <td>l</td>
+                    <td>Move sub-cursor to previous digit</td>
+                </tr>
+                <tr>
+                    <td>esc</td>
+                    <td>return to default mode</td>
+                </tr>
             </tbody>
         </table>
     </div>
-    <div>
-        <div>Regex modifications</div>
-        <div>Regex is supported in searches, however some modifications have been made to make it more useful in the context of all bytes rather than just the human-readable ones.</div>
+</div>
 
+<div class="section" id="shell">
+    <div>Shell Commands</div>
+    <div>Input ":" to open the shell</div>
+    <table>
+        <tbody>
+            <tr><td>find &lt;pattern&gt;</td><td>Search for, and jump to, a pattern</td></tr>
+            <tr><td>fr &lt;pattern&gt; &lt;replacewith&gt;</td><td>Search for all instances of pattern and replace them</td></tr>
+            <tr><td>insert &lt;pattern&gt;</td><td>Insert pattern</td></tr>
+            <tr><td>overwrite &lt;pattern&gt;</td><td>Overwrite with pattern</td></tr>
+            <tr><td>q</td><td>Quit</td></tr>
+            <tr><td>w</td><td>Save</td></tr>
+            <tr><td>w &lt;path&gt;</td><td>Save to *path*</td></tr>
+            <tr><td>wq</td><td>Save & Quit</td></tr>
+            
+            <tr><th colspan="2">Bitwise Masks</th></tr>
+            <tr><td colspan="2">and &lt;mask&gt;</td></tr>
+            <tr><td colspan="2">nand &lt;mask&gt;</td></tr>
+            <tr><td colspan="2">or &lt;mask&gt;</td></tr>
+            <tr><td colspan="2">nor &lt;mask&gt;</td></tr>
+            <tr><td colspan="2">xor &lt;mask&gt;</td></tr>
+            <tr><td colspan="2">not</td></tr>
+
+            <tr><th colspan="2">Record &amp; Play</th></tr>
+            <tr><td>rec &lt;keyword&gt;</td><td>Start recording user actions and save playback to *keyword*</td></tr>
+            <tr><td>rec</td><td>If recording, stop the recording</td></tr>
+            <tr><td>play &lt;keyword&gt;</td><td>Replay user actions saved to *keyword*</td></tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="section" id="regex">
+    <div>Regex modifications</div>
+    <div>Regex is supported in searches, however some modifications have been made to make it more useful in the context of all bytes rather than just the human-readable ones.</div>
+
+    <div>
+        <div>Byte Wildcarding</div>
+        <div>Use a `.` to indicate a wildcard within a byte.</div>
         <div>
-            <div>Byte Wildcarding</div>
-            <div>Use a `.` to indicate a wildcard within a byte.</div>
+            <div>Examples</div>
             <div>
-                <div>Examples</div>
-                <div>
-                    <div>This will find all bytes from \x90 to \x9F:</div>
-                    <code>
-                        <pre>find \x9.</pre>
-                    </code>
-                </div>
-                <div>
-                    <div>This can also be done in binary:</div>
-                    <code>
-                        <pre>find \b1001....</pre>
-                    </code>
-                </div>
-                <div>
-                    <div>....and doesn't need to be sequential</div>
-                    <code>
-                        <pre>find \b100100.0</pre>
-                    </code>
-                    <div>will match \x90 & \x92</div>
-                </div>
+                <div>This will find all bytes from \x90 to \x9F:</div>
+                <pre>find \x9.</pre>
+            </div>
+            <div>
+                <div>This can also be done in binary:</div>
+                <pre>find \b1001....</pre>
+            </div>
+            <div>
+                <div>....and doesn't need to be sequential</div>
+                <pre>find \b100100.0</pre>
+                <div>will match \x90 & \x92</div>
             </div>
         </div>
     </div>

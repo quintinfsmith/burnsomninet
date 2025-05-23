@@ -691,6 +691,7 @@ body {
     }
 }
 
+
 .markdown-wrapper {
     > .markdown {
 
@@ -792,6 +793,43 @@ body {
                 fill: var(--col_text);
             }
         }
+    }
+}
+
+.manual-container {
+    .section > div:first-child {
+        text-align: left;
+        font-size: 24px;
+        font-weight: 500;
+        padding: .5em 0 0 0;
+        margin-bottom: .5em;
+        border-bottom: 1px solid var(--col_fore);
+    }
+    table {
+        border-collapse: collapse;
+        th {
+            background-color: var(--BG);
+            padding: .5em;
+            font-size: 16px;
+        }
+        td, th {
+            border: 1px solid var(--col_fore);
+        }
+        td {
+            text-align: left;
+            padding: .25em 1em;
+        }
+        td:first-child:not(:last-child) {
+            text-align: center;
+        }
+
+    }
+    .flex {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .flex > * {
+        flex: 1 1 auto;
     }
 }
 

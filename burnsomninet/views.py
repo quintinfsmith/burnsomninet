@@ -200,12 +200,28 @@ def manual_controller(request, manual):
 
     title = f"{manual.title()} User Manual"
     raw_content = automanual.populate_page(directory_path)
-    raw_content = automanual.do_slugs(raw_content)
-    description = raw_content[raw_content.find("## About") + 8:].strip()
-    description = description[0:description.find("\n")]
+    description = ""
+    if manual.lower() != "sbyte":
+        raw_content = automanual.do_slugs(raw_content)
+        description = raw_content[raw_content.find("## About") + 8:].strip()
+        description = description[0:description.find("\n")]
 
-    raw_content = automanual.replace_svg(raw_content, STATIC_PATH)
-    raw_content = automanual.extra_markdown(raw_content)
+        raw_content = automanual.replace_svg(raw_content, STATIC_PATH)
+        raw_content = automanual.extra_markdown(raw_content)
+        content_tag = Tag("div",
+            { "class": "markdown-wrapper" },
+            Tag("div",
+                { "class": "markdown" },
+                RawHTML(marko.convert(raw_content))
+            )
+        )
+    else:
+        content_tag = Tag("div", 
+            { "class": f"manual-{manual} manual-container" },
+            RawHTML(raw_content)
+        )
+
+
     top = Tag("html",
         wrappers.build_head(**{
             "description": description,
@@ -216,14 +232,7 @@ def manual_controller(request, manual):
             wrappers.build_sitemap('manual', manual),
             Tag("div",
                 { "class": "content" },
-                Tag("div",
-                    { "class": "markdown-wrapper" },
-                    Tag("div",
-                        { "class": "markdown" },
-                        RawHTML(marko.convert(raw_content))
-                        #RawHTML(markdown.markdown(raw_content))
-                    )
-                )
+                content_tag
             )
         )
     )

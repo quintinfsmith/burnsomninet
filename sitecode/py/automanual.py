@@ -72,9 +72,16 @@ def do_slugs(content):
     return content
 
 def populate_page(directory, url_path=""):
+    content = ''
+
+    if "sbyte" in directory:
+        with open(f"{directory}/main.html", "r") as fp:
+            content = fp.read()
+        return content
+
+
     section_paths = get_all_paths(directory)
 
-    content = ''
     with open(directory + '/mod.md', 'r') as fp:
         content = fp.read()
 
