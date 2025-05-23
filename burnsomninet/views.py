@@ -23,18 +23,19 @@ from sitecode.py.atbt import Issue, IssueNote
 
 SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
-GIT_PATH = "/srv/git"
+GIT_PATH = settings.GIT_PATH
 COMMIT_ID = settings.COMMIT_ID
 JS_PATH = settings.JS_PATH
 SCSS_PATH = settings.SCSS_PATH
+VENV_PATH = settings.VENV_PATH
 
 def sass_compile(input_scss):
     timestamp = time.time()
-    scss_path = f"/tmp/.tmp_scss{timestamp}"
-    css_path = f"/tmp/.tmp_css{timestamp}"
+    scss_path = f"{TMP_PATH}/.tmp_scss{timestamp}"
+    css_path = f"{TMP_PATH}/.tmp_css{timestamp}"
     with open(scss_path, "w") as file_pipe:
         file_pipe.write(input_scss)
-    os.system(f"source /srv/bon_venv/bin/activate && pysassc {scss_path} {css_path} && deactivate")
+    os.system(f"source {VENV_PATH}/bin/activate && pysassc {scss_path} {css_path} && deactivate")
     output = ""
     with open(css_path, "r") as file_pipe:
         output = file_pipe.read()
@@ -341,7 +342,7 @@ def index(request):
 
     all_commits = []
     now = datetime.now()
-    from_date = datetime(year=now.year - 1, month=now.month, day=now.day) - timedelta(days=1) 
+    from_date = datetime(year=now.year - 1, month=now.month, day=now.day) - timedelta(days=1)
     for project in repositories:
         cache_key = f"INDEX_GIT_{project}"
         needs_update = check_cache(

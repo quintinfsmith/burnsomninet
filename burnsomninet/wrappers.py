@@ -17,7 +17,7 @@ SITECODE = settings.SITECODE
 STATIC_PATH = settings.STATIC_PATH
 BASE_DIR = settings.BASE_DIR
 COMMIT_ID = settings.COMMIT_ID
-GIT_PATH = "/srv/git"
+GIT_PATH = settings.GIT_PATH
 
 VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
@@ -266,8 +266,8 @@ def media_content(mediamap):
                 new_image.save(f"{vidpath}.png")
 
 
-
             sources.append(f"/content/{src}/{directory}/{filename}")
+
         # Create screenshots
         title = directory.capitalize()
 
@@ -699,7 +699,7 @@ def rss_issues(project):
         title = str(result["issue_id"]) + ": " + result["issue_title"]
         note_id = result["id"]
 
-        if result["state_update"] is not None: 
+        if result["state_update"] is not None:
             title += " [" + states[result["state_update"]] + "]"
 
         items.append(
@@ -849,6 +849,6 @@ def is_ip_banned(ip_address: str):
         return f"{ip_address}\n" in fp.read()
 
 def log(msg, suffix=""):
-    with open("/var/log/httpd/burnsomninet/log", "a") as fp:
+    with open(settings.LOG_PATH, "a") as fp:
         fp.write(msg + "\n")
 
