@@ -28,6 +28,7 @@ COMMIT_ID = settings.COMMIT_ID
 JS_PATH = settings.JS_PATH
 SCSS_PATH = settings.SCSS_PATH
 VENV_PATH = settings.VENV_PATH
+TMP_PATH = settings.TMP_PATH
 
 def sass_compile(input_scss):
     timestamp = time.time()
