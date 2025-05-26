@@ -38,6 +38,11 @@ def gen_language_shields():
         ( "java", "Java" ),
         ( "html5", "HTML" ),
         ( "css", "CSS" ),
+        ( "mysql",  "MySQL" ),
+        ( "sqlite", "SQLite"),
+        ( "postgresql", "PostGreSQL" ),
+        ( "apache", "Apache" ),
+        ( "linux", "Linux" )
     ]
 
     output = Tag("div",
