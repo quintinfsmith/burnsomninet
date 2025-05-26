@@ -323,6 +323,7 @@ def section_controller(request, section, subsection_path):
 
     return HttpResponse(repr(top))
 
+
 def index(request):
     active_path = request.get_full_path().split("/")
 
@@ -425,8 +426,9 @@ def index(request):
                                         { "class": "nametag" },
                                         "Quintin F Smith",
                                     ),
-                                    Tag("div", "Fully Stacked Software Developer")
+                                    Tag("div", "Fully Stacked Software Developer"),
                                 ),
+                                wrappers.gen_language_shields(),
                                 Tag("div",
                                     { "class": "externals" },
                                     Tag("div", { "class": "vh_mid" }),

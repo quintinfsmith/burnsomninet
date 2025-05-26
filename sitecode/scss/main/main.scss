@@ -463,6 +463,27 @@ body {
       background-color: var(--col_mid) !important;
     }
 
+    .shields {
+        .shield > svg {
+            padding: .25em;
+            height: 2em;
+            width: 2em;
+            path {
+                transition: all 200ms ease;
+                fill: var(--col_main_sub);
+            }
+        }
+        .shield:hover > svg {
+            path {
+                fill: var(--col_main);
+            }
+        }
+        .shield:not(:last-child) {
+            padding-right: .5em;
+        }
+
+    }
+
     .externals {
       padding-bottom: 1em;
     }

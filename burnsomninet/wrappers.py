@@ -23,6 +23,44 @@ VH_TOP = Tag('div', { "class": "vh_top" })
 VH_BOT = Tag('div', { "class": "vh_bot" })
 VH_MID = Tag('div', { "class": "vh_mid" })
 
+
+def gen_language_shields():
+    style = "flat-square"
+    shields = [
+        ( "php", "PHP" ),
+        ( "javascript", "JavaScript" ),
+        ( "typescript", "Typescript" ),
+        ( "python", "Python" ),
+        ( "rust", "Rust" ),
+        ( "kotlin", "Kotlin" ),
+        ( "cplusplus", "C++" ),
+        ( "gnubash", "BASH" ),
+        ( "java", "Java" ),
+        ( "html5", "HTML" ),
+        ( "css", "CSS" ),
+    ]
+
+    output = Tag("div",
+        { "class": "shields" },
+        Tag("div", { "class": "vh_mid" })
+    )
+
+    for shield in shields:
+        content = ""
+        with open(f"{STATIC_PATH}/icons/langs/{shield[0]}.svg", "r") as fp:
+            content = fp.read()
+
+        output.append(
+            Tag("div",
+                { "class": "shield" },
+                Tag("div", { "class": "vh_mid" }),
+                RawHTML(content)
+            )
+        )
+
+    return output
+
+
 def build_favicon_links(**kwargs):
     sizes = [16, 32, 48, 167, 180, 192]
     output = []
