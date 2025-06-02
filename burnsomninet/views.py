@@ -428,7 +428,7 @@ def index(request):
                                     ),
                                     Tag("div", "Fully Stacked Software Developer"),
                                 ),
-                                wrappers.gen_language_shields(),
+                                # wrappers.gen_language_shields(),
                                 Tag("div",
                                     { "class": "externals" },
                                     Tag("div", { "class": "vh_mid" }),
