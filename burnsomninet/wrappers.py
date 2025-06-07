@@ -846,6 +846,28 @@ def atom_releases(project):
         *items
     )
 
+def build_body_properties(request):
+    output = {}
+
+    dm_value = request.GET.get("dm", None)
+    if dm_value == "1":
+        output["class"] = "lightview"
+    elif dm_value == "2":
+        output["class"] = "darkview"
+
+    return output
+
+def build_dm_toggle(request):
+    return Tag("div",
+        {
+            "class": "dmtoggle",
+            "onclick": "toggledm();"
+        },
+        Tag("div", 
+            RawHTML("&#x25D1;")
+        )
+    )
+
 def is_malicious_query(path):
     path = path.lower()
     return path.startswith("/admin/") \

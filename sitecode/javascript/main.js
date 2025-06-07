@@ -639,3 +639,8 @@ class StepDiagram extends SlugWidget {
         }
     }
 }
+
+
+function toggledm() {
+    console.log("boop");
+}

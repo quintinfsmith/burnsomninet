@@ -30,6 +30,7 @@ urlpatterns = [
     path("keybase.txt", views.keybase, name="keybase"),
     path("robots.txt", views.robots, name="robots"),
     path("favicon.ico", views.favicon, name="favicon"),
+    path("setc", views.cookie_set, name="cookie_set"),
     #path("ntest/",  include('ntest.urls')),
     #path('admin/', admin.site.urls),
     path("issues/<str:project>", views.issues_controller),

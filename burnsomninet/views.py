@@ -52,8 +52,6 @@ def handler404(request, exception):
     if wrappers.is_malicious_query(request.path):
         wrappers.register_banned_ip(accesslogmanager.get_client_ip(request))
 
-    wrappers.log(f"DEBUG: {request.path}")
-
     daisy = ""
     with open(f"{STATIC_PATH}/oopsie daisy.svg", "r") as file_pipe:
         daisy = file_pipe.read()
@@ -61,7 +59,9 @@ def handler404(request, exception):
     top = Tag("html",
         wrappers.build_head(title="404"),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap(),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content daisy" },
                 Tag("div",
@@ -215,7 +215,9 @@ def manual_controller(request, manual):
             "favicon": manual
         }),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap('manual', manual),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content" },
                 Tag("div",
@@ -260,7 +262,6 @@ def section_controller(request, section, subsection_path):
 
     if not os.path.isdir(directory_path):
         raise Http404()
-
 
     files = os.listdir(directory_path)
     description = ""
@@ -313,7 +314,9 @@ def section_controller(request, section, subsection_path):
             "title": title
         }),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap(section, subsection),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content" },
                 body_content
@@ -405,7 +408,9 @@ def index(request):
             title="Quintin Smith - Developer, Unicyclist",
         ),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap(*active_path),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content index" },
                 Tag("div",
@@ -572,7 +577,9 @@ def git_controller(request, project, *project_path):
                     favicon=project
                 ),
                 Tag("body",
+                    wrappers.build_body_properties(request),
                     wrappers.build_sitemap('git', project),
+                    wrappers.build_dm_toggle(request),
                     Tag("div",
                         { "class": "content" },
                         body
@@ -809,7 +816,9 @@ def issues_controller(request, project):
             "favicon": project
         }),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap("git", project),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content" },
                 body_content
@@ -952,7 +961,9 @@ def issue_controller(request, issue_id):
             "favicon": issue.project
         }),
         Tag("body",
+            wrappers.build_body_properties(request),
             wrappers.build_sitemap("git", issue.project),
+            wrappers.build_dm_toggle(request),
             Tag("div",
                 { "class": "content" },
                 body_content
@@ -961,6 +972,17 @@ def issue_controller(request, issue_id):
     )
 
     return HttpResponse(repr(top), "text/html", status=status)
+
+def cookie_set(request):
+    cookies_in_use = [ "dm" ]
+    for cookie in cookies_in_use:
+        value = request.GET.get(cookie, None)
+        if not value:
+            continue
+
+        if cookie == "dm":
+            if value in ["system", "dark", "light"]:
+                request.session[cookie] = value
 
 def ban_hammer(request, *args):
     wrappers.log(str(dir(request)))

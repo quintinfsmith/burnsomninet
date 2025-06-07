@@ -1467,3 +1467,28 @@ div.slug-StepDiagram {
     }
   }
 }
+
+.dmtoggle {
+    z-index: 10;
+    position: fixed;
+    right: 1em;
+    bottom: 0em;
+    overflow:clip;
+    cursor: pointer;
+    font-size: 40px;
+} 
+
+.dmtoggle:hover > div {
+    top: 0;
+}
+
+.dmtoggle > div {
+    position:relative;
+    top: 50%;
+    transition: all ease-in 100ms;
+    box-shadow: var(--shadow);
+    background-color: var(--col_button);
+    border-top-left-radius: .3em;
+    border-top-right-radius: .3em;
+    padding: .1em .2em 0 .2em;
+}
