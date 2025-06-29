@@ -186,32 +186,17 @@
 
 @media (prefers-color-scheme: dark) {
 }
-
-
-
 @font-face {
-    font-family: primary;
-    font-weight: 800;
-    src: url(/content/fonts/FiraSans/Heavy.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 700;
-    src: url(/content/fonts/FiraSans/ExtraBold.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 600;
+    font-family: heavy;
     src: url(/content/fonts/FiraSans/Bold.otf);
 }
 @font-face {
     font-family: primary;
-    font-weight: 500;
-    src: url(/content/fonts/FiraSans/SemiBold.otf);
+    font-weight: bold;
+    src: url(/content/fonts/FiraSans/Bold.otf);
 }
 @font-face {
     font-family: primary;
-    font-weight: 400;
     src: url(/content/fonts/FiraSans/Regular.otf);
 }
 @font-face {
@@ -222,62 +207,18 @@
 @font-face {
     font-family: primary;
     font-weight: 200;
-    src: url(/content/fonts/FiraSans/ExtraLight.otf);
+    src: url(/content/fonts/FiraSans/Light.otf);
 }
 @font-face {
     font-family: primary;
     font-weight: 100;
-    src: url(/content/fonts/FiraSans/Thin.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 800;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/HeavyItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 700;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/ExtraBoldItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 600;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/BoldItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 500;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/SemiBoldItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 400;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/Italic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 300;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/LightItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 200;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/ExtraLightItalic.otf);
-}
-@font-face {
-    font-family: primary;
-    font-weight: 100;
-    font-style: italic;
-    src: url(/content/fonts/FiraSans/ThinItalic.otf);
+    src: url(/content/fonts/FiraSans/Light.otf);
 }
 
+@font-face {
+    font-family: light;
+    src: url(/content/fonts/FiraSans/Light.otf);
+}
 @font-face {
     font-family: monospace;
     src: url(/content/fonts/FiraMono/Regular.woff2);
@@ -524,14 +465,15 @@ body {
       padding: 1em 0 0 0;
     }
     .nametag {
+      font-family: heavy;
       font-weight: bold;
       font-size: 2em;
     }
 
     .nametag + div {
+      font-family: light;
       font-size: 1.2em;
       font-style: italic;
-      font-weight: 200;
     }
 
     .slug-GitActivityWidget:empty {
@@ -790,6 +732,11 @@ body {
     }
 }
 
+h1, h2, h3, h4, h5, th, b, strong {
+    font-family: heavy;
+}
+em { }
+
 .markdown-wrapper {
     > .markdown {
 
@@ -821,6 +768,7 @@ body {
             }
         }
         > h1 {
+            font-family: heavy;
             text-decoration: underline;
         }
 
@@ -851,6 +799,7 @@ body {
         }
 
         > h2 {
+            font-family: heavy;
             border-bottom: 1px solid var(--col_fore);
         }
         > :not(h2) + ul {
@@ -1539,7 +1488,7 @@ div.slug-StepDiagram {
     .label:empty {
       display: none;
     }
-    
+
     > * {
       border: 1px solid var(--col_fore);
     }
@@ -1555,7 +1504,7 @@ div.slug-StepDiagram {
     overflow:clip;
     cursor: pointer;
     font-size: 40px;
-} 
+}
 
 .dmtoggle:hover > div {
     top: 0;
