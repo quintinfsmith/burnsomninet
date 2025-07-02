@@ -863,7 +863,7 @@ def build_dm_toggle(request):
             "class": "dmtoggle",
             "onclick": "toggledm();"
         },
-        Tag("div", 
+        Tag("div",
             RawHTML("&#x25D1;")
         )
     )
