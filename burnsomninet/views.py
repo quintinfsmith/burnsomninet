@@ -200,27 +200,27 @@ def manual_controller(request, manual):
         raise Http404()
 
     title = f"{manual.title()} User Manual"
-    if f"{directory_path}/index.html":
-        with open(f"{directory_path}/index.html", "r") as fp:
-            content = fp.read()
+    # if f"{directory_path}/index.html":
+    #     with open(f"{directory_path}/index.html", "r") as fp:
+    #         content = fp.read()
 
-        top = Tag("html",
-            wrappers.build_head(**{
-                "description": "TODO",
-                "title": title,
-                "favicon": manual
-            }),
-            Tag("body",
-                wrappers.build_body_properties(request),
-                wrappers.build_sitemap('manual', manual),
-                wrappers.build_dm_toggle(request),
-                Tag("div",
-                    { "class": "content manual" },
-                    RawHTML(content)
-                )
-            )
-        )
-        return HttpResponse(repr(top))
+    #     top = Tag("html",
+    #         wrappers.build_head(**{
+    #             "description": "TODO",
+    #             "title": title,
+    #             "favicon": manual
+    #         }),
+    #         Tag("body",
+    #             wrappers.build_body_properties(request),
+    #             wrappers.build_sitemap('manual', manual),
+    #             wrappers.build_dm_toggle(request),
+    #             Tag("div",
+    #                 { "class": "content manual" },
+    #                 RawHTML(content)
+    #             )
+    #         )
+    #     )
+    #     return HttpResponse(repr(top))
 
 
     raw_content = automanual.populate_page(directory_path)
