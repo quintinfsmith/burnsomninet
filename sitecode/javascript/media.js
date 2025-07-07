@@ -132,7 +132,6 @@ class MediaPlayer {
 
         event_listen(window, "mediacenter.resize",  function(event) {
             var media_player = document.body.data.MP;
-            media_player.reposition();
         });
 
         event_listen(window, "mediacenter.keydown", function(event) {
@@ -141,11 +140,6 @@ class MediaPlayer {
                 media_player.kill();
             }
         });
-        this.reposition();
-    }
-
-    reposition() {
-        this.element_overlay.style.setProperty("top", window.scrollY + "px");
     }
 
     set_video(index) {

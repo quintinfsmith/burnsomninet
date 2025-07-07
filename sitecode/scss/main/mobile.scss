@@ -3,6 +3,10 @@
 body {
     flex-direction: column;
     max-height: 100dvh;
+
+}
+body > .body_wrapper {
+    height: 100dvh;
 }
 
 .sitemap {

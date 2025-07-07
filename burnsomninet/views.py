@@ -60,18 +60,21 @@ def handler404(request, exception):
         wrappers.build_head(title="404"),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap(),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content daisy" },
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap(),
+                wrappers.build_dm_toggle(request),
                 Tag("div",
-                    { "class": "img_wrapper" },
-                    RawHTML(daisy)
-                ),
-                Tag("div",
-                    { "class": "details"},
+                    { "class": "content daisy" },
                     Tag("div",
-                        "Looks like you've gone and picked yourself an oopsie daisy there, friend."
+                        { "class": "img_wrapper" },
+                        RawHTML(daisy)
+                    ),
+                    Tag("div",
+                        { "class": "details"},
+                        Tag("div",
+                            "Looks like you've gone and picked yourself an oopsie daisy there, friend."
+                        )
                     )
                 )
             )
@@ -212,11 +215,14 @@ def manual_controller(request, manual):
     #         }),
     #         Tag("body",
     #             wrappers.build_body_properties(request),
-    #             wrappers.build_sitemap('manual', manual),
-    #             wrappers.build_dm_toggle(request),
     #             Tag("div",
-    #                 { "class": "content manual" },
-    #                 RawHTML(content)
+    #                 { "class": "body_wrapper" },
+    #                 wrappers.build_sitemap('manual', manual),
+    #                 wrappers.build_dm_toggle(request),
+    #                 Tag("div",
+    #                     { "class": "content manual" },
+    #                     RawHTML(content)
+    #                 )
     #             )
     #         )
     #     )
@@ -238,16 +244,19 @@ def manual_controller(request, manual):
         }),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap('manual', manual),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content" },
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap('manual', manual),
+                wrappers.build_dm_toggle(request),
                 Tag("div",
-                    { "class": "markdown-wrapper" },
+                    { "class": "content" },
                     Tag("div",
-                        { "class": "markdown" },
-                        RawHTML(marko.convert(raw_content))
-                        #RawHTML(markdown.markdown(raw_content))
+                        { "class": "markdown-wrapper" },
+                        Tag("div",
+                            { "class": "markdown" },
+                            RawHTML(marko.convert(raw_content))
+                            #RawHTML(markdown.markdown(raw_content))
+                        )
                     )
                 )
             )
@@ -337,11 +346,14 @@ def section_controller(request, section, subsection_path):
         }),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap(section, subsection),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content" },
-                body_content
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap(section, subsection),
+                wrappers.build_dm_toggle(request),
+                Tag("div",
+                    { "class": "content" },
+                    body_content
+                )
             )
         )
     )
@@ -431,74 +443,77 @@ def index(request):
         ),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap(*active_path),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content index" },
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap(*active_path),
+                wrappers.build_dm_toggle(request),
                 Tag("div",
+                    { "class": "content index" },
                     Tag("div",
-                        Tag("div", { "class": "vh_mid" }),
                         Tag("div",
-                            { "class": "details-img-wrapper" },
+                            Tag("div", { "class": "vh_mid" }),
                             Tag("div",
-                                { "class": "img_wrapper" },
-                                Tag("img", {
-                                    "src": "/content/profile.png?v=2"
-                                })
-                            ),
-                            Tag("div",
-                                { "class": "details"},
+                                { "class": "details-img-wrapper" },
                                 Tag("div",
-                                    Tag("div",
-                                        { "class": "nametag" },
-                                        "Quintin F Smith",
-                                    ),
-                                    Tag("div", "Fully Stacked Software Developer"),
+                                    { "class": "img_wrapper" },
+                                    Tag("img", {
+                                        "src": "/content/profile.png?v=2"
+                                    })
                                 ),
-                                # wrappers.gen_language_shields(),
                                 Tag("div",
-                                    { "class": "externals" },
-                                    Tag("div", { "class": "vh_mid" }),
-                                    Tag("a",
-                                        { "href": "mailto:smith.quintin@protonmail.com", "alt": "Email" },
-                                        RawHTML(svg_email)
+                                    { "class": "details"},
+                                    Tag("div",
+                                        Tag("div",
+                                            { "class": "nametag" },
+                                            "Quintin F Smith",
+                                        ),
+                                        Tag("div", "Fully Stacked Software Developer"),
                                     ),
-                                    Tag("a",
-                                        { "href": "https://github.com/quintinfsmith", "alt": "Github" },
-                                        RawHTML(svg_github)
-                                    ),
-                                    Tag("a",
-                                        { "href": "https://bsky.app/profile/quintinfsmith.bsky.social", "alt": "Bluesky" },
-                                        RawHTML(svg_bsky)
-                                    ),
-                                    Tag("a",
-                                        { "href": "https://keybase.io/quintinfsmith", "alt": "Keybase" },
-                                        RawHTML(svg_keybase)
-                                    ),
-                                    Tag("a",
-                                        { "href": "https://ko-fi.com/quintinfsmith", "alt": "Ko-Fi" },
-                                        RawHTML(svg_kofi)
+                                    # wrappers.gen_language_shields(),
+                                    Tag("div",
+                                        { "class": "externals" },
+                                        Tag("div", { "class": "vh_mid" }),
+                                        Tag("a",
+                                            { "href": "mailto:smith.quintin@protonmail.com", "alt": "Email" },
+                                            RawHTML(svg_email)
+                                        ),
+                                        Tag("a",
+                                            { "href": "https://github.com/quintinfsmith", "alt": "Github" },
+                                            RawHTML(svg_github)
+                                        ),
+                                        Tag("a",
+                                            { "href": "https://bsky.app/profile/quintinfsmith.bsky.social", "alt": "Bluesky" },
+                                            RawHTML(svg_bsky)
+                                        ),
+                                        Tag("a",
+                                            { "href": "https://keybase.io/quintinfsmith", "alt": "Keybase" },
+                                            RawHTML(svg_keybase)
+                                        ),
+                                        Tag("a",
+                                            { "href": "https://ko-fi.com/quintinfsmith", "alt": "Ko-Fi" },
+                                            RawHTML(svg_kofi)
+                                        )
                                     )
+                                    # Tag("div",
+                                    #     { "class": "externals" },
+                                    #     Tag("a",
+                                    #         {
+                                    #             "href": "https://buymeacoffee.com/qfsmith",
+                                    #             "class": "bmac"
+                                    #         },
+                                    #         Tag("div", { "class": "vh_mid" }),
+                                    #         Tag("span", RawHTML(bmac_content)),
+                                    #         "Buy Me A Coffee"
+                                    #     )
+                                    # )
                                 )
-                                # Tag("div",
-                                #     { "class": "externals" },
-                                #     Tag("a",
-                                #         {
-                                #             "href": "https://buymeacoffee.com/qfsmith",
-                                #             "class": "bmac"
-                                #         },
-                                #         Tag("div", { "class": "vh_mid" }),
-                                #         Tag("span", RawHTML(bmac_content)),
-                                #         "Buy Me A Coffee"
-                                #     )
-                                # )
                             )
+                        ),
+                        slug_tag(
+                            '/javascript/git.js',
+                            'GitActivityWidget',
+                            commits=all_commits,
                         )
-                    ),
-                    slug_tag(
-                        '/javascript/git.js',
-                        'GitActivityWidget',
-                        commits=all_commits,
                     )
                 )
             )
@@ -600,11 +615,14 @@ def git_controller(request, project, *project_path):
                 ),
                 Tag("body",
                     wrappers.build_body_properties(request),
-                    wrappers.build_sitemap('git', project),
-                    wrappers.build_dm_toggle(request),
                     Tag("div",
-                        { "class": "content" },
-                        body
+                        { "class": "body_wrapper" },
+                        wrappers.build_sitemap('git', project),
+                        wrappers.build_dm_toggle(request),
+                        Tag("div",
+                            { "class": "content" },
+                            body
+                        )
                     )
                 )
             )
@@ -839,11 +857,14 @@ def issues_controller(request, project):
         }),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap("git", project),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content" },
-                body_content
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap("git", project),
+                wrappers.build_dm_toggle(request),
+                Tag("div",
+                    { "class": "content" },
+                    body_content
+                )
             )
         )
     )
@@ -984,11 +1005,14 @@ def issue_controller(request, issue_id):
         }),
         Tag("body",
             wrappers.build_body_properties(request),
-            wrappers.build_sitemap("git", issue.project),
-            wrappers.build_dm_toggle(request),
             Tag("div",
-                { "class": "content" },
-                body_content
+                { "class": "body_wrapper" },
+                wrappers.build_sitemap("git", issue.project),
+                wrappers.build_dm_toggle(request),
+                Tag("div",
+                    { "class": "content" },
+                    body_content
+                )
             )
         )
     )

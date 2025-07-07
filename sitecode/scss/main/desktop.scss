@@ -1,8 +1,13 @@
 @media only screen and (min-width: 800px) {
 
 body {
+}
+body > .body_wrapper {
+    height: 100%;
     display: flex;
-    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 0 0 1em .2em #0008;
+    max-width: 1024px;
 }
 
 .slug-HamburgerMenu {
@@ -10,6 +15,7 @@ body {
 }
 
 .sitemap {
+    position: fixed;
     width: 14em;
     height: 100vh;
     flex: 0 0 auto;
@@ -59,6 +65,8 @@ body {
 }
 
 .content {
+    min-height: calc(100dvh - 2em);
+    margin-left: 14em;
     flex: 1 1 auto;
     overflow-y: auto;
     overflow-x: hidden;
@@ -66,7 +74,7 @@ body {
 }
 
 .content.index {
-    height: calc(100% - 4em - 1px);
+    min-height: calc(100dvh - 4em - 1px);
     > :last-child {
         display: flex;
         max-height: 100%;
@@ -106,7 +114,6 @@ body {
 }
 
 .content.daisy {
-    height: calc(100vh - 2em);
 }
 
 
