@@ -1175,27 +1175,7 @@ em { }
     color: var(--col_button_hover_text);
 }
 
-
 .numbered-diagram {
-    border-collapse: collapse;
-    td:nth-last-child(2) {
-        text-align: center;
-        font-weight: bold;
-    }
-    td:last-child,
-    td:nth-last-child(2) {
-        padding: .25em .5em;
-    }
-    td:nth-last-child(3) {
-        height: 500px;
-        img {
-            height: 100%;
-            display: block;
-        }
-    }
-}
-
-div.slug-NumberedDiagram {
     > div:first-child {
         > div:nth-child(2) {
             position: relative;
@@ -1211,7 +1191,7 @@ div.slug-NumberedDiagram {
                 width: 100%;
                 height: 100%;
                 position: absolute;
-                .label {
+                span {
                     font-size: 1.5em;
                     position: absolute;
                     display: inline-block;
@@ -1219,13 +1199,22 @@ div.slug-NumberedDiagram {
                     text-shadow: 2px 2px 3px #000000;
                     font-weight: bold;
                     user-select: none;
-                }
-                .label:not(.selected) {
                     opacity: .7;
                 }
-                .label.selected {
-                    opacity: 1;
-                }
+
+                span.selected { opacity: 1; }
+                span:nth-child(1):before { content: "01"; }
+                span:nth-child(2):before { content: "02"; }
+                span:nth-child(3):before { content: "03"; }
+                span:nth-child(4):before { content: "04"; }
+                span:nth-child(5):before { content: "05"; }
+                span:nth-child(6):before { content: "06"; }
+                span:nth-child(7):before { content: "07"; }
+                span:nth-child(8):before { content: "08"; }
+                span:nth-child(9):before { content: "09"; }
+                span:nth-child(10):before { content: "10"; }
+                span:nth-child(11):before { content: "11"; }
+                span:nth-child(12):before { content: "12"; }
             }
         }
     }
@@ -1242,6 +1231,19 @@ div.slug-NumberedDiagram {
                     color: var(--col_diagrams_highlight);
                 }
             }
+
+            tr:nth-child(1) td:first-child:before { content: "01"; }
+            tr:nth-child(2) td:first-child:before { content: "02"; }
+            tr:nth-child(3) td:first-child:before { content: "03"; }
+            tr:nth-child(4) td:first-child:before { content: "04"; }
+            tr:nth-child(5) td:first-child:before { content: "05"; }
+            tr:nth-child(6) td:first-child:before { content: "06"; }
+            tr:nth-child(7) td:first-child:before { content: "07"; }
+            tr:nth-child(8) td:first-child:before { content: "08"; }
+            tr:nth-child(9) td:first-child:before { content: "09"; }
+            tr:nth-child(10) td:first-child:before { content: "10"; }
+            tr:nth-child(11) td:first-child:before { content: "11"; }
+            tr:nth-child(12) td:first-child:before { content: "12"; }
         }
     }
 }

@@ -1,259 +1,242 @@
 @media only screen and (max-width: 800px) {
 
-body {
-    flex-direction: column;
-    max-height: 100dvh;
+    body {
+        flex-direction: column;
+        max-height: 100dvh;
 
-}
-body > .body_wrapper {
-    height: 100dvh;
-}
+    }
+    body > .body_wrapper {
+        height: 100dvh;
+    }
 
-.sitemap {
-    position: fixed;
-    z-index: 2;
-    width: 100%;
-    > div {
-        display: flex;
-        flex-wrap: wrap;
-        border-bottom: 1px solid var(--col_dark);
-        > .logo {
-            height: 3em;
-            padding: .5em 1em;
-            flex: 1 1 auto;
-            a {
-                display:inline-block;
-                svg {
-                    height: 3em;
-                    width: 3em;
-                    path {
-                        stroke-width: 25;
+    .sitemap {
+        position: fixed;
+        z-index: 2;
+        width: 100%;
+        > div {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--col_dark);
+            > .logo {
+                height: 3em;
+                padding: .5em 1em;
+                flex: 1 1 auto;
+                a {
+                    display:inline-block;
+                    svg {
+                        height: 3em;
+                        width: 3em;
+                        path {
+                            stroke-width: 25;
+                        }
                     }
                 }
             }
-        }
-        .slug-HamburgerMenu {
-            .custom-select {
-                box-shadow: none;
-            }
-            flex: 0 1 auto;
-            .hamburger-wrapper {
-                text-align: right;
-                .hamburger {
-                    display: inline-block;
+            .slug-HamburgerMenu {
+                .custom-select {
+                    box-shadow: none;
+                }
+                flex: 0 1 auto;
+                .hamburger-wrapper {
+                    text-align: right;
+                    .hamburger {
+                        display: inline-block;
+                    }
                 }
             }
-        }
-        > div:last-child:not(.visible) {
-            display: none;
-        }
-        > div:last-child.visible {
-            flex: 1 1 auto;
-            border-top: 1px solid rgba(0, 0, 0, .1);
-            display: flex;
-            width: 100%;
-            max-height: calc(100dvh - 4em - 1px);
-            overflow: auto;
-            > div {
+            > div:last-child:not(.visible) {
+                display: none;
+            }
+            > div:last-child.visible {
                 flex: 1 1 auto;
-                text-align: center;
-                > .header {
+                border-top: 1px solid rgba(0, 0, 0, .1);
+                display: flex;
+                width: 100%;
+                max-height: calc(100dvh - 4em - 1px);
+                overflow: auto;
+                > div {
+                    flex: 1 1 auto;
                     text-align: center;
-                    height: 2em;
-                    display: block;
-                }
-                > .entry {
-                    > .item {
+                    > .header {
                         text-align: center;
                         height: 2em;
                         display: block;
                     }
-                    .item.active {
-                        color: var(--col_highlight);
-                        font-weight: bold;
+                    > .entry {
+                        > .item {
+                            text-align: center;
+                            height: 2em;
+                            display: block;
+                        }
+                        .item.active {
+                            color: var(--col_highlight);
+                            font-weight: bold;
+                        }
                     }
                 }
             }
         }
     }
-}
 
 
 
-.content {
-    position: absolute;
-    top: calc(4em + 1px);
-    height: calc(100dvh - 4em - 2em - 1px);
-    overflow: auto;
-}
+    .content {
+        position: absolute;
+        top: calc(4em + 1px);
+        height: calc(100dvh - 4em - 2em - 1px);
+        overflow: auto;
+    }
 
-.content.index {
-    height: calc(100dvh - 8em - 1px);
-    width: calc(100vw - 4em);
+    .content.index {
+        height: calc(100dvh - 8em - 1px);
+        width: calc(100vw - 4em);
 
-    .img_wrapper {
-        padding: 0 10vw;
-        img {
+        .img_wrapper {
+            padding: 0 10vw;
+            img {
+                display: inline-block;
+                width: 24em;
+                max-width: 100%;
+                border-radius: 50%;
+            }
+        }
+        .slug-GitActivityWidget {
+            margin-top: 1em;
+        }
+    }
+
+    .content.daisy {
+        max-height: calc(100dvh - 6em - 1px);
+    }
+
+
+    .mp_overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100dvh;
+        width: 100vw;
+        background-color: rgba(0, 0, 0, .7);
+        text-align:center;
+
+        > div > div,
+        > div {
             display: inline-block;
-            width: 24em;
-            max-width: 100%;
-            border-radius: 50%;
-        }
-    }
-    .slug-GitActivityWidget {
-        margin-top: 1em;
-    }
-}
-
-.content.daisy {
-    max-height: calc(100dvh - 6em - 1px);
-}
-
-
-.mp_overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100dvh;
-    width: 100vw;
-    background-color: rgba(0, 0, 0, .7);
-    text-align:center;
-
-    > div > div,
-    > div {
-        display: inline-block;
-        vertical-align: middle;
-    }
-}
-
-.media_player {
-    height: calc(100dvh - 1em);
-    width: calc(100vw - 1em);
-    border: none;
-    > div {
-        display: block;
-        > div:nth-child(2) {
-            .mp_video_wrapper {
-               height: calc(100dvh - 10em);
-            }
-
-            > div:nth-child(2) {
-                > .mp_selector {
-                    height: 7em;
-                    max-width: 100%;
-                    overflow-x: auto;
-                    overflow-y: hidden;
-                    white-space: nowrap;
-                    .thumb {
-                        height: 6.75em;
-                        width: 12em;
-                    }
-                }
-            }
+            vertical-align: middle;
         }
     }
 
-}
-
-
-.markdown {
-    > h1 + p + p {
-        display: block;
-        > * {
-            display: block;
-            margin: .5em 0 0 0;
-        }
-    }
-}
-
-
-.git-fileoverview {
-    .navigation-row {
-        display: flex;
-        flex-wrap: wrap;
-        .breadcrumb-nav {
-            padding: .25em 0;
-        }
-        > div:first-child {
-            flex: 1 1 auto;
-        }
-        > div:not(:first-child) {
-            flex: 1 1 auto;
-        }
-        > div:nth-child(2) {
-            text-align: left;
-        }
-        > div:last-child {
-            text-align: right;
-        }
-    }
-}
-
-.git-overview {
-    .option-row {
+    .media_player {
+        height: calc(100dvh - 1em);
+        width: calc(100vw - 1em);
+        border: none;
         > div {
             display: block;
-            text-align: center;
-            margin: 0;
-            .vh_mid {
-                display: none;
+            > div:nth-child(2) {
+                .mp_video_wrapper {
+                   height: calc(100dvh - 10em);
+                }
+
+                > div:nth-child(2) {
+                    > .mp_selector {
+                        height: 7em;
+                        max-width: 100%;
+                        overflow-x: auto;
+                        overflow-y: hidden;
+                        white-space: nowrap;
+                        .thumb {
+                            height: 6.75em;
+                            width: 12em;
+                        }
+                    }
+                }
             }
         }
-        > div:last-child {
-            display:flex;
-            padding: .5em 0;
-            > div {
-                flex: 1 1 auto;
+
+    }
+
+
+    .markdown {
+        > h1 + p + p {
+            display: block;
+            > * {
+                display: block;
+                margin: .5em 0 0 0;
+            }
+        }
+    }
+
+
+    .git-fileoverview {
+        .navigation-row {
+            display: flex;
+            flex-wrap: wrap;
+            .breadcrumb-nav {
+                padding: .25em 0;
             }
             > div:first-child {
+                flex: 1 1 auto;
+            }
+            > div:not(:first-child) {
+                flex: 1 1 auto;
+            }
+            > div:nth-child(2) {
                 text-align: left;
             }
             > div:last-child {
-                text-align:right;
+                text-align: right;
             }
         }
     }
-}
 
-.slug-GitActivityWidget {
-}
-
-div.numbered-diagram {
-    display: flex;
-    flex-direction: column;
-    > div:first-child {
-        text-align: center;
-        > img {
-            display: inline-block
-        }
-    }
-    > div {
-        flex-direction: column;
-        flex-wrap: auto;
-        display: block;
-        > div {
-            display: block;
-        }
-    }
-}
-div.slug-NumberedDiagram {
-    > div:first-child {
-        display: flex;
-        > div:nth-child(2) {
-            flex: 0 1 auto;
-        }
-        > .padding {
-            flex: 1 1 auto;
-            display: visible;
-        }
-    }
-    > div:last-child {
-        > table {
-            td {
-                padding: .5em;
+    .git-overview {
+        .option-row {
+            > div {
+                display: block;
+                text-align: center;
+                margin: 0;
+                .vh_mid {
+                    display: none;
+                }
+            }
+            > div:last-child {
+                display:flex;
+                padding: .5em 0;
+                > div {
+                    flex: 1 1 auto;
+                }
+                > div:first-child {
+                    text-align: left;
+                }
+                > div:last-child {
+                    text-align:right;
+                }
             }
         }
     }
-}
 
+    .slug-GitActivityWidget {
+    }
+
+
+    .numbered-diagram,
+    div.slug-NumberedDiagram {
+        > div:first-child {
+            display: flex;
+            > div:nth-child(2) {
+                flex: 0 1 auto;
+            }
+            > .padding {
+                flex: 1 1 auto;
+                display: visible;
+            }
+        }
+        > div:last-child {
+            > table {
+                td {
+                    padding: .5em;
+                }
+            }
+        }
+    }
 }
