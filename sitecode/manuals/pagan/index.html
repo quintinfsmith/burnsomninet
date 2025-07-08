@@ -1,0 +1,1070 @@
+<style>
+    h1.title {
+        margin: 0;
+        text-decoration: underline;
+    }
+
+    .manual.content {
+        padding: 1em 0em !important;
+        width: 100% !important;
+    }
+
+    .manual-section {
+        position: relative;
+        padding: 1em;
+        line-height: 1.4em;
+        h1, h2, h3,h4, p {
+            margin: 0;
+        }
+
+        h1, h2, h3 {
+            padding-bottom: .5em;
+        }
+        h4 {
+            padding: .5em 0;
+        }
+        .subsection {
+            padding-left: 1em;
+            display: block;
+        }
+    }
+    .manual-section:nth-child(odd) {
+        background-color: #251f3a;
+        z-index: 1;
+        box-shadow: 0 0 .5em 0em #000;
+    }
+    .manual-section:nth-child(even) {
+        z-index: 0;
+    }
+    .manual-section > h2 {
+        margin-top: 0;
+    }
+
+    .manual-section.header {
+        text-align: center;
+    }
+
+    .captionedimg {
+        padding: 1em;
+        border: 1px solid var(--col_text);
+        text-align: center;
+        img {
+            display: block;
+            box-sizing: border-box;
+            width: calc(100% - 2em);
+            margin: 0 auto;
+        }
+
+        div {
+            margin: 1em;
+        }
+    }
+
+    .prefix-example {
+        margin: 1em 0;
+        text-align: center;
+        font-size: 24px;
+        text-decoration: bold;
+        display: block;
+        sub {
+            font-size: 15px;
+        }
+    }
+
+    .downloads {
+        display: inline-flex;
+        margin: 0 auto;
+        flex-wrap: wrap;
+    }
+
+    .downloads > div {
+        flex: 0 1 auto;
+        white-space: none;
+        display: inline-block;
+        height: 4em;
+        img {
+            display: inline-block;
+            height: 100%;
+        }
+    }
+
+    .table-of-contents {
+    }
+
+    .table-of-contents > div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .table-of-contents > div > div.toc-section {
+        padding: 1em;
+        flex: 1 1 auto;
+    }
+    .table-of-contents .toc-section > a:first-child {
+        font-weight: bold;
+    }
+    .table-of-contents .toc-section ul {
+        list-style: none;
+        padding-left: 0em;
+    }
+    .table-of-contents .toc-section ul li li {
+        padding-left: 1em;
+    }
+    .table-of-contents .toc-section ul > li {
+        line-height: 1.5em;
+    }
+    .table-of-contents .toc-section ul > li:not(:last-child) {
+        border-bottom: 1px solid var(--col_text);
+    }
+    .table-of-contents .toc-section li ul {
+        border-top: 1px solid var(--col_text);
+    }
+
+    table.note-translations {
+        margin: 1em auto;
+        border-collapse: collapse;
+        th {
+            border-bottom: 1px solid var(--col_text);
+        }
+        th:first-child,
+        td:first-child {
+            border-left: 1px solid var(--col_text);
+        }
+
+        td,
+        th {
+            text-align: center;
+            padding: .25em .5em;
+            border-right: 1px solid var(--col_text);
+        }
+    }
+
+    div.gm-percussion-table {
+        font-weight: 300;
+        display: flex;
+        flex-wrap: wrap;
+    }
+    div.gm-percussion-table > div {
+        padding: .25em .5em .25em 0;
+        flex: 0 1 auto;
+        white-space: nowrap;
+        width: 12em;
+    }
+    div.gm-percussion-table > div > b {
+        font-family: mono;
+    }
+
+</style>
+
+<div class="manual-section header">
+    <h1 class="title">Pagan</h1>
+    <p>A Mobile Music Sequencer</p>
+
+    <div class="downloads">
+        <div>
+            <a href="https://f-droid.org/en/packages/com.qfs.pagan/">
+                <img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"/>
+            </a>
+        </div>
+        <div>
+            <a href='https://play.google.com/store/apps/details?id=com.qfs.pagan'>
+                <img alt='Get it on Google Play' src='/content/google-play-badge.png'/>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="table-of-contents manual-section">
+    <h2>Table of Contents</h2>
+    <div>
+        <div class="toc-section">
+            <a href="#reading-the-layout">Reading The Layout</a>
+            <ul>
+                <li><a href="#reading-the-layout_the-rhythm">The Rhythm</a></li>
+                <li><a href="#reading-the-layout_the-notes">The Notes</a></li>
+                <li><a href="#reading-the-layout_the-instruments">The Instruments</a></li>
+            </ul>
+        </div>
+        <div class="toc-section">
+            <a href="#controls-overview">Controls Overview</a>
+            <ul>
+                <li><a href="#controls-overview_the-app">The App</a></li>
+                <li><a href="#controls-overview_the-config-menu">The Config Menu</a></li>
+                <li><a href="#controls-overview_the-tuning-table">The Tuning Table</a></li>
+                <li><a href="#controls-overview_the-line-menu">The Line Menu</a></li>
+                <li><a href="#controls-overview_the-channel-menu">The Channel Menu</a></li>
+                <li><a href="#controls-overview_the-column-control-menu">The Column Control Menu</a></li>
+                <li><a href="#controls-overview_the-note-control-menu">The Note Control Menu</a></li>
+            </ul>
+        </div>
+        <div class="toc-section">
+            <a href="#settings">Settings</a>
+            <ul>
+                <li><a href="#settings_change-soundfont">Change SoundFont</a></li>
+                <li><a href="#settings_relative-controls">Toggle Relative Controls</a></li>
+            </ul>
+        </div>
+        <div class="toc-section">
+            <a href="#how-tuning-works">How Tuning Works</a>
+            <ul>
+                <li><a href="#how-tuning-works_equal-temperament-tuning">Equal Temperament Tuning</a></li>
+                <li>
+                    <a href="#how-tuning-works_using-the-tuning-table">Using The Tuning Table</a>
+                    <ul>
+                        <li><a href="#how-tuning-works_using-the-tuning-table_radix">Radix</a></li>
+                        <li><a href="#how-tuning-works_using-the-tuning-table_note-tunings">Note Tunings</a></li>
+                        <li><a href="#how-tuning-works_using-the-tuning-table_transpose">Transpose</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="toc-section">
+            <a href="#f.a.q.">F.A.Q.</a>
+            <ul>
+                <li><a href="#f.a.q._what%27s-a-radix">What's a Radix?</a></li>
+                <li>
+                    <a href="#f.a.q._how-do-i...">How Do I...</a>
+                    <ul>
+                        <li><a href="#f.a.q._how-do-i..._name-my-project">Name my Project?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._add-a-channel">Add a Channel?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._remove-a-channel">Remove a Channel?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._add-a-line">Add a Line?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._remove-a-line">Remove a Line?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._import-a-midi-file">Import a MIDI file?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._import-a-project">Import a Project?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._change-a-soundfont">Change a Soundfont?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._remove-a-soundfont">Remove a Soundfont?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._change-the-sample-rate">Change the Sample Rate?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._change-an-instrument">Change an Instrument?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._change-a-percussion-instrument">Change a Percussion Instrument?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._set-the-tempo">Set the Tempo?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._add-beats">Add Beats?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._remove-beats">Remove Beats?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._move-a-line">Move a Line?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._hide-(or-show)-the-percussion-section">Hide (or show) the Percussion section?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._jump-to-a-beat">Jump to a Beat?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._set-the-tuning">Set the tuning?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._save-the-project">Save the project?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._%27save-as...%27-the-project">'Save As...' the project?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._export-a-midi-file">Export a MIDI file?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._export-a-wav-file">Export a WAV file?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._delete-the-project">Delete the Project?</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<div class="manual-section">
+    <a name="reading-the-layout"></a>
+    <h2>Reading The Layout</h2>
+
+    <hr/>
+    <a name="reading-the-layout_the-rhythm"></a>
+    <h3>The Rhythm</h3>
+
+    Pagan is laid-out on a beat-by-beat basis, rather than by groups of beats (measures). So a time signature wouldn't really make sense to use here. Each column represents a single beat, regardless of visual width.
+    <br/>
+    <br/>
+    <div class="captionedimg">
+        <img src="/content/manuals/pagan/imgs/1.7.6/lick.png"/>
+        <div>
+            "The Lick"<br/>
+            Notice the columns aren't all the same width, but they will occupy the same duration.
+        </div>
+    </div>
+    <br/>
+    So the equivalent of a quarter note or crotchet in 4/4, would be a column's width.
+    <br/>
+    The equivalent of an eigth note (or quaver) in 4/4 time would be a column divided in 2.
+    <br/>
+    A triplet would be a column divided in 3 and so on.
+    <br/>
+    Rests are implicated by the lack of an active note in any given position.
+    <br/>
+    <br/>
+    <div class="captionedimg">
+        <img alt="Some random progression in Pagan" src="/content/manuals/pagan/imgs/1.7.6/example.png" />
+        <div> &#8693; These images represent the same thing. &#8693; </div>
+        <img alt="The same progression in Musescore" src="/content/manuals/pagan/imgs/1.5.9/measure_musescore.png" />
+    </div>
+    <br/><hr/>
+    <a name="reading-the-layout_the-notes"></a>
+    <h3>The Notes</h3>
+    Instead of using letters with sharps and flats, Pagan uses the <b>offset</b> of the note in the octave.
+    <table class="note-translations">
+        <tr>
+            <th>00</th>
+            <th>01</th>
+            <th>02</th>
+            <th>03</th>
+            <th>04</th>
+            <th>05</th>
+            <th>06</th>
+            <th>07</th>
+            <th>08</th>
+            <th>09</th>
+            <th>10</th>
+            <th>11</th>
+        </tr>
+        <tr>
+            <td>A</td>
+            <td>A#</td>
+            <td>B</td>
+            <td>C</td>
+            <td>C#</td>
+            <td>D</td>
+            <td>D#</td>
+            <td>E</td>
+            <td>F</td>
+            <td>F#</td>
+            <td>G</td>
+            <td>G#</td>
+        </tr>
+    </table>
+
+    ...and the octave is represented by the subscripted prefix...
+
+    <div class="prefix-example">
+        <sub>octave</sub>Offset
+    </div>
+
+    Octaves are counted starting at A (0) rather than C (3). So <b>A0 remains <sub>0</sub>0</b>, but the proceding <strong>C is not <sub>1</sub>C</strong>, but rather <span style="font-size:20px"><b><u><sub>0</sub>3</u></b></span>
+
+    <br/>
+
+    <center>So middle C <span style="font-size: 1.5em;">(C4)</span> would be written as <span style="font-size: 1.5em;"><sub>3</sub>3</span></center>
+
+    <br/>
+    <hr/>
+    <p><a name="reading-the-layout_the-instruments"></a></p>
+    <h3>The Instruments</h3>
+
+    On the left side of the Pagan interface, you'll notice labels that look something like:
+    <br/>
+    <img src="/content/manuals/pagan/imgs/1.7.6/line-labels.png" style="max-width: 25%; display: block; margin: 1em auto;"/>
+    <h4>First, note the numbers in the <u>top-left</u> corners.</h4>
+    <span class="subsection">This is the channel number. Each channel is also delineated by a <b>thick line</b> to help differentiate at a glance. You'll also notice that there is a ! preceding channel 1. This indicates a <b> percussion channel </b>.</span>
+    <h4>Next, note the numbers in the <u>bottom-right</u> corners.</h4>
+    <span class="subsection">
+        These indicate different things between <b>standard</b> &amp; <b>percussion</b> channels.
+        <br/>
+        In <b>standard channels</b>, this number is the <b>line number</b>.
+        <br/>
+        In <b>percussion channels</b>, this number the instrument being used by that line as is defined in the table below. (The project pictured has a <b>side stick</b> and an <b>acoustic snare</b> active.)
+    </span>
+
+    <br/>
+    <br/>
+
+    The numbers identify the percussion instruments being used. It varies based on the soundfont being used, but soundfonts that adhere to the <b>General MIDI Standard</b> will follow this table:<br>
+    <div class="gm-percussion-table">
+        <div><b>08</b> | Acoustic Bass Drum</div>
+        <div><b>09</b> | Bass Drum 1</div>
+        <div><b>10</b> | Side Stick</div>
+        <div><b>11</b> | Acoustic Snare</div>
+        <div><b>12</b> | Hand Clap</div>
+        <div><b>13</b> | Electric Snare</div>
+        <div><b>14</b> | Low Floor Tom</div>
+        <div><b>15</b> | Closed Hi Hat</div>
+        <div><b>16</b> | High Floor Tom</div>
+        <div><b>17</b> | Pedal Hi-Hat</div>
+        <div><b>18</b> | Low Tom</div>
+        <div><b>19</b> | Open Hi-Hat</div>
+        <div><b>20</b> | Low-Mid Tom</div>
+        <div><b>21</b> | Hi Mid Tom</div>
+        <div><b>22</b> | Crash Cymbal 1</div>
+        <div><b>23</b> | High Tom</div>
+        <div><b>24</b> | Ride Cymbal 1</div>
+        <div><b>25</b> | Chinese Cymbal</div>
+        <div><b>26</b> | Ride Bell</div>
+        <div><b>27</b> | Tambourine</div>
+        <div><b>28</b> | Splash Cymbal</div>
+        <div><b>29</b> | Cowbell</div>
+        <div><b>30</b> | Crash Cymbal 2</div>
+        <div><b>31</b> | Vibraslap</div>
+        <div><b>32</b> | Ride Cymbal 2</div>
+        <div><b>33</b> | Hi Bongo</div>
+        <div><b>34</b> | Low Bongo</div>
+        <div><b>35</b> | Mute Hi Conga</div>
+        <div><b>36</b> | Open Hi Conga</div>
+        <div><b>37</b> | Low Conga</div>
+        <div><b>38</b> | High Timbale</div>
+        <div><b>39</b> | Low Timbale</div>
+        <div><b>40</b> | High Agogo</div>
+        <div><b>41</b> | Low Agogo</div>
+        <div><b>42</b> | Cabasa</div>
+        <div><b>43</b> | Maracas</div>
+        <div><b>44</b> | Short Whistle</div>
+        <div><b>45</b> | Long Whistle</div>
+        <div><b>46</b> | Short Guiro</div>
+        <div><b>47</b> | Long Guiro</div>
+        <div><b>48</b> | Claves</div>
+        <div><b>49</b> | Hi Wood Block</div>
+        <div><b>50</b> | Low Wood Block</div>
+        <div><b>51</b> | Mute Cuica</div>
+        <div><b>52</b> | Open Cuica</div>
+        <div><b>53</b> | Mute Triangle</div>
+        <div><b>54</b> | Open Triangle</div>
+    </div>
+</div>
+
+<div class="manual-section">
+    <a name="controls-overview"></a>
+    <h2>Controls Overview</h2>
+    <a name="controls-overview_the-app"></a>
+    <h3>The App</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.7.6/mainlayout.png" />
+                <div class="label-layer">
+                    <span style="left: 65%; top: 04%"></span>
+                    <span style="left: 80%; top: 04%"></span>
+                    <span style="left: 00%; top: 06%"></span>
+                    <span style="left: 35%; top: 06%"></span>
+                    <span style="left: 00%; top: 16%"></span>
+                    <span style="left: 10%; top: 21%"></span>
+                    <span style="left: 00%; top: 61%"></span>
+                    <span style="left: 53%; top: 13%"></span>
+                    <span style="left: 00%; top: 89%"></span>
+                    <span style="left: 50%; top: 87%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Start Playback. Tap again to stop. Also tap anywhere to stop</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Undo last action. (max history size is 100 actions)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Quick Navigate</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Select column and open up column menu</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Select to set meta control initial values</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Select percussion line. The "!" denotes the line belongs to a percussion channel.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Select a note. Brings up note menu. Tap and hold to link, copy or move beats.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set the initial tempo.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set a tempo change.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a name="controls-overview_the-config-menu"></a>
+    <h3>The Config Menu</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.6.0/configlayout.png" />
+                <div class="label-layer">
+                    <span style="left: 54%; top: 0%"></span>
+                    <span style="left: 20%; top: 5%"></span>
+                    <span style="left: 65%; top: 5%"></span>
+                    <span style="left: 21%; top: 17%"></span>
+                    <span style="left: 64%; top: 17%"></span>
+                    <span style="left: 21%; top: 26.5%"></span>
+                    <span style="left: 64%; top: 26.5%"></span>
+                    <span style="left: 10%; top: 88%"></span>
+                    <span style="left: 28%; top: 88%"></span>
+                    <span style="left: 45%; top: 88%"></span>
+                    <span style="left: 61%; top: 88%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Set the song's name</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Open The Tuning Table. This is where you can set the transposition and manually tweak the tuning.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add New Channels (Instruments) to the Song</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Change Channel Instrument</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Remove Channel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set Drum</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Toggle Drum visibility</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Save the current project. Long press to "save as"</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Move to a copy of the current project</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Delete the project</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Export the project to .wav or .mid. Can only export to midi when Radix is 12.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a name="controls-overview_the-tuning-table"></a>
+    <h3>The Tuning Table</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.5.9/tuningtablelayout.png" />
+                <div class="label-layer">
+                    <span style="left: 35%; top: 5%"></span>
+                    <span style="left: 65%; top: 5%"></span>
+                    <span style="left: 40%; top: 40%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Transpose the project by the given note. Maximum is the Radix - 1</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set the number of notes-per-octave to use in the project. Default is 12</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Tune the notes using ratios rather than 'cents'. See <a href="#how-tuning-works"><b>How tuning works</b></a> for more information.</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a name="controls-overview_the-line-menu"></a>
+    <h3>The Line Menu</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.6.0/linemenulayout.png" />
+                <div class="label-layer">
+                    <span style="left: 0%; top: 44%"></span>
+                    <span style="left: 0%; top: 74%"></span>
+                    <span style="left: 30%; top: 74%"></span>
+                    <span style="left: 73%; top: 74%"></span>
+                    <span style="left: 90%; top: 74%"></span>
+                    <span style="left: 23%; top: 88%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Tap again to open the channel menu</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Show line meta controls (currently volume &amp; pan)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set line's drum. (Exclusive to the Percussion Channel)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Remove a line from the channel. This button will *not* be visible when there is only 1 line in the given channel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add a line to the channel.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Control the line's volume</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+    <a name="controls-overview_the-channel-menu"></a>
+    <h3>The Channel Menu</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.6.0/channelmenulayout.png"/>
+                <div class="label-layer">
+                    <span style="left: 10%; top: 76%"></span>
+                    <span style="left: 73%; top: 76%"></span>
+                    <span style="left: 90%; top: 76%"></span>
+                    <span style="left: 23%; top: 88%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Show line meta controls (currently just pan)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Remove the channel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add a channel</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Choose channel instrument</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <p><a name="controls-overview_the-column-control-menu"></a></p>
+    <h3>The Column Control Menu</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.6.0/columnmenulayout.png"/>
+                <div class="label-layer">
+                    <span style="left: 73%; top: 90%"></span>
+                    <span style="left: 90%; top: 90%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Remove beats from the column. (Short tap for 1. Hold to input a number)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add more beats to the column. (Short tap for 1. Hold to input a number)</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <a name="controls-overview_the-note-control-menu"></a>
+    <h3>The Note Control Menu</h3>
+    <div class="numbered-diagram">
+        <div>
+            <div class="padding"></div>
+            <div>
+                <img src="/content/manuals/pagan/imgs/1.6.0/cellmenulayout.png"/>
+                <div class="label-layer">
+                    <span style="left: 00%; top: 72%"></span>
+                    <span style="left: 14%; top: 72%"></span>
+                    <span style="left: 30%; top: 72%"></span>
+                    <span style="left: 48%; top: 72%"></span>
+                    <span style="left: 67%; top: 72%"></span>
+                    <span style="left: 85%; top: 72%"></span>
+                    <span style="left: 30%; top: 83%"></span>
+                    <span style="left: 60%; top: 88%"></span>
+                </div>
+            </div>
+            <div class="padding"></div>
+        </div>
+        <div>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Change to Relative/Absolute Note Input Mode. This can be toggled from the settings menu.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Split a cell into finite divisions. (Hold to input a number)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Insert an empty cell after the currently selected one. (Hold to input a number)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Remove the selected cell. (Hold to remove all cell at the current level)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Unset a note.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set a note's duration (Hold to reset to x1)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set a note's octave</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Set a note's offset</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="manual-section">
+    <a name="settings"></a>
+    <h2>Settings</h2>
+    <a name="settings_change-soundfont"></a>
+    <h3>Change SoundFont</h3>
+    <span class="subsection">
+        From here you can either select an imported .sf2 file or select 'import' and use a soundfont from your device. By default, a message will appear if you have no soundfonts, providing a link to the Fluid R3 general midi soundfont on the internet archive.
+    </span>
+    <br/>
+    <hr/>
+    <a name="settings_relative-controls"></a>
+    <h3>Toggle Relative Controls</h3>
+    <span class="subsection">
+        Pagan has the option to set notes based on preceding notes(eg +1, -3, etc). This can control can be enabled here. Projects with relative notes are still viewable if this option is not enabled.
+    </span>
+    <a name="how-tuning-works"></a>
+</div>
+
+<div class="manual-section">
+    <h2>How Tuning Works</h2>
+    <a name="how-tuning-works_equal-temperament-tuning"></a>
+    <h3>Equal Temperament Tuning</h3>
+    Simply put, this means each note is <strong>double</strong> the frequency of the same note one octave lower.
+    Mathematically speaking, equal temperament is defined thusly: <br/>
+
+    <pre><code>    base_frequency * (2 ^ ( x / radix )) </code></pre>
+    <br/>
+    Where, relative to western music:
+    <br/>
+    <pre><code>    base_frequency = 27.5
+    radix = 12 </code></pre>
+
+    <br/>
+    27.5Hz is the frequency of the <strong>A<sub>0</sub></strong> on a piano and there are <strong>12</strong> <em>keys per octave</em>
+    <br/>
+    <hr/>
+    <a name="how-tuning-works_using-the-tuning-table"></a>
+    <h3>Using The Tuning Table</h3>
+    The tuning table has 3 parts:
+    <a name="how-tuning-works_using-the-tuning-table_radix"></a>
+    <h4>Radix</h4>
+    <span class="subsection">
+        Changing the Radix changes the <em>number of notes per octave</em>. The <em>note tunings</em> will default to <strong>equal temperament</strong> when this gets changed.
+        <br/>
+        This means you could set the radix to 24 and use the even notes as normal and the odd notes as micro-tones. Or you could experiment with different sized octaves.
+    </span>
+    <a name="how-tuning-works_using-the-tuning-table_note-tunings"></a>
+    <h4>Note Tunings</h4>
+    <span class="subsection">
+        Instead of using "cents" and "semi-tones", Pagan uses <em>ratios</em> and <em>offsets</em>.
+        <br/>
+        The <strong>Offset</strong> is the index of the note given a list of notes. (See <a href="#reading-the-layout_the-notes">How to Read</a>).
+        <br/>
+        The <strong>Ratios</strong> are the <code>(x / radix)</code> part of the function in equal temperament tuning.
+        <br/>
+        <br/>
+        This means that if you want to tune a key <em>up</em> you'll need to have a ratio 
+        <br/>
+        between <code>(offset / radix)</code> and <code>((offset + 1) / radix)</code>
+        <br/>
+        <br/>
+        <b>A cent is a 1/100th step between each note.</b>
+        <br/>
+        This means that in order to tune a note <strong>Up One Cent</strong>, the ratio would be:
+        <pre><code>((offset * 100) + 1) / (radix * 100) </code></pre>
+    </span>
+    <br/>
+
+    <a name="how-tuning-works_using-the-tuning-table_transpose"></a>
+    <h4>Transpose</h4>
+    <span class="subsection">
+        Pagan defaults to <strong><sub>0</sub>0 = 27.5Hz</strong> (or A<sub>0</sub>).
+        <br/>
+        The transpose is which offset you want to start at.
+        <br/>
+        So if you wanted to set <sub>0</sub>0 to <strong>C</strong>, you would change Transpose to <b>3 / 12</b>. (A:0, A#:1, B:2, C:3)
+    </span>
+</div>
+
+
+<div class="manual-section">
+    <p><a name="f.a.q."></a></p>
+    <h2>F.A.Q.</h2>
+    <p><a name="f.a.q._what's-a-radix"></a></p>
+    <h3>What's a Radix?<br></h3>
+    <p>A radix is the number by which you group when counting. If you are part of most of the modern world, you'll be familiar with radix-10, in which we count in groups of 10 numerals.<br>
+    Binary is radix 2 and hexidecimal is radix 16.<br>
+    Pianos are implicitly radix 12. Even if western music thinks of notes as letters rather than numbers.</p>
+    <p><a name="f.a.q._how-do-i..."></a></p>
+    <h3>How Do I...</h3>
+    <p><a name="f.a.q._how-do-i..._name-my-project"></a></p>
+    <h4>Name my Project?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap 'Change Project Name'.<br></li>
+    <li>Enter the new name and tap 'OK'.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._add-a-channel"></a></p>
+    <h4>Add a Channel?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap 'Add Channel'.</li>
+    </ol>
+    <p>--OR--</p>
+    <ol>
+    <li>Tap a line Label. Any line label. To select a line.<br></li>
+    <li>Tap it again to open up the channel menu.<br></li>
+    <li>Tap the 'Add channel' icon.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._remove-a-channel"></a></p>
+    <h4>Remove a Channel?<br></h4>
+    <p>Keep in mind that you can't remove the percussion channel, but you <em>can</em> hide it. The steps are the same.</p>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the X button on the channel you want to remove.</li>
+    </ol>
+    <p>--OR--</p>
+    <ol>
+    <li>Tap a line label in the channel you want to remove.<br></li>
+    <li>Tap it again to open up the channel menu.<br></li>
+    <li>Tap the 'remove channel' icon.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._add-a-line"></a></p>
+    <h4>Add a Line?<br></h4>
+    <ol>
+    <li>Tap the line label where you want to insert a new line.<br></li>
+    <li>Tap the 'add line' button.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._remove-a-line"></a></p>
+    <h4>Remove a Line?<br></h4>
+    <ol>
+    <li>Tap the line label of the line you want to remove.<br></li>
+    <li>Tap the 'remove line' button.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._import-a-midi-file"></a></p>
+    <h4>Import a MIDI file?</h4>
+    <ol>
+    <li>Tap the vertical ellipsis.<br></li>
+    <li>Select 'Import'<br></li>
+    <li>Pick your .mid file.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._import-a-project"></a></p>
+    <h4>Import a Project?</h4>
+    <ol>
+    <li>Tap the vertical ellipsis.<br></li>
+    <li>Select 'Import'<br></li>
+    <li>Pick your exported project (.json)</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._change-a-soundfont"></a></p>
+    <h4>Change a Soundfont?</h4>
+    <ol>
+    <li>Tap the vertical ellipsis.<br></li>
+    <li>Select 'Settings'<br></li>
+    <li>Tap the 'Active Soundfont'<br></li>
+    <li>Pick from already imported sounfont or choose 'Import' and select a .sf2 from your device.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._remove-a-soundfont"></a></p>
+    <h4>Remove a Soundfont?</h4>
+    <ol>
+    <li>Tap the vertical ellipsis.<br></li>
+    <li>Select 'Settings'<br></li>
+    <li><strong>Tap and Hold</strong> the 'Active Soundfont'<br></li>
+    <li>Choose the soundfont to remove from the list.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._change-the-sample-rate"></a></p>
+    <h4>Change the Sample Rate?</h4>
+    <ol>
+    <li>Tap the vertical ellipsis.<br></li>
+    <li>Select 'Settings'<br></li>
+    <li>Use the 'Playback Quality' Slider to set the rate.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._change-an-instrument"></a></p>
+    <h4>Change an Instrument?</h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the channel with the instrument to be changed.<br></li>
+    <li>Pick an instrument from the menu.</li>
+    </ol>
+    <p>--OR--</p>
+    <ol>
+    <li>Tap the label of the line which instrument you want to change.<br></li>
+    <li>Tap the the same label <strong>again</strong><br></li>
+    <li>Tap the button at the bottom that has the name of the currently active channel instrument<br></li>
+    <li>Pick an instrument from the menu.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._change-a-percussion-instrument"></a></p>
+    <h4>Change a Percussion Instrument?</h4>
+    <ol>
+    <li>Tap the label of the percussion line to change<br></li>
+    <li>Tap the button with button labelled with the current instrument name (eg. 0: High Q)<br></li>
+    <li>Pick an instrument from the menu.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._set-the-tempo"></a></p>
+    <h4>Set the Tempo?</h4>
+    <p>To set the initial tempo:<br></p>
+    <ol>
+    <li>Tap the metronome icon at the bottom of the table.<br></li>
+    <li>Tap the BPM button.<br></li>
+    <li>Input the new tempo in Beats per Minute.</li>
+    </ol>
+    <p>To change the tempo within the song:<br></p>
+    <ol>
+    <li>Select a leaf along the tempo line as you would the other lines.<br></li>
+    <li>Tap the BPM button.<br></li>
+    <li>Input the new tempo in Beats per Minute.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._add-beats"></a></p>
+    <h4>Add Beats?<br></h4>
+    <ol>
+    <li>Tap the top of a column.<br>
+    Single Beat:<br></li>
+    <li>Tap the 'Add Beat' button in the corner<br>
+    Mutliple Beats:<br></li>
+    <li><strong>Tap and Hold</strong>* the 'Add Beat' button the corner.<br></li>
+    <li>Input the number of beats to add.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._remove-beats"></a></p>
+    <h4>Remove Beats?<br></h4>
+    <ol>
+    <li>Tap the top of a column.<br>
+    Single Beat:<br></li>
+    <li>Tap the 'Remove Beat' button in the corner<br>
+    Mutliple Beats:<br></li>
+    <li><strong>Tap and Hold</strong>* the 'Remove Beat' button the corner.<br></li>
+    <li>Input the number of beats to remove.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._move-a-line"></a></p>
+    <h4>Move a Line?<br></h4>
+    <ol>
+    <li>Insert a line where you want the moved line to go.<br></li>
+    <li>Drag and drop the line label of one onto the other.<br></li>
+    <li>Delete the empty line.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._hide-(or-show)-the-percussion-section"></a></p>
+    <h4>Hide (or show) the Percussion section?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the eye icon at the end of the percussion channel button.</li>
+    </ol>
+    <p>--OR-- (hide only)</p>
+    <ol>
+    <li>Double tap a percusion line label.<br></li>
+    <li>Tap the eye icon to hide.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._jump-to-a-beat"></a></p>
+    <h4>Jump to a Beat?</h4>
+    <ol>
+    <li>Tap the arrow icon in the top-left corner of the editor<br></li>
+    <li>Use the slider to select a beat.</li>
+    </ol>
+    <p>--OR-- (to jump to 0)</p>
+    <ol>
+    <li><strong>Tap and Hold</strong> the arrow icon in the top-left corner to jump to the first beat.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._set-the-tuning"></a></p>
+    <h4>Set the tuning?</h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the 'Tuning' button.<br></li>
+    <li>See the <a href="#how-tuning-works"><strong>Tuning Section</strong></a> if this table doesn't make sense to you.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._save-the-project"></a></p>
+    <h4>Save the project?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the floppy disk icon in the bottom-left corner.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._'save-as...'-the-project"></a></p>
+    <h4>'Save As...' the project?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li><strong>Tap and hold</strong>* the floppy disk icon in the bottom-left corner.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._export-a-midi-file"></a></p>
+    <h4>Export a MIDI file?<br></h4>
+    <p>NOTE: Projects can <em><strong>only</strong></em> be exported to midi when the Radix and Tuning table are unaltered. (See <a href="#tuning"><strong>Tuning</strong></a> for more information).<br></p>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the 'Export' button at the bottom-right of the menu.<br></li>
+    <li>Select 'Midi File'.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._export-a-wav-file"></a></p>
+    <h4>Export a WAV file?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the 'Export' button at the bottom-right of the menu.<br></li>
+    <li>Select 'Wav File'.</li>
+    </ol>
+    <p><a name="f.a.q._how-do-i..._delete-the-project"></a></p>
+    <h4>Delete the Project?<br></h4>
+    <ol>
+    <li>Tap the hamburger menu to open the configuration menu.<br></li>
+    <li>Tap the trash bin icon.</li>
+    </ol>
+    </div>
+    </div>
+    </div>
+</div>

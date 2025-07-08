@@ -307,6 +307,10 @@ class RelativeVagueDate extends SlugWidget {
 
 window.onload = function() {
     load_widget_slugs();
+    let elements = document.body.getElementsByClassName("numbered-diagram");
+    for (let i = 0; i < elements.length; i++) {
+        activate_numbered_diagram(elements[i]);
+    }
 }
 
 class HamburgerMenu extends SlugWidget {
@@ -367,79 +371,44 @@ class HamburgerMenu extends SlugWidget {
     }
 }
 
-class NumberedDiagram extends SlugWidget {
-    constructor(element, options) {
-        super(element, options);
-        let item_table = crel("table")
-        let label_layer = crel("div", {
-            "class": "label-layer"
+function activate_numbered_diagram(element) {
+    if (element.hasClass("activated") || !element.hasClass("numbered-diagram")) {
+        return;
+    }
+    element.addClass("activated");
+    let cells = element.getElementsByClassName("label-layer")[0].getElementsByTagName("span")
+    let table = element.getElementsByTagName("table")[0];
+    for (let i = 0; i < cells.length; i++) {
+        let label = cells[i];
+        let row = table.getElementsByTagName("tr")[i];
+
+        event_listen(label, "mouseout", function() {
+            removeClass(row, "selected");
+            removeClass(label, "selected");
         })
-        for (let i = 0; i < options["entries"].length; i++) {
-            let padded_i = (i + 1).toString()
-            while (padded_i.length < 2) {
-                padded_i = "0" + padded_i
-            }
-            let td_label = crel("td")
-            td_label.insertAdjacentHTML("beforeend", options["entries"][i][2])
-            item_table.appendChild(
-                crel("tr",
-                    crel("td", padded_i),
-                    td_label
-                )
-            )
-
-            let x = (options["entries"][i][0] * 100).toString() + "%"
-            let y = (options["entries"][i][1] * 100).toString() + "%"
-            let label = crel("span", {
-                    "class": "label",
-                    "style": "position: absolute; left: " + x + "; top: " + y
-                },
-                padded_i
-            )
-
-            event_listen(label, "mouseout", function() {
-                removeClass(item_table.children[i], "selected")
-                removeClass(label, "selected")
-            })
-            event_listen(label, "mouseover", function() {
-                addClass(item_table.children[i], "selected")
-                addClass(label, "selected")
-            })
-            event_listen(label, "click", function() {
-                addClass(item_table.children[i], "selected")
-                addClass(label, "selected")
-            })
-            event_listen(item_table.children[i], "mouseout", function() {
-                removeClass(item_table.children[i], "selected")
-                removeClass(label, "selected")
-            })
-            event_listen(item_table.children[i], "mouseover", function() {
-                addClass(item_table.children[i], "selected")
-                addClass(label, "selected")
-            })
-            event_listen(item_table.children[i], "click", function() {
-                addClass(item_table.children[i], "selected")
-                addClass(label, "selected")
-            })
-
-            label_layer.appendChild(label)
-        }
-
-        this.element.appendChild(
-            crel("div",
-                crel("div", { "class": "padding" }),
-                crel("div",
-                    crel("img", {
-                        "src": options["img"]
-                    }),
-                    label_layer
-                ),
-                crel("div", { "class": "padding" })
-            )
-        )
-        this.element.appendChild(crel("div", item_table))
+        event_listen(label, "mouseover", function() {
+            addClass(row, "selected");
+            addClass(label, "selected");
+        })
+        event_listen(label, "click", function() {
+            addClass(row, "selected");
+            addClass(label, "selected");
+        })
+        event_listen(row, "mouseout", function() {
+            removeClass(row, "selected");
+            removeClass(label, "selected");
+        })
+        event_listen(row, "mouseover", function() {
+            addClass(row, "selected");
+            addClass(label, "selected");
+        })
+        event_listen(row, "click", function() {
+            addClass(row, "selected");
+            addClass(label, "selected");
+        })
     }
 }
+
 
 class IssuesTable extends SlugWidget {
     constructor(element, options) {
