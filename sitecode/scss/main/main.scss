@@ -1191,7 +1191,7 @@ em { }
                 width: 100%;
                 height: 100%;
                 position: absolute;
-                span {
+                span, a {
                     font-size: 1.5em;
                     position: absolute;
                     display: inline-block;
@@ -1199,22 +1199,22 @@ em { }
                     text-shadow: 2px 2px 3px #000000;
                     font-weight: bold;
                     user-select: none;
-                    opacity: .7;
+                    opacity: .4;
                 }
 
-                span.selected { opacity: 1; }
-                span:nth-child(1):before { content: "01"; }
-                span:nth-child(2):before { content: "02"; }
-                span:nth-child(3):before { content: "03"; }
-                span:nth-child(4):before { content: "04"; }
-                span:nth-child(5):before { content: "05"; }
-                span:nth-child(6):before { content: "06"; }
-                span:nth-child(7):before { content: "07"; }
-                span:nth-child(8):before { content: "08"; }
-                span:nth-child(9):before { content: "09"; }
-                span:nth-child(10):before { content: "10"; }
-                span:nth-child(11):before { content: "11"; }
-                span:nth-child(12):before { content: "12"; }
+                .selected { opacity: 1; }
+                :nth-child(1):before { content: "01"; }
+                :nth-child(2):before { content: "02"; }
+                :nth-child(3):before { content: "03"; }
+                :nth-child(4):before { content: "04"; }
+                :nth-child(5):before { content: "05"; }
+                :nth-child(6):before { content: "06"; }
+                :nth-child(7):before { content: "07"; }
+                :nth-child(8):before { content: "08"; }
+                :nth-child(9):before { content: "09"; }
+                :nth-child(10):before { content: "10"; }
+                :nth-child(11):before { content: "11"; }
+                :nth-child(12):before { content: "12"; }
             }
         }
     }

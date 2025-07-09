@@ -17,10 +17,7 @@
             margin: 0;
         }
 
-        h1, h2, h3 {
-            padding-bottom: .5em;
-        }
-        h4 {
+        h1, h2, h3, h4 {
             padding: .5em 0;
         }
         .subsection {
@@ -28,6 +25,7 @@
             display: block;
         }
     }
+
     .manual-section:nth-child(odd) {
         background-color: #251f3a;
         z-index: 1;
@@ -200,8 +198,24 @@
         <div class="toc-section">
             <a href="#settings">Settings</a>
             <ul>
-                <li><a href="#settings_change-soundfont">Change SoundFont</a></li>
-                <li><a href="#settings_relative-controls">Toggle Relative Controls</a></li>
+                <li><a href="#settings_active-soundfont">Active Soundfont</a></li>
+                <li><a href="#settings_playback-quality">Playback quality</a></li>
+                <li><a href="#settings_clip-sample">Clip sample fade-out on same lines</a></li>
+                <li><a href="#settings_input-mode">Relative input mode</a></li>
+                <li><a href="#settings_remember-sf">Remember soundfont when loading project</a></li>
+                <li><a href="#settings_enable-midi-playback">Enable midi playback</a></li>
+                <li><a href="#settings_use-percussion-as-std">Use percussion as standard instrument</a></li>
+                <li><a href="#settings_screen-orientation">Screen orientation</a></li>
+            </ul>
+        </div>
+        <div class="toc-section">
+            <a href="#export-menu">Exporting A Project</a>
+            <ul>
+                <li><a href="#export-menu-json">JSON File</a></li>
+                <li><a href="#export-menu-midi">MIDI File</a></li>
+                <li><a href="#export-menu-wav-single">WAV File</a></li>
+                <li><a href="#export-menu-wav-lines">WAV Files (Lines)</a></li>
+                <li><a href="#export-menu-wav-channels">WAV Files (Channels)</a></li>
             </ul>
         </div>
         <div class="toc-section">
@@ -226,6 +240,7 @@
                     <a href="#f.a.q._how-do-i...">How Do I...</a>
                     <ul>
                         <li><a href="#f.a.q._how-do-i..._name-my-project">Name my Project?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._uniform_adjust">Adjust a selection?</a></li>
                         <li><a href="#f.a.q._how-do-i..._add-a-channel">Add a Channel?</a></li>
                         <li><a href="#f.a.q._how-do-i..._remove-a-channel">Remove a Channel?</a></li>
                         <li><a href="#f.a.q._how-do-i..._add-a-line">Add a Line?</a></li>
@@ -243,6 +258,7 @@
                         <li><a href="#f.a.q._how-do-i..._move-a-line">Move a Line?</a></li>
                         <li><a href="#f.a.q._how-do-i..._hide-(or-show)-the-percussion-section">Hide (or show) the Percussion section?</a></li>
                         <li><a href="#f.a.q._how-do-i..._jump-to-a-beat">Jump to a Beat?</a></li>
+                        <li><a href="#f.a.q._how-do-i..._jump-to-a-section">Jump to a Section?</a></li>
                         <li><a href="#f.a.q._how-do-i..._set-the-tuning">Set the tuning?</a></li>
                         <li><a href="#f.a.q._how-do-i..._save-the-project">Save the project?</a></li>
                         <li><a href="#f.a.q._how-do-i..._%27save-as...%27-the-project">'Save As...' the project?</a></li>
@@ -429,18 +445,23 @@
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.7.6/mainlayout.png" />
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/main_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/main_layout_d.png" alt="The App">
+                </picture> 
                 <div class="label-layer">
                     <span style="left: 65%; top: 04%"></span>
                     <span style="left: 80%; top: 04%"></span>
-                    <span style="left: 00%; top: 06%"></span>
-                    <span style="left: 35%; top: 06%"></span>
-                    <span style="left: 00%; top: 16%"></span>
-                    <span style="left: 10%; top: 21%"></span>
-                    <span style="left: 00%; top: 61%"></span>
-                    <span style="left: 53%; top: 13%"></span>
-                    <span style="left: 00%; top: 89%"></span>
-                    <span style="left: 50%; top: 87%"></span>
+                    <span style="left: -4%; top: 07%"></span>
+                    <a href="#controls-overview_the-column-control-menu" style="left: 30%; top: 09%"></a>
+                    <a href="#controls-overview_the-line-menu" style="left: -4%; top: 18%"></a>
+                    <span style="left: -4%; top: 28%"></span>
+                    <a href="#controls-overview_the-line-menu" style="left: -5%; top: 45%"></a>
+                    <a href="#controls-overview_the-note-control-menu" style="left: 68%; top: 16%"></a>
+                    <span style="left: -5%; top: 56%"></span>
+                    <span style="left: 50%; top: 55%"></span>
+                    <span style="left: 23%; top: 00%"></span>
+                    <a href="#controls-overview_the-config-menu" style="left: -2%; top: 00%"></a>
                 </div>
             </div>
             <div class="padding"></div>
@@ -457,15 +478,15 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Quick Navigate</td>
+                    <td>Quick Navigate to a specific beat or section if any sections are tagged.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Select column and open up column menu</td>
+                    <td>Select column and open up column menu. The circled column number indicates a section.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0::4 means channel 0, line 4)</td>
+                    <td>Select line and open up line menu. The numbers indicate the channel and the line. (eg, 0/4 means channel 0, line 4).</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -487,6 +508,14 @@
                     <td></td>
                     <td>Set a tempo change.</td>
                 </tr>
+                <tr>
+                    <td></td>
+                    <td>Press and hold title to change the project name or add text notes to the project.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Open the song configuration menu.</td>
+                </tr>
             </table>
         </div>
     </div>
@@ -497,19 +526,23 @@
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.6.0/configlayout.png" />
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/config_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/config_layout_d.png" alt="The Config Menu">
+                </picture> 
                 <div class="label-layer">
-                    <span style="left: 54%; top: 0%"></span>
-                    <span style="left: 20%; top: 5%"></span>
-                    <span style="left: 65%; top: 5%"></span>
-                    <span style="left: 21%; top: 17%"></span>
-                    <span style="left: 64%; top: 17%"></span>
-                    <span style="left: 21%; top: 26.5%"></span>
-                    <span style="left: 64%; top: 26.5%"></span>
-                    <span style="left: 10%; top: 88%"></span>
-                    <span style="left: 28%; top: 88%"></span>
-                    <span style="left: 45%; top: 88%"></span>
-                    <span style="left: 61%; top: 88%"></span>
+                    <span style="left: 60%; top: 02%"></span>
+                    <a href="#controls-overview_the-tuning-table" style="left: 18%; top: 09%"></a>
+                    <span style="left: 75%; top: 09%"></span>
+                    <span style="left: 43%; top: 09%"></span>
+                    <span style="left: -3%; top: 16%"></span>
+                    <span style="left: 75%; top: 16%"></span>
+                    <span style="left: -3%; top: 29%"></span>
+                    <span style="left: 75%; top: 29%"></span>
+                    <span style="left: 07%; top: 81%"></span>
+                    <span style="left: 26%; top: 81%"></span>
+                    <span style="left: 45%; top: 81%"></span>
+                    <a href="#export-menu" style="left: 64%; top: 81%"></a>
                 </div>
             </div>
             <div class="padding"></div>
@@ -526,7 +559,11 @@
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Add New Channels (Instruments) to the Song</td>
+                    <td>Add New Standard Channel (Instrument) to the Song</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add New Percussion Channel to the Song</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -570,10 +607,13 @@
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.5.9/tuningtablelayout.png" />
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/tuning_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/tuning_layout_d.png" alt="The Line Menu">
+                </picture> 
                 <div class="label-layer">
-                    <span style="left: 35%; top: 5%"></span>
-                    <span style="left: 65%; top: 5%"></span>
+                    <span style="left: 42%; top: 10%"></span>
+                    <span style="left: 80%; top: 10%"></span>
                     <span style="left: 40%; top: 40%"></span>
                 </div>
             </div>
@@ -599,18 +639,23 @@
 
     <a name="controls-overview_the-line-menu"></a>
     <h3>The Line Menu</h3>
+
     <div class="numbered-diagram">
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.6.0/linemenulayout.png" />
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/line_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/line_layout_d.png" alt="The Line Menu">
+                </picture> 
                 <div class="label-layer">
                     <span style="left: 0%; top: 44%"></span>
                     <span style="left: 0%; top: 74%"></span>
                     <span style="left: 30%; top: 74%"></span>
                     <span style="left: 73%; top: 74%"></span>
                     <span style="left: 90%; top: 74%"></span>
-                    <span style="left: 23%; top: 88%"></span>
+                    <span style="left: 0%; top: 90%"></span>
+                    <span style="left: 23%; top: 90%"></span>
                 </div>
             </div>
             <div class="padding"></div>
@@ -639,6 +684,10 @@
                 </tr>
                 <tr>
                     <td></td>
+                    <td>Mute/Unmute line</td>
+                </tr>
+                <tr>
+                    <td></td>
                     <td>Control the line's volume</td>
                 </tr>
             </table>
@@ -652,12 +701,18 @@
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.6.0/channelmenulayout.png"/>
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/channel_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/channel_layout_d.png" alt="The Channel Menu">
+                </picture> 
                 <div class="label-layer">
-                    <span style="left: 10%; top: 76%"></span>
-                    <span style="left: 73%; top: 76%"></span>
-                    <span style="left: 90%; top: 76%"></span>
-                    <span style="left: 23%; top: 88%"></span>
+                    <span style="left: 04%; top: 75%"></span>
+                    <span style="left: 35%; top: 75%"></span>
+                    <span style="left: 52%; top: 75%"></span>
+                    <span style="left: 69%; top: 75%"></span>
+                    <span style="left: 86%; top: 75%"></span>
+                    <span style="left: 04%; top: 91%"></span>
+                    <span style="left: 84%; top: 87%"></span>
                 </div>
             </div>
             <div class="padding"></div>
@@ -666,33 +721,52 @@
             <table>
                 <tr>
                     <td></td>
-                    <td>Show line meta controls (currently just pan)</td>
+                    <td>Show line meta controls.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Remove the channel</td>
+                    <td>Uniformly adjust all notes in channel.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Add a channel</td>
+                    <td>Remove the channel.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Choose channel instrument</td>
+                    <td>Add a percussion channel.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add a standard channel.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Mute/Unmute Channel.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Choose channel instrument.</td>
                 </tr>
             </table>
         </div>
     </div>
-    <p><a name="controls-overview_the-column-control-menu"></a></p>
+
+    <a name="controls-overview_the-column-control-menu"></a>
     <h3>The Column Control Menu</h3>
     <div class="numbered-diagram">
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.6.0/columnmenulayout.png"/>
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/column_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/column_layout_d.png" alt="The Column Menu">
+                </picture> 
                 <div class="label-layer">
-                    <span style="left: 73%; top: 90%"></span>
-                    <span style="left: 90%; top: 90%"></span>
+                    <span style="left: 04%; top: 82%"></span>
+                    <span style="left: 21%; top: 82%"></span>
+                    <span style="left: 51%; top: 82%"></span>
+                    <span style="left: 69%; top: 82%"></span>
+                    <span style="left: 86%; top: 82%"></span>
                 </div>
             </div>
             <div class="padding"></div>
@@ -701,11 +775,23 @@
             <table>
                 <tr>
                     <td></td>
-                    <td>Remove beats from the column. (Short tap for 1. Hold to input a number)</td>
+                    <td>Tag section. If not tagged, tap to create unnamed section or tap &amp; hold to create named section. If it is already tagged, tap to name/rename the section.</td>
                 </tr>
                 <tr>
                     <td></td>
-                    <td>Add more beats to the column. (Short tap for 1. Hold to input a number)</td>
+                    <td>Remove section tag.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Uniformly adjust all notes in the column.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Remove beats. (Short tap for 1. Hold to input a number)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Add more beats. (Short tap for 1. Hold to input a number)</td>
                 </tr>
             </table>
         </div>
@@ -717,7 +803,10 @@
         <div>
             <div class="padding"></div>
             <div>
-                <img src="/content/manuals/pagan/imgs/1.6.0/cellmenulayout.png"/>
+                <picture>
+                    <source media="(prefers-color-scheme: light)" srcset="/content/manuals/pagan/imgs/1.7.6/note_layout_l.png">
+                    <img usemap="line-menu" src="/content/manuals/pagan/imgs/1.7.6/note_layout_d.png" alt="The Note Menu">
+                </picture> 
                 <div class="label-layer">
                     <span style="left: 00%; top: 72%"></span>
                     <span style="left: 14%; top: 72%"></span>
@@ -773,22 +862,102 @@
 <div class="manual-section">
     <a name="settings"></a>
     <h2>Settings</h2>
-    <a name="settings_change-soundfont"></a>
-    <h3>Change SoundFont</h3>
+    <a name="settings_active-soundfont"></a>
+    <h3>Active Soundfont</h3>
     <span class="subsection">
         From here you can either select an imported .sf2 file or select 'import' and use a soundfont from your device. By default, a message will appear if you have no soundfonts, providing a link to the Fluid R3 general midi soundfont on the internet archive.
     </span>
-    <br/>
-    <hr/>
-    <a name="settings_relative-controls"></a>
-    <h3>Toggle Relative Controls</h3>
+
+    <a name="settings_playback-quality"></a>
+    <h3>Playback quality</h3>
     <span class="subsection">
-        Pagan has the option to set notes based on preceding notes(eg +1, -3, etc). This can control can be enabled here. Projects with relative notes are still viewable if this option is not enabled.
+        Set the sample rate of the playback (export is unaffected). This is useful for less powerful devices with a large amount of notes being played.
     </span>
-    <a name="how-tuning-works"></a>
+
+    <a name="settings_clip-sample"></a>
+    <h3>Clip sample fade-out on same lines</h3>
+    <span class="subsection">
+        Some instruments have long fade-out durations. Enable this option to prevent notes on the same line from overlapping.
+    </span>
+
+    <a name="settings_input-mode"></a>
+    <h3>Relative input mode</h3>
+    <span class="subsection">
+        Enable relative input. This means you can input notes based off of the previous notes (ie +3, -12 etc) instead of using absolute values like normal.
+    </span>
+
+    <a name="settings_remember-sf"></a>
+    <h3>Remember soundfont when loading project</h3>
+    <span class="subsection">
+        The Soundfont being using is saved within a project file. If this option is enabled, Pagan will *attempt* to change to that soundfont when loading that project.
+    </span>
+
+    <a name="settings_enable-midi-playback"></a>
+    <h3>Enable midi playback</h3>
+    <span class="subsection">
+        When a midi device is connected to Pagan, it will automatically attempt to play through the Midi device. <br/>
+        Disable this option to ignore midi output devices.
+    </span>
+
+    <a name="settings_use-percussion-as-std"></a>
+    <h3>Use percussion as standard instrument</h3>
+    <span class="subsection">
+        Percussion instruments are stored exclusively within Midi Bank 128 in Soundfont files. Pagan usually separates these from the rest of these instruments. <br/>
+        Enable this option to allow setting standard channels to percussion instruments in bank 128. This means drum lines can be on single lines as opposed to giving each instrument its own dedicated line.
+    </span>
+
+    <a name="settings_screen-orientation"></a>
+    <h3>Screen orientation</h3>
+    <span class="subsection">
+        Force the screen orientation to landscape or portait or defer to the device's orientation.
+    </span>
+
+</div>
+<div class="manual-section">
+    <a name="export-menu"></a>
+    <h2>Exporting a Project</h2>
+
+    <a name="export-menu-json"></a>
+    <h3>JSON File</h3>
+    <span class="subsection">
+        Pagan projects are stored in JSON formated files. This is how to store your project for transport without losing any data.
+    </span>
+
+    <a name="export-menu-midi"></a>
+    <h3>MIDI File</h3>
+    <span class="subsection">
+        Export to a Midi 1.0 .mid file. <br/>
+        Midi 1 doesn't support more than 16 channels including a single percussion channel. Keep this in mind as any channels after the 16th will be ignored as well as any percussion channels after the 1st.<br/>
+        <b>Also</b> keep in mind that Midi 1 doesn't support per-note pitch bending so non-standard tuning will prevent this option from being available.<br/>
+
+        Finally, Midi 2.0 support is planned and somewhat in progress and is *not* subject to the aforementioned limitations.
+    </span>
+
+    <a name="export-menu-wav-single"></a>
+    <h3>WAV File</h3>
+    <span class="subsection">
+        Export to a lossless wav file at a sample rate of 44100 kHz. <br/>
+        The balancing is handled automatically using the hyberbolic tangent (htan) function which is fine but usually insufficient for production purposes. <br/>
+        To manually balance the lines, I recommend exporting each line to a wav (see next section) and using something like Audacity to merge the output.
+    </span>
+
+    <a name="export-menu-wav-lines"></a>
+    <h3>WAV Files (Lines)</h3>
+    <span class="subsection">
+        Export each line to a separate lossless wav files. <br/>
+        This is useful for manual mixing with software like audacity.
+    </span>
+
+    <a name="export-menu-wav-channels"></a>
+    <h3>WAV Files (Channels)</h3>
+    <span class="subsection">
+        Export each channel to a separate lossless wav files. <br/>
+        This is useful for manual mixing with software like audacity.
+    </span>
 </div>
 
 <div class="manual-section">
+    <a name="how-tuning-works"></a>
     <h2>How Tuning Works</h2>
     <a name="how-tuning-works_equal-temperament-tuning"></a>
     <h3>Equal Temperament Tuning</h3>
@@ -850,220 +1019,241 @@
 </div>
 
 
-<div class="manual-section">
-    <p><a name="f.a.q."></a></p>
-    <h2>F.A.Q.</h2>
-    <p><a name="f.a.q._what's-a-radix"></a></p>
-    <h3>What's a Radix?<br></h3>
-    <p>A radix is the number by which you group when counting. If you are part of most of the modern world, you'll be familiar with radix-10, in which we count in groups of 10 numerals.<br>
-    Binary is radix 2 and hexidecimal is radix 16.<br>
-    Pianos are implicitly radix 12. Even if western music thinks of notes as letters rather than numbers.</p>
-    <p><a name="f.a.q._how-do-i..."></a></p>
-    <h3>How Do I...</h3>
-    <p><a name="f.a.q._how-do-i..._name-my-project"></a></p>
-    <h4>Name my Project?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap 'Change Project Name'.<br></li>
-    <li>Enter the new name and tap 'OK'.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._add-a-channel"></a></p>
-    <h4>Add a Channel?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap 'Add Channel'.</li>
-    </ol>
-    <p>--OR--</p>
-    <ol>
-    <li>Tap a line Label. Any line label. To select a line.<br></li>
-    <li>Tap it again to open up the channel menu.<br></li>
-    <li>Tap the 'Add channel' icon.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._remove-a-channel"></a></p>
-    <h4>Remove a Channel?<br></h4>
-    <p>Keep in mind that you can't remove the percussion channel, but you <em>can</em> hide it. The steps are the same.</p>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the X button on the channel you want to remove.</li>
-    </ol>
-    <p>--OR--</p>
-    <ol>
-    <li>Tap a line label in the channel you want to remove.<br></li>
-    <li>Tap it again to open up the channel menu.<br></li>
-    <li>Tap the 'remove channel' icon.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._add-a-line"></a></p>
-    <h4>Add a Line?<br></h4>
-    <ol>
-    <li>Tap the line label where you want to insert a new line.<br></li>
-    <li>Tap the 'add line' button.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._remove-a-line"></a></p>
-    <h4>Remove a Line?<br></h4>
-    <ol>
-    <li>Tap the line label of the line you want to remove.<br></li>
-    <li>Tap the 'remove line' button.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._import-a-midi-file"></a></p>
-    <h4>Import a MIDI file?</h4>
-    <ol>
-    <li>Tap the vertical ellipsis.<br></li>
-    <li>Select 'Import'<br></li>
-    <li>Pick your .mid file.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._import-a-project"></a></p>
-    <h4>Import a Project?</h4>
-    <ol>
-    <li>Tap the vertical ellipsis.<br></li>
-    <li>Select 'Import'<br></li>
-    <li>Pick your exported project (.json)</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._change-a-soundfont"></a></p>
-    <h4>Change a Soundfont?</h4>
-    <ol>
-    <li>Tap the vertical ellipsis.<br></li>
-    <li>Select 'Settings'<br></li>
-    <li>Tap the 'Active Soundfont'<br></li>
-    <li>Pick from already imported sounfont or choose 'Import' and select a .sf2 from your device.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._remove-a-soundfont"></a></p>
-    <h4>Remove a Soundfont?</h4>
-    <ol>
-    <li>Tap the vertical ellipsis.<br></li>
-    <li>Select 'Settings'<br></li>
-    <li><strong>Tap and Hold</strong> the 'Active Soundfont'<br></li>
-    <li>Choose the soundfont to remove from the list.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._change-the-sample-rate"></a></p>
-    <h4>Change the Sample Rate?</h4>
-    <ol>
-    <li>Tap the vertical ellipsis.<br></li>
-    <li>Select 'Settings'<br></li>
-    <li>Use the 'Playback Quality' Slider to set the rate.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._change-an-instrument"></a></p>
-    <h4>Change an Instrument?</h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the channel with the instrument to be changed.<br></li>
-    <li>Pick an instrument from the menu.</li>
-    </ol>
-    <p>--OR--</p>
-    <ol>
-    <li>Tap the label of the line which instrument you want to change.<br></li>
-    <li>Tap the the same label <strong>again</strong><br></li>
-    <li>Tap the button at the bottom that has the name of the currently active channel instrument<br></li>
-    <li>Pick an instrument from the menu.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._change-a-percussion-instrument"></a></p>
-    <h4>Change a Percussion Instrument?</h4>
-    <ol>
-    <li>Tap the label of the percussion line to change<br></li>
-    <li>Tap the button with button labelled with the current instrument name (eg. 0: High Q)<br></li>
-    <li>Pick an instrument from the menu.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._set-the-tempo"></a></p>
-    <h4>Set the Tempo?</h4>
-    <p>To set the initial tempo:<br></p>
-    <ol>
-    <li>Tap the metronome icon at the bottom of the table.<br></li>
-    <li>Tap the BPM button.<br></li>
-    <li>Input the new tempo in Beats per Minute.</li>
-    </ol>
-    <p>To change the tempo within the song:<br></p>
-    <ol>
-    <li>Select a leaf along the tempo line as you would the other lines.<br></li>
-    <li>Tap the BPM button.<br></li>
-    <li>Input the new tempo in Beats per Minute.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._add-beats"></a></p>
-    <h4>Add Beats?<br></h4>
-    <ol>
-    <li>Tap the top of a column.<br>
-    Single Beat:<br></li>
-    <li>Tap the 'Add Beat' button in the corner<br>
-    Mutliple Beats:<br></li>
-    <li><strong>Tap and Hold</strong>* the 'Add Beat' button the corner.<br></li>
-    <li>Input the number of beats to add.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._remove-beats"></a></p>
-    <h4>Remove Beats?<br></h4>
-    <ol>
-    <li>Tap the top of a column.<br>
-    Single Beat:<br></li>
-    <li>Tap the 'Remove Beat' button in the corner<br>
-    Mutliple Beats:<br></li>
-    <li><strong>Tap and Hold</strong>* the 'Remove Beat' button the corner.<br></li>
-    <li>Input the number of beats to remove.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._move-a-line"></a></p>
-    <h4>Move a Line?<br></h4>
-    <ol>
-    <li>Insert a line where you want the moved line to go.<br></li>
-    <li>Drag and drop the line label of one onto the other.<br></li>
-    <li>Delete the empty line.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._hide-(or-show)-the-percussion-section"></a></p>
-    <h4>Hide (or show) the Percussion section?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the eye icon at the end of the percussion channel button.</li>
-    </ol>
-    <p>--OR-- (hide only)</p>
-    <ol>
-    <li>Double tap a percusion line label.<br></li>
-    <li>Tap the eye icon to hide.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._jump-to-a-beat"></a></p>
-    <h4>Jump to a Beat?</h4>
-    <ol>
-    <li>Tap the arrow icon in the top-left corner of the editor<br></li>
-    <li>Use the slider to select a beat.</li>
-    </ol>
-    <p>--OR-- (to jump to 0)</p>
-    <ol>
-    <li><strong>Tap and Hold</strong> the arrow icon in the top-left corner to jump to the first beat.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._set-the-tuning"></a></p>
-    <h4>Set the tuning?</h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the 'Tuning' button.<br></li>
-    <li>See the <a href="#how-tuning-works"><strong>Tuning Section</strong></a> if this table doesn't make sense to you.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._save-the-project"></a></p>
-    <h4>Save the project?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the floppy disk icon in the bottom-left corner.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._'save-as...'-the-project"></a></p>
-    <h4>'Save As...' the project?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li><strong>Tap and hold</strong>* the floppy disk icon in the bottom-left corner.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._export-a-midi-file"></a></p>
-    <h4>Export a MIDI file?<br></h4>
-    <p>NOTE: Projects can <em><strong>only</strong></em> be exported to midi when the Radix and Tuning table are unaltered. (See <a href="#tuning"><strong>Tuning</strong></a> for more information).<br></p>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the 'Export' button at the bottom-right of the menu.<br></li>
-    <li>Select 'Midi File'.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._export-a-wav-file"></a></p>
-    <h4>Export a WAV file?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the 'Export' button at the bottom-right of the menu.<br></li>
-    <li>Select 'Wav File'.</li>
-    </ol>
-    <p><a name="f.a.q._how-do-i..._delete-the-project"></a></p>
-    <h4>Delete the Project?<br></h4>
-    <ol>
-    <li>Tap the hamburger menu to open the configuration menu.<br></li>
-    <li>Tap the trash bin icon.</li>
-    </ol>
+    <div class="manual-section">
+        <a name="f.a.q."></a>
+        <h2>F.A.Q.</h2>
+        <a name="f.a.q._what's-a-radix"></a>
+        <h3>What's a Radix?</h3>
+        A radix is the number by which you group when counting. If you are part of most of the modern world, you'll be familiar with radix-10, in which we count in groups of 10 numerals.<br>
+        Binary is radix 2 and hexidecimal is radix 16.<br>
+        Pianos are implicitly radix 12. Even if western music thinks of notes as letters rather than numbers.
+        <a name="f.a.q._how-do-i..."></a>
+        <h3>How Do I...</h3>
+        <a name="f.a.q._how-do-i..._name-my-project"></a>
+        <h4>Name my Project?</h4>
+        <ol>
+            <li>Tap the hamburger menu to open the configuration menu.</li>
+            <li>Tap 'Change Project Name'.</li>
+            <li>Enter the new name and tap 'OK'.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._uniform_adjust"></a>
+        <h4>Adjust a selection</h4>
+        <ol>
+            <li>When selecting a channel, line, column or range, tap the <b>"+/-"</b> icon.</li>
+            <li>Choose the octave and/or offset you want to adjust it by.</li>
+            <li>Tap Ok.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._add-a-channel"></a>
+        <h4>Add a Channel?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap <b>"+"</b> to add a standard channel, or <b>"!+"</b> to add a percussion channel.</li>
+        </ol>
+        --OR--
+        <ol>
+        <li>Tap a line Label. Any line label. To select a line.</li>
+        <li>Tap it again to open up the channel menu.</li>
+        <li>Tap <b>"+"</b> to add a standard channel, or <b>"!+"</b> to add a percussion channel.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._remove-a-channel"></a>
+        <h4>Remove a Channel?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the <b>"X"</b> button on the channel you want to remove.</li>
+        </ol>
+        --OR--
+        <ol>
+        <li>Tap a line label in the channel you want to remove.</li>
+        <li>Tap it again to open up the channel menu.</li>
+        <li>Tap the <b>"X"</b> icon.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._add-a-line"></a>
+        <h4>Add a Line?</h4>
+        <ol>
+        <li>Tap the line label where you want to insert a new line.</li>
+        <li>Tap the 'add line' button.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._remove-a-line"></a>
+        <h4>Remove a Line?</h4>
+        <ol>
+        <li>Tap the line label of the line you want to remove.</li>
+        <li>Tap the 'remove line' button.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._import-a-midi-file"></a>
+        <h4>Import a MIDI file?</h4>
+        <ol>
+        <li>Tap the vertical ellipsis.</li>
+        <li>Select 'Import'</li>
+        <li>Pick your .mid file.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._import-a-project"></a>
+        <h4>Import a Project?</h4>
+        <ol>
+        <li>Tap the vertical ellipsis.</li>
+        <li>Select 'Import'</li>
+        <li>Pick your exported project (.json)</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._change-a-soundfont"></a>
+        <h4>Change a Soundfont?</h4>
+        <ol>
+        <li>Tap the vertical ellipsis.</li>
+        <li>Select 'Settings'</li>
+        <li>Tap the 'Active Soundfont'</li>
+        <li>Pick from already imported sounfont or choose 'Import' and select a .sf2 from your device.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._remove-a-soundfont"></a>
+        <h4>Remove a Soundfont?</h4>
+        <ol>
+        <li>Tap the vertical ellipsis.</li>
+        <li>Select 'Settings'</li>
+        <li><strong>Tap and Hold</strong> the 'Active Soundfont'</li>
+        <li>Choose the soundfont to remove from the list.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._change-the-sample-rate"></a>
+        <h4>Change the Sample Rate?</h4>
+        <ol>
+        <li>Tap the vertical ellipsis.</li>
+        <li>Select 'Settings'</li>
+        <li>Use the 'Playback Quality' Slider to set the rate.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._change-an-instrument"></a>
+        <h4>Change an Instrument?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the channel with the instrument to be changed.</li>
+        <li>Pick an instrument from the menu.</li>
+        </ol>
+        --OR--
+        <ol>
+        <li>Tap the label of the line which instrument you want to change.</li>
+        <li>Tap the the same label <strong>again</strong></li>
+        <li>Tap the button at the bottom that has the name of the currently active channel instrument</li>
+        <li>Pick an instrument from the menu.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._change-a-percussion-instrument"></a>
+        <h4>Change a Percussion Instrument?</h4>
+        <ol>
+        <li>Tap the label of the percussion line to change</li>
+        <li>Tap the button with button labelled with the current instrument name (eg. 0: High Q)</li>
+        <li>Pick an instrument from the menu.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._set-the-tempo"></a>
+        <h4>Set the Tempo?</h4>
+        To set the initial tempo:<br>
+        <ol>
+        <li>Tap the metronome icon at the bottom of the table.</li>
+        <li>Tap the BPM button.</li>
+        <li>Input the new tempo in Beats per Minute.</li>
+        </ol>
+        To change the tempo within the song:<br>
+        <ol>
+        <li>Select a leaf along the tempo line as you would the other lines.</li>
+        <li>Tap the BPM button.</li>
+        <li>Input the new tempo in Beats per Minute.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._add-beats"></a>
+        <h4>Add Beats?</h4>
+        <ol>
+        <li>Tap the top of a column.</li>
+        Single Beat:<br/>
+        <li>Tap the 'Add Beat' button in the corner</li> 
+        Multiple Beats:<br/>
+        <li><strong>Tap and Hold</strong>* the 'Add Beat' button the corner.</li>
+        <li>Input the number of beats to add.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._remove-beats"></a>
+        <h4>Remove Beats?</h4>
+        <ol>
+        <li>Tap the top of a column.<br>
+        Single Beat:</li>
+        <li>Tap the 'Remove Beat' button in the corner<br>
+        Multiple Beats:</li>
+        <li><strong>Tap and Hold</strong>* the 'Remove Beat' button the corner.</li>
+        <li>Input the number of beats to remove.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._move-a-line"></a>
+        <h4>Move a Line?</h4>
+        <ol>
+        <li>Insert a line where you want the moved line to go.</li>
+        <li>Drag and drop the line label of one onto the other.</li>
+        <li>Delete the empty line.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._hide-(or-show)-the-percussion-section"></a>
+        <h4>Hide (or show) the Percussion section?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the eye icon at the end of the percussion channel button.</li>
+        </ol>
+        --OR-- (hide only)
+        <ol>
+        <li>Double tap a percusion line label.</li>
+        <li>Tap the eye icon to hide.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._jump-to-a-beat"></a>
+        <h4>Jump to a Beat?</h4>
+        <ol>
+        <li>Tap the arrow icon in the top-left corner of the editor</li>
+        <li>Use the slider to select a beat.</li>
+        </ol>
+        --OR-- (to jump to 0)
+        <ol>
+        <li><strong>Tap and Hold</strong> the arrow icon in the top-left corner to jump to the first beat.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._jump-to-a-section"></a>
+        <h4>Jump to a Section?</h4>
+        <ol>
+            <li>Tap the arrow icon in the top-left corner of the editor</li>
+            <li>Use the drop-down menu to select a section.</li>
+        </ol>
+
+        <a name="f.a.q._how-do-i..._set-the-tuning"></a>
+        <h4>Set the tuning?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the 'Tuning' button.</li>
+        <li>See the <a href="#how-tuning-works"><strong>Tuning Section</strong></a> if this table doesn't make sense to you.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._save-the-project"></a>
+        <h4>Save the project?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the floppy disk icon in the bottom-left corner.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._'save-as...'-the-project"></a>
+        <h4>'Save As...' the project?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li><strong>Tap and hold</strong>* the floppy disk icon in the bottom-left corner.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._export-a-midi-file"></a>
+        <h4>Export a MIDI file?</h4>
+        NOTE: Projects can <em><strong>only</strong></em> be exported to midi when the Radix and Tuning table are unaltered. (See <a href="#tuning"><strong>Tuning</strong></a> for more information).<br>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the 'Export' button at the bottom-right of the menu.</li>
+        <li>Select 'Midi File'.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._export-a-wav-file"></a>
+        <h4>Export a WAV file?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the 'Export' button at the bottom-right of the menu.</li>
+        <li>Select 'Wav File'.</li>
+        </ol>
+        <a name="f.a.q._how-do-i..._delete-the-project"></a>
+        <h4>Delete the Project?</h4>
+        <ol>
+        <li>Tap the hamburger menu to open the configuration menu.</li>
+        <li>Tap the trash bin icon.</li>
+        </ol>
+        --OR--
+        <ol>
+            <li>Tap the verical ellipsis.</li>
+            <li>Select "Load Project"</li>
+            <li><b>Tap-and-hold</b> the project you want to delete.</li>
+            <li>Tap delete</li>
+        </ol>
+
     </div>
     </div>
     </div>

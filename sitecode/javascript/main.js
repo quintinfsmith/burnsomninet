@@ -372,11 +372,11 @@ class HamburgerMenu extends SlugWidget {
 }
 
 function activate_numbered_diagram(element) {
-    if (element.hasClass("activated") || !element.hasClass("numbered-diagram")) {
+    if (hasClass(element, "activated") || !hasClass(element, "numbered-diagram")) {
         return;
     }
-    element.addClass("activated");
-    let cells = element.getElementsByClassName("label-layer")[0].getElementsByTagName("span")
+    addClass(element, "activated");
+    let cells = element.getElementsByClassName("label-layer")[0].children;
     let table = element.getElementsByTagName("table")[0];
     for (let i = 0; i < cells.length; i++) {
         let label = cells[i];
